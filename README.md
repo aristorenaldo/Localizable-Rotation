@@ -4,8 +4,8 @@
 
 Official PyTorch Repository of "Tailoring Self-Supervision for Supervised Learning" (ECCV 2022 Paper)
 <p align="center">
-    <img src=figures/LoRot-I.png width="45%"> 
-    <img src=figures/LoRot-E.png width="45%"> 
+    <img src=figures/LoRot-I.png width="50%"> 
+    <img src=figures/LoRot-E.png width="50%"> 
 </p>
 
 
