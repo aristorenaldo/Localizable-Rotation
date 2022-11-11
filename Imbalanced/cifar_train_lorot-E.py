@@ -127,10 +127,10 @@ parser.add_argument("--root_log", type=str, default="log")
 parser.add_argument("--root_model", type=str, default="checkpoint")
 parser.add_argument("--r_ratio", default=0.1, type=float, help="ratio")
 parser.add_argument(
-    "-e",
+    "-x",
     "--experiment",
-    type="str",
-    default=None,
+    type=str,
+    default="",
     help="Experiment it will be doing, Full explanation in experiment.txt",
 )
 best_acc1 = 0
@@ -440,7 +440,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                 )
 
                 # Jika fliplr maka idx2 = 5
-                idx2 = torch.full(size=(input_image.size(0)), fill_value=5)
+                idx2 = torch.full_like(idx2, 3)
             else:
                 input_image[i][:, w1:w2, h1:h2] = torch.rot90(
                     input_image[i][:, w1:w2, h1:h2], idx2[i], [1, 2]
