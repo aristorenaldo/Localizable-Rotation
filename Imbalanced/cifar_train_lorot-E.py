@@ -1,25 +1,26 @@
 import argparse
 import os
 import random
+import sys
 import time
 import warnings
-import sys
+
+import models
 import numpy as np
 import torch
+import torch.backends.cudnn as cudnn
+import torch.multiprocessing as mp
 import torch.nn as nn
 import torch.nn.parallel
-import torch.backends.cudnn as cudnn
 import torch.optim
-import torch.multiprocessing as mp
 import torch.utils.data
-import torchvision.transforms as transforms
 import torchvision.datasets as datasets
-import models
-from tensorboardX import SummaryWriter
-from sklearn.metrics import confusion_matrix
-from utils import *
+import torchvision.transforms as transforms
 from imbalance_cifar import IMBALANCECIFAR10, IMBALANCECIFAR100
-from losses import LDAMLoss, FocalLoss
+from losses import FocalLoss, LDAMLoss
+from sklearn.metrics import confusion_matrix
+from tensorboardX import SummaryWriter
+from utils import *
 
 ##2022_CVPR_LoRot-E
 model_names = sorted(
@@ -125,6 +126,13 @@ parser.add_argument("--gpu", default=None, type=int, help="GPU id to use.")
 parser.add_argument("--root_log", type=str, default="log")
 parser.add_argument("--root_model", type=str, default="checkpoint")
 parser.add_argument("--r_ratio", default=0.1, type=float, help="ratio")
+parser.add_argument(
+    "-e",
+    "--experiment",
+    type="str",
+    default=None,
+    help="Experiment it will be doing, Full explanation in experiment.txt",
+)
 best_acc1 = 0
 
 
@@ -393,19 +401,19 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
     model.train()
 
     end = time.time()
-    for i, (input, target) in enumerate(train_loader):
+    for i, (input_image, target) in enumerate(train_loader):
         # measure data loading time
         data_time.update(time.time() - end)
 
         if args.gpu is not None:
-            input = input.cuda(args.gpu, non_blocking=True)
+            input_image = input_image.cuda(args.gpu, non_blocking=True)
         target = target.cuda(args.gpu, non_blocking=True)
 
-        idx = torch.randint(4, size=(input.size(0),))
-        idx2 = torch.randint(4, size=(input.size(0),))
-        r = input.size(2) // 2
-        r2 = input.size(2)
-        for i in range(input.size(0)):
+        idx = torch.randint(4, size=(input_image.size(0),))
+        idx2 = torch.randint(4, size=(input_image.size(0),))
+        r = input_image.size(2) // 2
+        r2 = input_image.size(2)
+        for i in range(input_image.size(0)):
             if idx[i] == 0:
                 w1 = 0
                 w2 = r
@@ -426,23 +434,31 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                 w2 = r2
                 h1 = r
                 h2 = r2
-            input[i][:, w1:w2, h1:h2] = torch.rot90(
-                input[i][:, w1:w2, h1:h2], idx2[i], [1, 2]
-            )
+            if args.experiment == "fliplr":
+                input_image[i][:, w1:w2, h1:h2] = torch.fliplr(
+                    input_image[i][:, w1:w2, h1:h2]
+                )
+
+                # Jika fliplr maka idx2 = 5
+                idx2 = torch.full(size=(input_image.size(0)), fill_value=5)
+            else:
+                input_image[i][:, w1:w2, h1:h2] = torch.rot90(
+                    input_image[i][:, w1:w2, h1:h2], idx2[i], [1, 2]
+                )
         rotlabel = idx * 4 + idx2
         rotlabel = rotlabel.cuda()
 
         # compute output
-        output, rotoutput = model(input, both=True)
+        output, rotoutput = model(input_image, both=True)
         loss = criterion(output, target)
 
-        # rotoutput = model(input, rot=True)
+        # rotoutput = model(input_image, rot=True)
         rotloss = CE(rotoutput, rotlabel)
         # measure accuracy and record loss
         acc1, acc5 = accuracy(output, target, topk=(1, 5))
-        losses.update(loss.item(), input.size(0))
-        top1.update(acc1[0], input.size(0))
-        top5.update(acc5[0], input.size(0))
+        losses.update(loss.item(), input_image.size(0))
+        top1.update(acc1[0], input_image.size(0))
+        top5.update(acc5[0], input_image.size(0))
 
         loss = loss + args.r_ratio * rotloss
 
@@ -498,20 +514,20 @@ def validate(
     all_targets = []
     with torch.no_grad():
         end = time.time()
-        for i, (input, target) in enumerate(val_loader):
+        for i, (input_image, target) in enumerate(val_loader):
             if args.gpu is not None:
-                input = input.cuda(args.gpu, non_blocking=True)
+                input_image = input_image.cuda(args.gpu, non_blocking=True)
             target = target.cuda(args.gpu, non_blocking=True)
 
             # compute output
-            output = model(input)
+            output = model(input_image)
             loss = criterion(output, target)
 
             # measure accuracy and record loss
             acc1, acc5 = accuracy(output, target, topk=(1, 5))
-            losses.update(loss.item(), input.size(0))
-            top1.update(acc1[0], input.size(0))
-            top5.update(acc5[0], input.size(0))
+            losses.update(loss.item(), input_image.size(0))
+            top1.update(acc1[0], input_image.size(0))
+            top5.update(acc5[0], input_image.size(0))
 
             # measure elapsed time
             batch_time.update(time.time() - end)
