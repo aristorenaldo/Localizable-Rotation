@@ -20,38 +20,66 @@ from torch.utils.data import DataLoader
 from resnet import ResNet34, ResNet18
 import copy
 from torch.utils.data.dataset import Subset
-from torchvision import transforms# datasets,
+from torchvision import transforms  # datasets,
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--num_epochs', type=int, default=100, help='number of epochs to train for [default: 10]')
-parser.add_argument('--lr', '--learning_rate', default=0.001, type=float, help='initial learning rate')
-parser.add_argument('--num_class', default=10, type=int)
-parser.add_argument('--batch_size', default=64, type=int, help='train batchsize')
-parser.add_argument('--iter', default='False', type=str)
-parser.add_argument('--dataset', type=str, default='cifar10', help="mnist | svhn | cifar10 | cifar100 | tiny_imagenet")
-parser.add_argument('--out-dataset', type=str, default='svhn', help="mnist | svhn | cifar10 | cifar100 | tiny_imagenet")
-parser.add_argument('--dataroot', type=str, default='./data')
-parser.add_argument('--outf', type=str, default='./log')
-parser.add_argument('--loss', type=str, default='ce')
-parser.add_argument('--r_ratio', default=0.5, type=float, help='self-supervised loss ratio')
-parser.add_argument('--workers', default=6, type=int,
-                    help="number of data loading workers (default: 4)")
-parser.add_argument('--model', type=str, default='classifier32', help='classifier32 | WRN')
-parser.add_argument("--ood_dataset", help='Datasets for OOD detection',
-                    default=None, nargs="*", type=str)
-parser.add_argument('--trial', default=0, type=int)
-parser.add_argument('--psize', default=2, type=int,
-                        help='patch size_min')
-parser.add_argument('--maxpsize', default=16, type=int,
-                    help='patch size_min')
+parser.add_argument(
+    "--num_epochs",
+    type=int,
+    default=100,
+    help="number of epochs to train for [default: 10]",
+)
+parser.add_argument(
+    "--lr", "--learning_rate", default=0.001, type=float, help="initial learning rate"
+)
+parser.add_argument("--num_class", default=10, type=int)
+parser.add_argument("--batch_size", default=64, type=int, help="train batchsize")
+parser.add_argument("--iter", default="False", type=str)
+parser.add_argument(
+    "--dataset",
+    type=str,
+    default="cifar10",
+    help="mnist | svhn | cifar10 | cifar100 | tiny_imagenet",
+)
+parser.add_argument(
+    "--out-dataset",
+    type=str,
+    default="svhn",
+    help="mnist | svhn | cifar10 | cifar100 | tiny_imagenet",
+)
+parser.add_argument("--dataroot", type=str, default="./data")
+parser.add_argument("--outf", type=str, default="./log")
+parser.add_argument("--loss", type=str, default="ce")
+parser.add_argument(
+    "--r_ratio", default=0.5, type=float, help="self-supervised loss ratio"
+)
+parser.add_argument(
+    "--workers", default=6, type=int, help="number of data loading workers (default: 4)"
+)
+parser.add_argument(
+    "--model", type=str, default="classifier32", help="classifier32 | WRN"
+)
+parser.add_argument(
+    "--ood_dataset",
+    help="Datasets for OOD detection",
+    default=None,
+    nargs="*",
+    type=str,
+)
+parser.add_argument("--trial", default=0, type=int)
+parser.add_argument("--psize", default=2, type=int, help="patch size_min")
+parser.add_argument("--maxpsize", default=16, type=int, help="patch size_min")
 args = parser.parse_args()
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+
 def kl_div(d1, d2):
     """
     Compute KL-Divergence between d1 and d2.
     """
     dirty_logs = d1 * torch.log2(d1 / d2)
     return torch.sum(torch.where(d1 != 0, dirty_logs, torch.zeros_like(d1)), axis=1)
+
 
 def rand_bbox(size, psize, maxpsize):
     W = size[2]
@@ -60,8 +88,8 @@ def rand_bbox(size, psize, maxpsize):
     r = np.random.randint(psize, maxpsize + 1)
 
     # uniform
-    cx = np.random.randint(W-r)
-    cy = np.random.randint(H-r)
+    cx = np.random.randint(W - r)
+    cy = np.random.randint(H - r)
 
     bbx1 = cx
     bby1 = cy
@@ -70,7 +98,8 @@ def rand_bbox(size, psize, maxpsize):
 
     return bbx1, bby1, bbx2, bby2
 
-def train(epoch,net,optimizer,train_loader, iter):
+
+def train(epoch, net, optimizer, train_loader, iter):
     net.train()
     for batch_idx, (inputs_x, labels_x) in enumerate(train_loader):
         batch_size = inputs_x.size(0)
@@ -78,7 +107,9 @@ def train(epoch,net,optimizer,train_loader, iter):
         bbx1, bby1, bbx2, bby2 = rand_bbox(inputs.size(), args.psize, args.maxpsize)
         idx2 = torch.randint(4, size=(inputs.size(0),))
         for i in range(inputs.size(0)):
-            inputs[i][:, bbx1:bbx2, bby1:bby2] = torch.rot90(inputs[i][:, bbx1:bbx2, bby1:bby2], idx2[i], [1, 2])
+            inputs[i][:, bbx1:bbx2, bby1:bby2] = torch.rot90(
+                inputs[i][:, bbx1:bbx2, bby1:bby2], idx2[i], [1, 2]
+            )
         rotlabel = idx2
         rotlabel = rotlabel.cuda()
         logits, rotlogits = net(inputs, both=True)
@@ -89,13 +120,16 @@ def train(epoch,net,optimizer,train_loader, iter):
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        sys.stdout.write('\r')
+        sys.stdout.write("\r")
 
-        sys.stdout.write('%s: | Epoch [%3d/%3d] loss_x: %.2f, gr_loss: %.2f'
-                         % (args.dataset, epoch, args.num_epochs, loss_x.item(), rotloss.item()))
+        sys.stdout.write(
+            "%s: | Epoch [%3d/%3d] loss_x: %.2f, gr_loss: %.2f"
+            % (args.dataset, epoch, args.num_epochs, loss_x.item(), rotloss.item())
+        )
         sys.stdout.flush()
 
     return iter
+
 
 def test(net1, d):
     net1.eval()
@@ -124,7 +158,7 @@ def test(net1, d):
                 probs[n] = _1[b]
                 labels[n] = label[b]
                 prediction1[n] = pred1[b]
-                n+=1
+                n += 1
 
     # openset test
     open_labels[total:] = 0
@@ -145,62 +179,85 @@ def test(net1, d):
                 labels[n] = label[b]
                 n += 1
     prob = probs[:total2].reshape(-1, 1)
-    prob[prob == -float('inf')] = -10000
+    prob[prob == -float("inf")] = -10000
     auc = roc_auc_score(open_labels[:total2].cpu().numpy(), prob)
     correct1 = prediction1[:total].eq(labels[:total]).sum().item()
     acc1 = correct1 / total
     return acc1, auc
 
+
 acc_results = []
 auc_results = []
 criterion = nn.CrossEntropyLoss()
 options = vars(args)
-options['dataroot'] = os.path.join(options['dataroot'], options['dataset'])
-if not os.path.exists('./logs'):
-    os.makedirs('./logs')
-    if not os.path.exists('./logs/ood'):
-        os.makedirs('./logs/ood')
-if not os.path.exists('./logs/ood/'+ args.dataset):
-    os.makedirs('./logs/ood/'+ args.dataset)
+options["dataroot"] = os.path.join(options["dataroot"], options["dataset"])
+if not os.path.exists("./logs"):
+    os.makedirs("./logs")
+    if not os.path.exists("./logs/ood"):
+        os.makedirs("./logs/ood")
+if not os.path.exists("./logs/ood/" + args.dataset):
+    os.makedirs("./logs/ood/" + args.dataset)
 
-stats_log = open('./logs/ood/' + args.dataset + '/%d_psize_lorotI_%.2f_%d_%d' % (args.trial, args.r_ratio, args.psize, args.maxpsize) + '.txt', 'w')
+stats_log = open(
+    "./logs/ood/"
+    + args.dataset
+    + "/%d_psize_lorotI_%.2f_%d_%d"
+    % (args.trial, args.r_ratio, args.psize, args.maxpsize)
+    + ".txt",
+    "w",
+)
 
 
 use_gpu = torch.cuda.is_available()
-options.update(
-    {
-
-        'use_gpu': use_gpu
-    }
-)
-out_dataset = datasets.create(options['out_dataset'], **options)
-dataset = datasets.create(options['dataset'], **options)
+options.update({"use_gpu": use_gpu})
+out_dataset = datasets.create(options["out_dataset"], **options)
+dataset = datasets.create(options["dataset"], **options)
 trainloader, testloader = dataset.trainloader, dataset.testloader
 outloader = out_dataset.testloader
-options.update(
-    {
-        'num_classes': dataset.num_classes
-    }
-)
+options.update({"num_classes": dataset.num_classes})
 
-if options['ood_dataset'] is None:
-    if options['dataset'] == 'cifar10':
-        options['ood_dataset'] = ['svhn', 'lsun_resize', 'imagenet_resize', 'lsun_fix', 'imagenet_fix', 'cifar100']#, 'interp']
-        options['image_size'] = (32, 32, 3)
-    elif options['dataset'] == 'imagenet':
-        options['ood_dataset'] = ['cub', 'stanford_dogs', 'flowers102', 'places365', 'food_101', 'caltech_256', 'dtd', 'pets']
-        options['num_classes'] = 30
+if options["ood_dataset"] is None:
+    if options["dataset"] == "cifar10":
+        options["ood_dataset"] = [
+            "svhn",
+            "lsun_resize",
+            "imagenet_resize",
+            "lsun_fix",
+            "imagenet_fix",
+            "cifar100",
+        ]  # , 'interp']
+        options["image_size"] = (32, 32, 3)
+    elif options["dataset"] == "imagenet":
+        options["ood_dataset"] = [
+            "cub",
+            "stanford_dogs",
+            "flowers102",
+            "places365",
+            "food_101",
+            "caltech_256",
+            "dtd",
+            "pets",
+        ]
+        options["num_classes"] = 30
 ood_eval = True
 ood_test_loader = dict()
-kwargs = {'pin_memory': False, 'num_workers': 40}
-for ood in options['ood_dataset']:
-    ood_test_set = get_dataset(options, dataset=ood, test_only=True, image_size=options['image_size'], eval=ood_eval)
-    ood_test_loader[ood] = DataLoader(ood_test_set, shuffle=False, batch_size=options['batch_size'], **kwargs)
+kwargs = {"pin_memory": False, "num_workers": 40}
+for ood in options["ood_dataset"]:
+    ood_test_set = get_dataset(
+        options,
+        dataset=ood,
+        test_only=True,
+        image_size=options["image_size"],
+        eval=ood_eval,
+    )
+    ood_test_loader[ood] = DataLoader(
+        ood_test_set, shuffle=False, batch_size=options["batch_size"], **kwargs
+    )
 
 
-model = ResNet18(options['num_classes'], 4).cuda()
+model = ResNet18(options["num_classes"], 4).cuda()
 model = torch.nn.DataParallel(model)
-cudnn.benchmark=True
+cudnn.benchmark = True
 
 optimizer = optim.Adam(model.parameters(), lr=args.lr, betas=(0.5, 0.999))
 
@@ -214,7 +271,7 @@ for epoch in range(args.num_epochs + 1):
         lr /= 10
 
     for param_group in optimizer.param_groups:
-        param_group['lr'] = lr
+        param_group["lr"] = lr
 
     iter = train(epoch, model, optimizer, trainloader, iter)
     if epoch % 10 == 0:
@@ -223,14 +280,20 @@ for epoch in range(args.num_epochs + 1):
         if epoch % 100 == 0:
             aucs = []
             accs = []
-            for d in options['ood_dataset']:
+            for d in options["ood_dataset"]:
                 acc, auc = test(model, d)
                 aucs.append(auc)
                 accs.append(acc)
-                print("E[%d] [%s] AUC Err: [%.3f] ACC : [%.2f]\n" % (epoch, d, auc * 100, acc * 100))
+                print(
+                    "E[%d] [%s] AUC Err: [%.3f] ACC : [%.2f]\n"
+                    % (epoch, d, auc * 100, acc * 100)
+                )
                 # if epoch % 100 == 0:
                 stats_log.write("--Epoch %d--\n" % epoch)
-                stats_log.write("E[%d] [%s] AUC Err : [%.3f] ACC : [%.2f]\n" % (epoch, d, auc* 100, acc * 100))
+                stats_log.write(
+                    "E[%d] [%s] AUC Err : [%.3f] ACC : [%.2f]\n"
+                    % (epoch, d, auc * 100, acc * 100)
+                )
         # auc_results.append(aucs)
         # acc_results.append(accs)
 # data_list = options['ood_dataset']
