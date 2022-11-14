@@ -440,11 +440,20 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                 )
 
                 # Jika fliplr maka idx2 = 5
-                idx2 = torch.full_like(idx2, 3)
+                idx2 = torch.full_like(idx2, 4)
             else:
                 input_image[i][:, w1:w2, h1:h2] = torch.rot90(
                     input_image[i][:, w1:w2, h1:h2], idx2[i], [1, 2]
                 )
+        print(f"idx2 : ")
+        print(idx2)
+        print(f"idx2 Shape :")
+        print(idx2.shape)
+        print("=======" * 10)
+        print(f"idx : ")
+        print(idx)
+        print(f"idx Shape :")
+        print(idx.shape)
         rotlabel = idx * 4 + idx2
         rotlabel = rotlabel.cuda()
 
