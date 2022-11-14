@@ -130,14 +130,24 @@ def plot_confusion_matrix(
     return ax
 
 
-def prepare_folders(args):
-    args.root_log = args.root_log
-    folders_util = [
-        args.root_log,
-        args.root_model,
-        os.path.join(args.root_log, args.store_name),
-        os.path.join(args.root_model, args.store_name),
-    ]
+def prepare_folders(args, use_argspars=True):
+    folders_util = []
+    if use_argspars:
+        args.root_log = args.root_log
+        folders_util = [
+            args.root_log,
+            args.root_model,
+            os.path.join(args.root_log, args.store_name),
+            os.path.join(args.root_model, args.store_name),
+        ]
+    else:
+        folders_util = [
+            args['root_log'],
+            args['root_model'],
+            os.path.join(args['root_log'], args['store_name']),
+            os.path.join(args['root_model'], args['store_name']),
+        ]
+
     for folder in folders_util:
         if not os.path.exists(folder):
             print("creating folder " + folder)
