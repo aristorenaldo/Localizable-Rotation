@@ -195,7 +195,7 @@ def shuffle_channel(img: torch.Tensor, index_shuffle: int) -> torch.Tensor:
         img = torch.tensor(img)
 
     list_to_permutations = list(itertools.permutations(range(3), 3))
-    return img[list_to_permutations[i], ...]
+    return img[list_to_permutations[index_shuffle], ...]
 
 def accuracy(output, target, topk=(1,)):
 
