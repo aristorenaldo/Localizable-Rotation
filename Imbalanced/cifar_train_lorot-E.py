@@ -436,7 +436,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                 w2 = r2
                 h1 = r
                 h2 = r2
-            if args.experiment == "fliplr" or args.experiment == "all":
+            if args.experiment == "triple" or args.experiment == "all":
                 input_image[i][:, w1:w2, h1:h2] = torch.fliplr(
                     input_image[i][:, w1:w2, h1:h2]
                 )
@@ -445,7 +445,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                 # idx3 = torch.full_like(idx3, 4)
                 fliplabel = idx * 4
                 fliplabel = fliplabel.cuda()
-            if args.experiment == "rot" or args.experiment == "all":
+            if args.experiment == "both" or args.experiment == "all" or args.experiment == "triple":
                 input_image[i][:, w1:w2, h1:h2] = torch.rot90(
                     input_image[i][:, w1:w2, h1:h2], idx_rotation[i], [1, 2]
                 )
