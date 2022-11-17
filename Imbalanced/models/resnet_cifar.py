@@ -164,29 +164,19 @@ class ResNet_s(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def forward(self, x, rot=False, method=None):
+    def forward(self, x):
         out = F.relu(self.bn1(self.conv1(x)))
         out = self.layer1(out)
         out = self.layer2(out)
         out = self.layer3(out)
         out = F.avg_pool2d(out, out.size()[3])
         out = out.view(out.size(0), -1)
-        if method == "both":
-            return self.linear(out), self.linear2(out)
-        if method == "triple":
-            return self.linear(out), self.linear2(out), self.linear3(out)
-        if method == "all":
-            return (
-                self.linear(out),
-                self.linear2(out),
-                self.linear3(out),
-                self.linear4(out),
-            )
-        if rot:
-            return self.linear2(out)
-        else:
-            out = self.linear(out)
-            return out
+        return (
+            self.linear(out),
+            self.linear2(out),
+            self.linear3(out),
+            self.linear4(out),
+        )
 
 
 def resnet20():
