@@ -458,6 +458,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                 sclabel = idx * 4 + idx_shuffle_channel
                 sclabel = sclabel.cuda()
         rotoutput, flipoutput, scoutput = 0, 0, 0
+        rotloss, fliploss, scloss = 0, 0, 0
         # compute output
         if args.experiment == "all":
             output, rotoutput, flipoutput, scoutput = model(input_image, method="all")
