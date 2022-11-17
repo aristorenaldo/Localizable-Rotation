@@ -113,12 +113,18 @@ class BasicBlock(nn.Module):
 
 
 class ResNet_s(nn.Module):
-    def __init__(self, block, num_blocks, num_classes=10, 
-                 use_norm=False, num_trans=16, 
-                 num_flipped=4,
-                 # there are 6 ways to shuffled the image (6c3). Times 4 quadrant then
-                 # you get 24 num_shuffled_channel
-                 num_shuffled_channel=24):
+    def __init__(
+        self,
+        block,
+        num_blocks,
+        num_classes=10,
+        use_norm=False,
+        num_trans=16,
+        num_flipped=4,
+        # there are 6 ways to shuffled the image (6c3). Times 4 quadrant then
+        # you get 24 num_shuffled_channel
+        num_shuffled_channel=24,
+    ):
         super(ResNet_s, self).__init__()
         self.in_planes = 16
 
@@ -170,7 +176,12 @@ class ResNet_s(nn.Module):
         if method == "triple":
             return self.linear(out), self.linear2(out), self.linear3(out)
         if method == "all":
-            return self.linear(out), self.linear2(out), self.linear3(out), self.linear4(out)
+            return (
+                self.linear(out),
+                self.linear2(out),
+                self.linear3(out),
+                self.linear4(out),
+            )
         if rot:
             return self.linear2(out)
         else:

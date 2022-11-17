@@ -131,6 +131,7 @@ def plot_confusion_matrix(
     fig.tight_layout()
     return ax
 
+
 def prepare_folders(args):
     args.root_log = args.root_log
     folders_util = [
@@ -176,6 +177,7 @@ class AverageMeter(object):
         fmtstr = "{name} {val" + self.fmt + "} ({avg" + self.fmt + "})"
         return fmtstr.format(**self.__dict__)
 
+
 def shuffle_channel(img: torch.Tensor, index_shuffle: int) -> torch.Tensor:
     """Mengacak urutan dimensi RGB sebagai bentuk transformasi
 
@@ -196,6 +198,7 @@ def shuffle_channel(img: torch.Tensor, index_shuffle: int) -> torch.Tensor:
 
     list_to_permutations = list(itertools.permutations(range(3), 3))
     return img[list_to_permutations[index_shuffle], ...]
+
 
 def accuracy(output, target, topk=(1,)):
 

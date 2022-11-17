@@ -452,7 +452,9 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                 rotlabel = idx * 4 + idx_rotation
                 rotlabel = rotlabel.cuda()
             if args.experiment == "sc" or args.experiment == "all":
-                input_image[i][:, w1:w2, h1:h2] = shuffle_channel(input_image[i][:, w1:w2, h1:h2], idx_shuffle_channel[i])
+                input_image[i][:, w1:w2, h1:h2] = shuffle_channel(
+                    input_image[i][:, w1:w2, h1:h2], idx_shuffle_channel[i]
+                )
                 sclabel = idx * 4 + idx_shuffle_channel
                 sclabel = sclabel.cuda()
         rotoutput, flipoutput, scoutput = 0, 0, 0
@@ -460,9 +462,9 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         if args.experiment == "all":
             output, rotoutput, flipoutput, scoutput = model(input_image, method="all")
         elif args.experiment == "both":
-            output, rotoutput = model(input_image, method="all")
+            output, rotoutput = model(input_image, method="both")
         elif args.experiment == "triple":
-            output, rotoutput, flipoutput = model(input_image, method="all")
+            output, rotoutput, flipoutput = model(input_image, method="triple")
         loss = criterion(output, target)
 
         # rotoutput = model(input_image, rot=True)
@@ -481,7 +483,12 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         top1.update(acc1[0], input_image.size(0))
         top5.update(acc5[0], input_image.size(0))
 
-        loss = loss + args.r_ratio * rotloss + args.r_ratio * fliploss + args.r_ratio * scloss
+        loss = (
+            loss
+            + args.r_ratio * rotloss
+            + args.r_ratio * fliploss
+            + args.r_ratio * scloss
+        )
 
         # compute gradient and do SGD step
 
