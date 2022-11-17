@@ -11,13 +11,16 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Function
 import cv2
+
+
 def set_random_seed(seed):
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
 
-DATA_PATH = './datasets/data/'
+
+DATA_PATH = "./datasets/data/"
 
 
 CIFAR10_SUPERCLASS = list(range(10))  # one class
@@ -73,28 +76,29 @@ class MultiDataTransformList(object):
         return sample_list, self.clean_transform(sample)
 
 
-
-
 def get_transform(image_size=None):
     if image_size:  # use pre-specified image size
-        train_transform = transforms.Compose([
-
-            transforms.ToPILImage(),
-            transforms.Resize((image_size[0], image_size[1])),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-
-        ])
-        test_transform = transforms.Compose([
-            transforms.Resize((image_size[0], image_size[1])),
-            transforms.ToTensor(),
-        ])
-
+        train_transform = transforms.Compose(
+            [
+                transforms.ToPILImage(),
+                transforms.Resize((image_size[0], image_size[1])),
+                transforms.RandomHorizontalFlip(),
+                transforms.ToTensor(),
+            ]
+        )
+        test_transform = transforms.Compose(
+            [
+                transforms.Resize((image_size[0], image_size[1])),
+                transforms.ToTensor(),
+            ]
+        )
 
     else:  # use default image size
-        train_transform = transforms.Compose([
-            transforms.ToTensor(),
-        ])
+        train_transform = transforms.Compose(
+            [
+                transforms.ToTensor(),
+            ]
+        )
         test_transform = transforms.ToTensor()
 
     return train_transform, test_transform
@@ -116,47 +120,54 @@ def get_subset_with_len(dataset, length, shuffle=False):
     return subset
 
 
-
-def get_dataset(P, dataset, test_only=False, image_size=None, download=True, eval=False):
+def get_dataset(
+    P, dataset, test_only=False, image_size=None, download=True, eval=False
+):
     train_transform, test_transform = get_transform(image_size=image_size)
 
-    if dataset == 'cifar10':
+    if dataset == "cifar10":
         image_size = (32, 32, 3)
         n_classes = 10
-        train_set = datasets.CIFAR10(DATA_PATH, train=True, download=download, transform=train_transform)
-        test_set = datasets.CIFAR10(DATA_PATH, train=False, download=download, transform=test_transform)
+        train_set = datasets.CIFAR10(
+            DATA_PATH, train=True, download=download, transform=train_transform
+        )
+        test_set = datasets.CIFAR10(
+            DATA_PATH, train=False, download=download, transform=test_transform
+        )
 
-    elif dataset == 'cifar100':
+    elif dataset == "cifar100":
         image_size = (32, 32, 3)
         n_classes = 100
-        train_set = datasets.CIFAR100(DATA_PATH, train=True, download=download, transform=train_transform)
-        test_set = datasets.CIFAR100(DATA_PATH, train=False, download=download, transform=test_transform)
-    elif dataset == 'svhn':
+        train_set = datasets.CIFAR100(
+            DATA_PATH, train=True, download=download, transform=train_transform
+        )
+        test_set = datasets.CIFAR100(
+            DATA_PATH, train=False, download=download, transform=test_transform
+        )
+    elif dataset == "svhn":
         assert test_only and image_size is not None
-        test_set = datasets.SVHN(DATA_PATH, split='test', download=download, transform=test_transform)
+        test_set = datasets.SVHN(
+            DATA_PATH, split="test", download=download, transform=test_transform
+        )
 
-
-    elif dataset == 'lsun_resize':
+    elif dataset == "lsun_resize":
         assert test_only and image_size is not None
-        test_dir = os.path.join(DATA_PATH, 'LSUN_resize')
+        test_dir = os.path.join(DATA_PATH, "LSUN_resize")
         test_set = datasets.ImageFolder(test_dir, transform=test_transform)
 
-
-    elif dataset == 'lsun_fix':
+    elif dataset == "lsun_fix":
         assert test_only and image_size is not None
-        test_dir = os.path.join(DATA_PATH, 'LSUN_fix')
+        test_dir = os.path.join(DATA_PATH, "LSUN_fix")
         test_set = datasets.ImageFolder(test_dir, transform=test_transform)
 
-
-    elif dataset == 'imagenet_resize':
+    elif dataset == "imagenet_resize":
         assert test_only and image_size is not None
-        test_dir = os.path.join(DATA_PATH, 'Imagenet_resize')
+        test_dir = os.path.join(DATA_PATH, "Imagenet_resize")
         test_set = datasets.ImageFolder(test_dir, transform=test_transform)
 
-
-    elif dataset == 'imagenet_fix':
+    elif dataset == "imagenet_fix":
         assert test_only and image_size is not None
-        test_dir = os.path.join(DATA_PATH, 'Imagenet_fix')
+        test_dir = os.path.join(DATA_PATH, "Imagenet_fix")
         test_set = datasets.ImageFolder(test_dir, transform=test_transform)
 
     else:
@@ -169,9 +180,9 @@ def get_dataset(P, dataset, test_only=False, image_size=None, download=True, eva
 
 
 def get_superclass_list(dataset):
-    if dataset == 'cifar10':
+    if dataset == "cifar10":
         return CIFAR10_SUPERCLASS
-    elif dataset == 'cifar100':
+    elif dataset == "cifar100":
         return CIFAR100_SUPERCLASS
     else:
         raise NotImplementedError()
