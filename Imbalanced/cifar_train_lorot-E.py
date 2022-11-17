@@ -410,10 +410,11 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         target = target.cuda(args.gpu, non_blocking=True)
 
         idx = torch.randint(4, size=(input_image.size(0),))
-        idx2 = torch.randint(4, size=(input_image.size(0),))
+        idx_rotation = torch.randint(4, size=(input_image.size(0),))
+        idx_shuffle_channel = torch.randint(6, size=(input_image.size(0),))
         r = input_image.size(2) // 2
         r2 = input_image.size(2)
-        rotlabel, fliplabel = 0, 0
+        rotlabel, fliplabel, sclabel = 0, 0, 0
         for i in range(input_image.size(0)):
             if idx[i] == 0:
                 w1 = 0
@@ -440,29 +441,28 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                     input_image[i][:, w1:w2, h1:h2]
                 )
 
-                # Jika fliplr maka idx2 = 4
+                # Jika fliplr maka idx_rotation = 4
                 # idx3 = torch.full_like(idx3, 4)
                 fliplabel = idx * 4
                 fliplabel = fliplabel.cuda()
             if args.experiment == "rot" or args.experiment == "all":
                 input_image[i][:, w1:w2, h1:h2] = torch.rot90(
-                    input_image[i][:, w1:w2, h1:h2], idx2[i], [1, 2]
+                    input_image[i][:, w1:w2, h1:h2], idx_rotation[i], [1, 2]
                 )
-                rotlabel = idx * 4 + idx2
+                rotlabel = idx * 4 + idx_rotation
                 rotlabel = rotlabel.cuda()
-        # print(f"idx2 : ")
-        # print(idx2)
-        # print(f"idx2 Shape :")
-        # print(idx2.shape)
-        # print("=======" * 10)
-        # print(f"idx : ")
-        # print(idx)
-        # print(f"idx Shape :")
-        # print(idx.shape)
-        rotoutput, flipoutput = 0, 0
+            if args.experiment == "sc" or args.experiment == "all":
+                input_image[i][:, w1:w2, h1:h2] = shuffle_channel(input_image[i][:, w1:w2, h1:h2], idx_shuffle_channel[i])
+                sclabel = idx * 4 + idx_shuffle_channel
+                sclabel = sclabel.cuda()
+        rotoutput, flipoutput, scoutput = 0, 0, 0
         # compute output
         if args.experiment == "all":
-            output, rotoutput, flipoutput = model(input_image, method="triple")
+            output, rotoutput, flipoutput, scoutput = model(input_image, method="all")
+        elif args.experiment == "both":
+            output, rotoutput = model(input_image, method="all")
+        elif args.experiment == "triple":
+            output, rotoutput, flipoutput = model(input_image, method="all")
         loss = criterion(output, target)
 
         # rotoutput = model(input_image, rot=True)
@@ -472,13 +472,16 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         if not isinstance(flipoutput, int):
             flipoutput = torch.argmax(flipoutput, axis=1)
             fliploss = CE(flipoutput.type(torch.float32), fliplabel.type(torch.float32))
+        if not isinstance(flipoutput, int):
+            scoutput = torch.argmax(scoutput, axis=1)
+            scloss = CE(scoutput.type(torch.float32), sclabel.type(torch.float32))
         # measure accuracy and record loss
         acc1, acc5 = accuracy(output, target, topk=(1, 5))
         losses.update(loss.item(), input_image.size(0))
         top1.update(acc1[0], input_image.size(0))
         top5.update(acc5[0], input_image.size(0))
 
-        loss = loss + args.r_ratio * rotloss + args.r_ratio * fliploss
+        loss = loss + args.r_ratio * rotloss + args.r_ratio * fliploss + args.r_ratio * scloss
 
         # compute gradient and do SGD step
 
