@@ -475,7 +475,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         if not isinstance(flipoutput, int):
             flipoutput = torch.argmax(flipoutput, axis=1)
             fliploss = CE(flipoutput.type(torch.float32), fliplabel.type(torch.float32))
-        if not isinstance(flipoutput, int):
+        if not isinstance(scoutput, int):
             scoutput = torch.argmax(scoutput, axis=1)
             scloss = CE(scoutput.type(torch.float32), sclabel.type(torch.float32))
         # measure accuracy and record loss
