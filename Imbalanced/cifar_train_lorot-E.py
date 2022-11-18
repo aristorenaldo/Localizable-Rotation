@@ -437,22 +437,19 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                 w2 = r2
                 h1 = r
                 h2 = r2
-            if args.experiment == "triple" or args.experiment == "all":
+            if "fliplr" in args.method:
                 input_image[i][:, w1:w2, h1:h2] = torch.fliplr(
                     input_image[i][:, w1:w2, h1:h2]
                 )
-
-                # Jika fliplr maka idx_rotation = 4
-                # idx3 = torch.full_like(idx3, 4)
                 fliplabel = idx * 4
                 fliplabel = fliplabel.cuda()
-            if args.experiment == "both" or args.experiment == "all" or args.experiment == "triple":
+            if "rot" in args.method:
                 input_image[i][:, w1:w2, h1:h2] = torch.rot90(
                     input_image[i][:, w1:w2, h1:h2], idx_rotation[i], [1, 2]
                 )
                 rotlabel = idx * 4 + idx_rotation
                 rotlabel = rotlabel.cuda()
-            if args.experiment == "sc" or args.experiment == "all":
+            if "sc" in args.method:
                 input_image[i][:, w1:w2, h1:h2] = shuffle_channel(
                     input_image[i][:, w1:w2, h1:h2], idx_shuffle_channel[i]
                 )
@@ -461,22 +458,17 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         rotoutput, flipoutput, scoutput = 0, 0, 0
         rotloss, fliploss, scloss = 0, 0, 0
         # compute output
-        if args.experiment == "all":
-            output, rotoutput, flipoutput, scoutput = model(input_image, method="all")
-        elif args.experiment == "both":
-            output, rotoutput = model(input_image, method="both")
-        elif args.experiment == "triple":
-            output, rotoutput, flipoutput = model(input_image, method="triple")
+        output, rotoutput, flipoutput, scoutput = model(input_image)
         loss = criterion(output, target)
 
         # rotoutput = model(input_image, rot=True)
-        if not isinstance(rotoutput, int):
+        if "rot" in args.method:
             rotoutput = torch.argmax(rotoutput, axis=1)
             rotloss = CE(rotoutput.type(torch.float32), rotlabel.type(torch.float32))
-        if not isinstance(flipoutput, int):
+        if "fliplr" in args.method:
             flipoutput = torch.argmax(flipoutput, axis=1)
             fliploss = CE(flipoutput.type(torch.float32), fliplabel.type(torch.float32))
-        if not isinstance(scoutput, int):
+        if "sc" in args.method:
             scoutput = torch.argmax(scoutput, axis=1)
             scloss = CE(scoutput.type(torch.float32), sclabel.type(torch.float32))
         # measure accuracy and record loss
