@@ -544,7 +544,7 @@ def validate(
             target = target.cuda(args.gpu, non_blocking=True)
 
             # compute output
-            output = model(input_image)
+            output, *_ = model(input_image)
             loss = criterion(output, target)
 
             # measure accuracy and record loss
