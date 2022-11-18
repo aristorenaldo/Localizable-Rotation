@@ -127,11 +127,11 @@ parser.add_argument("--root_log", type=str, default="log")
 parser.add_argument("--root_model", type=str, default="checkpoint")
 parser.add_argument("--r_ratio", default=0.1, type=float, help="ratio")
 parser.add_argument(
-    "-x",
-    "--experiment",
+    "-m",
+    "--method",
     type=str,
-    default="",
-    help="Experiment it will be doing, Full explanation in experiment.txt",
+    required=True,
+    help="Experiment it will be doing, Full explanation in experiments md, the available value is rot, fliplr, and sc",
 )
 best_acc1 = 0
 
@@ -149,6 +149,7 @@ def main():
             args.exp_str,
         ]
     )
+    args.method = args.method.split(" ")
     args.root_log = args.root_log + "/" + str(int(args.r_ratio * 100))
     prepare_folders(args)
     if args.seed is not None:
