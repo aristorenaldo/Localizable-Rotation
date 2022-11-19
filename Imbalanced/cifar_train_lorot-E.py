@@ -401,7 +401,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
     model.train()
 
     end = time.time()
-    for b_i, (input, target) in enumerate(train_loader):
+    for b_i, (input_image, target) in enumerate(train_loader):
         # measure data loading time
         data_time.update(time.time() - end)
 
@@ -455,10 +455,19 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         print(f"idx Shape :")
         print(idx.shape)
         rotlabel = idx * 4 + idx2
+        print("=======" * 10)
+        print('rot label:')
+        print(rotlabel)
         rotlabel = rotlabel.cuda()
 
         # compute output
         output, rotoutput = model(input_image, both=True)
+        print("=======" * 10)
+        print('output:')
+        print(output.shape)
+        print('rotoutput:')
+        print(rotoutput.shape)
+        
         loss = criterion(output, target)
 
         # rotoutput = model(input_image, rot=True)
@@ -502,6 +511,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
             print(output)
             log.write(output + "\n")
             log.flush()
+        break
 
     tf_writer.add_scalar("loss/train", losses.avg, epoch)
     tf_writer.add_scalar("acc/train_top1", top1.avg, epoch)
