@@ -214,27 +214,30 @@ class BarlowTwins(nn.Module):
         # normalization layer for the representations z1 and z2
         self.bn = nn.BatchNorm1d(sizes[-1], affine=False)
 
-    def forward(self, y, y1, both=False):
+    def forward(self, y, y1=None, both=False):
         pred = self.backbone(y)
-        z1 = self.projector(pred)
-        z2 = self.projector(self.backbone(y1))
+        if self.training:
+            z1 = self.projector(pred)
+            z2 = self.projector(self.backbone(y1))
 
-        # empirical cross-correlation matrix
-        c = self.bn(z1).T @ self.bn(z2)
+            # empirical cross-correlation matrix
+            c = self.bn(z1).T @ self.bn(z2)
 
-        # sum the cross-correlation matrix between all gpus
-        c.div_(self.batch_size)
-        # torch.distributed.all_reduce(c)
+            # sum the cross-correlation matrix between all gpus
+            c.div_(self.batch_size)
+            # torch.distributed.all_reduce(c)
 
-        on_diag = torch.diagonal(c).add_(-1).pow_(2).sum()
-        off_diag = off_diagonal(c).pow_(2).sum()
-        loss = on_diag + self.lambd * off_diag
+            on_diag = torch.diagonal(c).add_(-1).pow_(2).sum()
+            off_diag = off_diagonal(c).pow_(2).sum()
+            loss = on_diag + self.lambd * off_diag
 
-        if both:
-            pred = self.fc(pred)
-            return pred, loss
+            if both:
+                pred = self.fc(pred)
+                return pred, loss
 
-        return loss
+            return loss
+        pred = self.fc(pred)
+        return pred
 
 def off_diagonal(x):
     # return a flattened view of the off-diagonal elements of a square matrix
