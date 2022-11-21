@@ -445,28 +445,28 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                 input_image[i][:, w1:w2, h1:h2] = torch.rot90(
                     input_image[i][:, w1:w2, h1:h2], idx2[i], [1, 2]
                 )
-        print(f"idx2 : ")
-        print(idx2)
-        print(f"idx2 Shape :")
-        print(idx2.shape)
-        print("=======" * 10)
-        print(f"idx : ")
-        print(idx)
-        print(f"idx Shape :")
-        print(idx.shape)
+        # print(f"idx2 : ")
+        # print(idx2)
+        # print(f"idx2 Shape :")
+        # print(idx2.shape)
+        # print("=======" * 10)
+        # print(f"idx : ")
+        # print(idx)
+        # print(f"idx Shape :")
+        # print(idx.shape)
         rotlabel = idx * 4 + idx2
-        print("=======" * 10)
-        print('rot label:')
-        print(rotlabel)
+        # print("=======" * 10)
+        # print('rot label:')
+        # print(rotlabel)
         rotlabel = rotlabel.cuda()
 
         # compute output
         output, rotoutput = model(input_image, both=True)
-        print("=======" * 10)
-        print('output:')
-        print(output.shape)
-        print('rotoutput:')
-        print(rotoutput.shape)
+        # print("=======" * 10)
+        # print('output:')
+        # print(output.shape)
+        # print('rotoutput:')
+        # print(rotoutput.shape)
         
         loss = criterion(output, target)
 
@@ -511,7 +511,6 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
             print(output)
             log.write(output + "\n")
             log.flush()
-        break
 
     tf_writer.add_scalar("loss/train", losses.avg, epoch)
     tf_writer.add_scalar("acc/train_top1", top1.avg, epoch)
