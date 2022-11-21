@@ -163,5 +163,3 @@ cython_debug/
 #.idea/
 
 data/
-logs/
-log/
