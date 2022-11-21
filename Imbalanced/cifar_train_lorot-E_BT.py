@@ -521,7 +521,6 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
             print(output)
             log.write(output + "\n")
             log.flush()
-        break
 
     tf_writer.add_scalar("loss/train", losses.avg, epoch)
     tf_writer.add_scalar("acc/train_top1", top1.avg, epoch)
