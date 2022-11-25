@@ -489,7 +489,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         batch_time.update(time.time() - end)
         end = time.time()
 
-        if b_i % args.print_freq == 0:
+        if b_i % args.print_freq == 0 or b_i == (len(train_loader)-1):
             output = (
                 "Epoch: [{0}][{1}/{2}], lr: {lr:.5f}\t"
                 "Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t"
