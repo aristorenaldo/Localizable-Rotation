@@ -199,7 +199,7 @@ class BarlowTwins(nn.Module):
             return pred, loss_bt
 
         # validation / test step 
-        pred = self.fc(pred)
+        pred = self.fc(out)
         return pred
 
 def off_diagonal(x):
