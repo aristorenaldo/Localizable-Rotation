@@ -127,7 +127,8 @@ parser.add_argument(
 parser.add_argument("--gpu", default=None, type=int, help="GPU id to use.")
 parser.add_argument("--root_log", type=str, default="log")
 parser.add_argument("--root_model", type=str, default="checkpoint")
-parser.add_argument("--r_ratio", default=0.1, type=float, help="ratio")
+parser.add_argument("--r_ratio", default=0.1, type=float, help="rotation loss ratio")
+parser.add_argument("--bt_ratio", default=0.1, type=float, help="BT loss ratio")
 parser.add_argument(
     "-x",
     "--experiment",
@@ -187,7 +188,7 @@ def main_worker(gpu, ngpus_per_node, args):
     num_classes = 100 if args.dataset == "cifar100" else 10
     use_norm = True if args.loss_type == "LDAM" else False
     if args.arch == 'BarlowTwins':
-        model = models.__dict__[args.arch](num_classes=num_classes, batch_size=args.batch_size)
+        model = models.__dict__[args.arch](num_classes=num_classes, batch_size=args.batch_size, lorot=True)
     else:
         model = models.__dict__[args.arch](num_classes=num_classes, use_norm=use_norm)
 
@@ -406,55 +407,55 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
     model.train()
 
     end = time.time()
-    for b_i, ((y, y1), target) in enumerate(train_loader):
+    for b_i, ((input_image, y1), target) in enumerate(train_loader):
         # measure data loading time
         data_time.update(time.time() - end)
 
         if args.gpu is not None:
-            # input_image = input_image.cuda(args.gpu, non_blocking=True)
-            y = y.cuda(args.gpu, non_blocking=True)
+            input_image = input_image.cuda(args.gpu, non_blocking=True)
+            # y = y.cuda(args.gpu, non_blocking=True)
             y1 = y1.cuda(args.gpu, non_blocking=True)
             # y2 = y2.cuda(args.gpu, non_blocking=True)
 
 
         target = target.cuda(args.gpu, non_blocking=True)
 
-        # idx = torch.randint(4, size=(input_image.size(0),))
-        # idx2 = torch.randint(4, size=(input_image.size(0),))
-        # r = input_image.size(2) // 2
-        # r2 = input_image.size(2)
-        # for i in range(input_image.size(0)):
-        #     if idx[i] == 0:
-        #         w1 = 0
-        #         w2 = r
-        #         h1 = 0
-        #         h2 = r
-        #     elif idx[i] == 1:
-        #         w1 = 0
-        #         w2 = r
-        #         h1 = r
-        #         h2 = r2
-        #     elif idx[i] == 2:
-        #         w1 = r
-        #         w2 = r2
-        #         h1 = 0
-        #         h2 = r
-        #     elif idx[i] == 3:
-        #         w1 = r
-        #         w2 = r2
-        #         h1 = r
-        #         h2 = r2
-        #     if args.experiment == "fliplr":
-        #         input_image[i][:, w1:w2, h1:h2] = torch.fliplr(
-        #             input_image[i][:, w1:w2, h1:h2]
-        #         )
+        idx = torch.randint(4, size=(input_image.size(0),))
+        idx2 = torch.randint(4, size=(input_image.size(0),))
+        r = input_image.size(2) // 2
+        r2 = input_image.size(2)
+        for i in range(input_image.size(0)):
+            if idx[i] == 0:
+                w1 = 0
+                w2 = r
+                h1 = 0
+                h2 = r
+            elif idx[i] == 1:
+                w1 = 0
+                w2 = r
+                h1 = r
+                h2 = r2
+            elif idx[i] == 2:
+                w1 = r
+                w2 = r2
+                h1 = 0
+                h2 = r
+            elif idx[i] == 3:
+                w1 = r
+                w2 = r2
+                h1 = r
+                h2 = r2
+            if args.experiment == "fliplr":
+                input_image[i][:, w1:w2, h1:h2] = torch.fliplr(
+                    input_image[i][:, w1:w2, h1:h2]
+                )
 
-        #         # Jika fliplr maka idx2 = 5
-        #         idx2 = torch.full_like(idx2, 4)
-        #     else:
-        #         input_image[i][:, w1:w2, h1:h2] = torch.rot90(
-        #             input_image[i][:, w1:w2, h1:h2], idx2[i], [1, 2]
-        #         )
+                # Jika fliplr maka idx2 = 5
+                idx2 = torch.full_like(idx2, 4)
+            else:
+                input_image[i][:, w1:w2, h1:h2] = torch.rot90(
+                    input_image[i][:, w1:w2, h1:h2], idx2[i], [1, 2]
+                )
         # print(f"idx2 : ")
         # print(idx2)
         # print(f"idx2 Shape :")
@@ -464,14 +465,14 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         # print(idx)
         # print(f"idx Shape :")
         # print(idx.shape)
-        # rotlabel = idx * 4 + idx2
+        rotlabel = idx * 4 + idx2
         # print("=======" * 10)
         # print('rot label:')
         # print(rotlabel)
-        # rotlabel = rotlabel.cuda()
+        rotlabel = rotlabel.cuda()
 
         # compute output
-        output, btloss = model(y, y1, both=True)
+        output, rotoutput, btloss = model(input_image, y1, bt_lorot=True)
         # print("=======" * 10)
         # print('output:')
         # print(output.shape)
@@ -480,15 +481,15 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         
         loss = criterion(output, target)
 
-        # rotoutput = model(input_image, rot=True)
-        # rotloss = CE(rotoutput, rotlabel)
+        rotloss = CE(rotoutput, rotlabel)
+
         # measure accuracy and record loss
         acc1, acc5 = accuracy(output, target, topk=(1, 5))
-        losses.update(loss.item(), y.size(0))
-        top1.update(acc1[0], y.size(0))
-        top5.update(acc5[0], y.size(0))
+        losses.update(loss.item(), input_image.size(0))
+        top1.update(acc1[0], input_image.size(0))
+        top5.update(acc5[0], input_image.size(0))
 
-        loss = loss + args.r_ratio * btloss
+        loss = loss + args.r_ratio * rotloss + args.bt_ratio * btloss
 
         # compute gradient and do SGD step
         optimizer.zero_grad()

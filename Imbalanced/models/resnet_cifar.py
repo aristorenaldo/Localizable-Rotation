@@ -34,8 +34,7 @@ __all__ = [
     "resnet44",
     "resnet56",
     "resnet110",
-    "resnet1202",
-    "BarlowTwins"
+    "resnet1202"
 ]
 
 
@@ -188,62 +187,6 @@ def resnet110():
 def resnet1202():
     return ResNet_s(BasicBlock, [200, 200, 200])
 
-
-class BarlowTwins(nn.Module):
-    def __init__(self, projector = '250-250', num_classes=10, batch_size=128, lambd=0.0051):
-        super().__init__()
-        self.batch_size = batch_size
-        self.lambd = lambd
-
-        self.backbone = resnet32()
-        self.backbone.linear = nn.Identity()
-
-        if num_classes:
-            self.fc = nn.Linear(64, num_classes)
-
-        # projector
-        sizes = [64] + list(map(int, projector.split('-')))
-        layers = []
-        for i in range(len(sizes) - 1):
-            layers.append(nn.Linear(sizes[i], sizes[i + 1], bias=False))
-            layers.append(nn.BatchNorm1d(sizes[i + 1]))
-            layers.append(nn.ReLU(inplace=True))
-        layers.append(nn.Linear(sizes[-2], sizes[-1], bias=False))
-        self.projector = nn.Sequential(*layers)
-
-        # normalization layer for the representations z1 and z2
-        self.bn = nn.BatchNorm1d(sizes[-1], affine=False)
-
-    def forward(self, y, y1=None, both=False):
-        pred = self.backbone(y)
-        if self.training:
-            z1 = self.projector(pred)
-            z2 = self.projector(self.backbone(y1))
-
-            # empirical cross-correlation matrix
-            c = self.bn(z1).T @ self.bn(z2)
-
-            # sum the cross-correlation matrix between all gpus
-            c.div_(self.batch_size)
-            # torch.distributed.all_reduce(c)
-
-            on_diag = torch.diagonal(c).add_(-1).pow_(2).sum()
-            off_diag = off_diagonal(c).pow_(2).sum()
-            loss = on_diag + self.lambd * off_diag
-
-            if both:
-                pred = self.fc(pred)
-                return pred, loss
-
-            return loss
-        pred = self.fc(pred)
-        return pred
-
-def off_diagonal(x):
-    # return a flattened view of the off-diagonal elements of a square matrix
-    n, m = x.shape
-    assert n == m
-    return x.flatten()[:-1].view(n - 1, n + 1)[:, 1:].flatten()
 
 def test(net):
     import numpy as np

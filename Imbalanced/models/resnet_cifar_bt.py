@@ -34,7 +34,7 @@ import torch.nn.init as init
 
 from torch.autograd import Variable
 
-__all__ = ['ResNet', 'resnet20', 'resnet32', 'resnet44', 'resnet56', 'resnet110', 'resnet1202']
+__all__ = ['BarlowTwins']
 
 def _weights_init(m):
     classname = m.__class__.__name__
@@ -93,7 +93,7 @@ class ResNet(nn.Module):
         self.layer1 = self._make_layer(block, 16, num_blocks[0], stride=1)
         self.layer2 = self._make_layer(block, 32, num_blocks[1], stride=2)
         self.layer3 = self._make_layer(block, 64, num_blocks[2], stride=2)
-        self.linear = nn.Linear(64, num_classes)
+        self.fc = nn.Linear(64, num_classes)
 
         self.apply(_weights_init)
 
@@ -113,8 +113,9 @@ class ResNet(nn.Module):
         out = self.layer3(out)
         out = F.avg_pool2d(out, out.size()[3])
         out = out.view(out.size(0), -1)
-        out = self.linear(out)
+        out = self.fc(out)
         return out
+
 
 
 def resnet20():
@@ -140,6 +141,72 @@ def resnet110():
 def resnet1202():
     return ResNet(BasicBlock, [200, 200, 200])
 
+
+class BarlowTwins(nn.Module):
+    def __init__(self, projector = '100-100', num_classes=10, batch_size=128, lambd=0.0051, lorot=False, lorot_trans=16):
+        super().__init__()
+        self.batch_size = batch_size
+        self.lambd = lambd
+        self.lorot = lorot
+
+        self.backbone = resnet32()
+        self.backbone.fc = nn.Identity()
+
+        if num_classes:
+            self.fc = nn.Linear(64, num_classes)
+
+        if lorot:
+            self.fc_lorot = nn.Linear(64, lorot_trans)
+
+        # projector
+        sizes = [64] + list(map(int, projector.split('-')))
+        layers = []
+        for i in range(len(sizes) - 1):
+            layers.append(nn.Linear(sizes[i], sizes[i + 1], bias=False))
+            layers.append(nn.BatchNorm1d(sizes[i + 1]))
+            layers.append(nn.ReLU(inplace=True))
+        layers.append(nn.Linear(sizes[-2], sizes[-1], bias=False))
+        self.projector = nn.Sequential(*layers)
+
+        # normalization layer for the representations z1 and z2
+        self.bn = nn.BatchNorm1d(sizes[-1], affine=False)
+
+    def forward(self, y, y1=None, bt_lorot = False):
+        out = self.backbone(y)
+
+        # training step
+        if self.training:
+            z1 = self.projector(out)
+            z2 = self.projector(self.backbone(y1))
+
+            # empirical cross-correlation matrix
+            c = self.bn(z1).T @ self.bn(z2)
+
+            # sum the cross-correlation matrix between all gpus
+            c.div_(self.batch_size)
+            # torch.distributed.all_reduce(c)
+
+            on_diag = torch.diagonal(c).add_(-1).pow_(2).sum()
+            off_diag = off_diagonal(c).pow_(2).sum()
+            loss_bt = on_diag + self.lambd * off_diag
+
+            pred = self.fc(out)
+
+            if bt_lorot:
+                lorot_pred = self.fc_lorot(out)
+                return pred, lorot_pred, loss_bt
+
+            return pred, loss_bt
+
+        # validation / test step 
+        pred = self.fc(pred)
+        return pred
+
+def off_diagonal(x):
+    # return a flattened view of the off-diagonal elements of a square matrix
+    n, m = x.shape
+    assert n == m
+    return x.flatten()[:-1].view(n - 1, n + 1)[:, 1:].flatten()
 
 def test(net):
     import numpy as np
