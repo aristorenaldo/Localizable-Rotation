@@ -149,6 +149,7 @@ class ResNet_s(nn.Module):
             self.linear4 = NormedLinear(64, num_trans)
         else:
             self.linear4 = nn.Linear(64, num_shuffled_channel)
+        self.gating_network = nn.Linear(64, 3) # sesuai jumlah transformasi
 
         print("num_trans : {}".format(num_trans))
         print("num_flipped : {}".format(num_flipped))
@@ -176,8 +177,9 @@ class ResNet_s(nn.Module):
             self.linear2(out),
             self.linear3(out),
             self.linear4(out),
+            self.gating_network(out)
         )
-
+# yay
 
 def resnet20():
     return ResNet_s(BasicBlock, [3, 3, 3])

@@ -133,9 +133,17 @@ parser.add_argument(
     required=True,
     help="Experiment it will be doing, Full explanation in experiments md, the available value is rot, fliplr, and sc",
 )
+parser.add_argument(
+    "-g",
+    "--gated_network",
+    type=bool,
+    action="store_true",
+    help="Use gated network for lambda on each transformation. Use r_ration instead if gated_network values is false",
+)
 best_acc1 = 0
 
 
+# ya
 def main():
     args = parser.parse_args()
     args.store_name = "_".join(
@@ -455,36 +463,43 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                 )
                 sclabel = idx * 4 + idx_shuffle_channel
                 sclabel = sclabel.cuda()
-        rotoutput, flipoutput, scoutput = 0, 0, 0
+        rot_output, flip_output, sc_output = 0, 0, 0
         rotloss, fliploss, scloss = 0, 0, 0
         # compute output
-        output, rotoutput, flipoutput, scoutput = model(input_image)
+        output, rot_output, flip_output, sc_output, gn_output = model(input_image)
+        gn_softmax = nn.Softmax(dim=1)(gn_output.mean(dim=0))
         loss = criterion(output, target)
 
-        # rotoutput = model(input_image, rot=True)
+        # rot_output = model(input_image, rot=True)
         if "rot" in args.method:
-            rotoutput = torch.argmax(rotoutput, axis=1)
-            rotloss = CE(rotoutput.type(torch.float32), rotlabel.type(torch.float32))
+            rot_output = torch.argmax(rot_output, axis=1)
+            rotloss = CE(rot_output.type(torch.float32), rotlabel.type(torch.float32))
         if "fliplr" in args.method:
-            flipoutput = torch.argmax(flipoutput, axis=1)
-            fliploss = CE(flipoutput.type(torch.float32), fliplabel.type(torch.float32))
+            flip_output = torch.argmax(flip_output, axis=1)
+            fliploss = CE(flip_output.type(torch.float32), fliplabel.type(torch.float32))
         if "sc" in args.method:
-            scoutput = torch.argmax(scoutput, axis=1)
-            scloss = CE(scoutput.type(torch.float32), sclabel.type(torch.float32))
+            sc_output = torch.argmax(sc_output, axis=1)
+            scloss = CE(sc_output.type(torch.float32), sclabel.type(torch.float32))
         # measure accuracy and record loss
         acc1, acc5 = accuracy(output, target, topk=(1, 5))
         losses.update(loss.item(), input_image.size(0))
         top1.update(acc1[0], input_image.size(0))
         top5.update(acc5[0], input_image.size(0))
 
-        loss = (
-            loss
-            + args.r_ratio * rotloss
-            + args.r_ratio * fliploss
-            + args.r_ratio * scloss
-        )
-
-        # compute gradient and do SGD step
+        if args.gated_network:
+            loss = (
+                loss
+                + gn_softmax[0].item() * rotloss
+                + gn_softmax[1].item() * fliploss
+                + gn_softmax[2].item() * scloss
+            )
+        else:
+            loss = (
+                loss
+                + args.r_ratio * rotloss
+                + args.r_ratio * fliploss
+                + args.r_ratio * scloss
+            )
 
         # compute gradient and do SGD step
         optimizer.zero_grad()
