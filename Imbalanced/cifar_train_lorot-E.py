@@ -136,7 +136,6 @@ parser.add_argument(
 parser.add_argument(
     "-g",
     "--gated_network",
-    type=bool,
     action="store_true",
     help="Use gated network for lambda on each transformation. Use r_ration instead if gated_network values is false",
 )
