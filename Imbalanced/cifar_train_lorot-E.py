@@ -466,7 +466,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         rotloss, fliploss, scloss = 0, 0, 0
         # compute output
         output, rot_output, flip_output, sc_output, gn_output = model(input_image)
-        gn_softmax = nn.Softmax(dim=1)(gn_output.mean(dim=0))
+        gn_softmax = nn.Softmax()(gn_output.mean(dim=0))
         loss = criterion(output, target)
 
         # rot_output = model(input_image, rot=True)
