@@ -486,7 +486,6 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         top5.update(acc5[0], input_image.size(0))
 
         if args.gated_network:
-            print(f"Gated Network LR= Rot:{gn_softmax[0].item():.2f}, Flip:{gn_softmax[1].item():.2f}, Sc:{gn_softmax[2].item():.2f}")
             loss = (
                 loss
                 + gn_softmax[0].item() * rotloss
@@ -532,7 +531,8 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
             print(output)
             log.write(output + "\n")
             log.flush()
-
+    if args.gated_network:
+        print(f"Gated Network LR= Rot:{gn_softmax[0].item():.2f}, Flip:{gn_softmax[1].item():.2f}, Sc:{gn_softmax[2].item():.2f}")
     tf_writer.add_scalar("loss/train", losses.avg, epoch)
     tf_writer.add_scalar("acc/train_top1", top1.avg, epoch)
     tf_writer.add_scalar("acc/train_top5", top5.avg, epoch)
