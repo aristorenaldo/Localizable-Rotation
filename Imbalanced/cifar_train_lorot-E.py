@@ -475,7 +475,9 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
             rotloss = CE(rot_output.type(torch.float32), rotlabel.type(torch.float32))
         if "fliplr" in args.method:
             flip_output = torch.argmax(flip_output, axis=1)
-            fliploss = CE(flip_output.type(torch.float32), fliplabel.type(torch.float32))
+            fliploss = CE(
+                flip_output.type(torch.float32), fliplabel.type(torch.float32)
+            )
         if "sc" in args.method:
             sc_output = torch.argmax(sc_output, axis=1)
             scloss = CE(sc_output.type(torch.float32), sclabel.type(torch.float32))
@@ -486,9 +488,8 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         top5.update(acc5[0], input_image.size(0))
 
         if args.gated_network:
-            loss = (
-                loss
-                + gn_softmax[0].item() * rotloss
+            loss = loss + args.r_ratio * (
+                gn_softmax[0].item() * rotloss
                 + gn_softmax[1].item() * fliploss
                 + gn_softmax[2].item() * scloss
             )
@@ -532,7 +533,9 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
             log.write(output + "\n")
             log.flush()
     if args.gated_network:
-        print(f"Gated Network LR= Rot:{gn_softmax[0].item():.2f}, Flip:{gn_softmax[1].item():.2f}, Sc:{gn_softmax[2].item():.2f}")
+        print(
+            f"Gated Network LR= Rot:{gn_softmax[0].item():.2f}, Flip:{gn_softmax[1].item():.2f}, Sc:{gn_softmax[2].item():.2f}"
+        )
     tf_writer.add_scalar("loss/train", losses.avg, epoch)
     tf_writer.add_scalar("acc/train_top1", top1.avg, epoch)
     tf_writer.add_scalar("acc/train_top5", top5.avg, epoch)
