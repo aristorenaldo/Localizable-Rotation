@@ -534,7 +534,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
             log.flush()
     if args.gated_network:
         print(
-            f"Gated Network LR= Rot:{gn_softmax[0].item():.2f}, Flip:{gn_softmax[1].item():.2f}, Sc:{gn_softmax[2].item():.2f}"
+            f"Gated Network Weight Gate= Rot:{gn_softmax[0].item():.2f}, Flip:{gn_softmax[1].item():.2f}, Sc:{gn_softmax[2].item():.2f}"
         )
     tf_writer.add_scalar("loss/train", losses.avg, epoch)
     tf_writer.add_scalar("acc/train_top1", top1.avg, epoch)
