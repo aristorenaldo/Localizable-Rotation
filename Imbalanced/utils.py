@@ -1,3 +1,4 @@
+import itertools
 import os
 import shutil
 
@@ -7,6 +8,7 @@ import torch
 
 matplotlib.use("Agg")
 from pathlib import Path
+from typing import Union
 
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
@@ -184,6 +186,28 @@ class AverageMeter(object):
     def __str__(self):
         fmtstr = "{name} {val" + self.fmt + "} ({avg" + self.fmt + "})"
         return fmtstr.format(**self.__dict__)
+
+
+def shuffle_channel(img: torch.Tensor, index_shuffle: int) -> torch.Tensor:
+    """Mengacak urutan dimensi RGB sebagai bentuk transformasi
+
+    Parameters
+    ----------
+    img : torch.Tensor
+        Pixel image RGB
+
+    index_shuffle : int
+        Index pengacakan berdasarkan kombinasi RGB
+    Returns
+    -------
+    torch.Tensor
+        Shuffled result image
+    """
+    if not isinstance(img, torch.Tensor):
+        img = torch.tensor(img)
+
+    list_to_permutations = list(itertools.permutations(range(3), 3))
+    return img[list_to_permutations[index_shuffle], ...]
 
 
 def accuracy(output, target, topk=(1,)):

@@ -127,15 +127,22 @@ parser.add_argument("--root_log", type=str, default="log")
 parser.add_argument("--root_model", type=str, default="checkpoint")
 parser.add_argument("--r_ratio", default=0.1, type=float, help="ratio")
 parser.add_argument(
-    "-x",
-    "--experiment",
+    "-m",
+    "--method",
     type=str,
-    default="",
-    help="Experiment it will be doing, Full explanation in experiment.txt",
+    required=True,
+    help="Experiment it will be doing, Full explanation in experiments md, the available value is rot, fliplr, and sc",
+)
+parser.add_argument(
+    "-g",
+    "--gated_network",
+    action="store_true",
+    help="Use gated network for lambda on each transformation. Use r_ration instead if gated_network values is false",
 )
 best_acc1 = 0
 
 
+# ya
 def main():
     args = parser.parse_args()
     args.store_name = "_".join(
@@ -149,6 +156,7 @@ def main():
             args.exp_str,
         ]
     )
+    args.method = args.method.split(" ")
     args.root_log = args.root_log + "/" + str(int(args.r_ratio * 100))
     prepare_folders(args)
     if args.seed is not None:
@@ -410,9 +418,11 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         target = target.cuda(args.gpu, non_blocking=True)
 
         idx = torch.randint(4, size=(input_image.size(0),))
-        idx2 = torch.randint(4, size=(input_image.size(0),))
+        idx_rotation = torch.randint(4, size=(input_image.size(0),))
+        idx_shuffle_channel = torch.randint(6, size=(input_image.size(0),))
         r = input_image.size(2) // 2
         r2 = input_image.size(2)
+        rotlabel, fliplabel, sclabel = 0, 0, 0
         for i in range(input_image.size(0)):
             if idx[i] == 0:
                 w1 = 0
@@ -434,51 +444,62 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                 w2 = r2
                 h1 = r
                 h2 = r2
-            if args.experiment == "fliplr":
+            if "fliplr" in args.method:
                 input_image[i][:, w1:w2, h1:h2] = torch.fliplr(
                     input_image[i][:, w1:w2, h1:h2]
                 )
-
-                # Jika fliplr maka idx2 = 5
-                idx2 = torch.full_like(idx2, 4)
-            else:
+                fliplabel = idx * 4
+                fliplabel = fliplabel.cuda()
+            if "rot" in args.method:
                 input_image[i][:, w1:w2, h1:h2] = torch.rot90(
-                    input_image[i][:, w1:w2, h1:h2], idx2[i], [1, 2]
+                    input_image[i][:, w1:w2, h1:h2], idx_rotation[i], [1, 2]
                 )
-        # print(f"idx2 : ")
-        # print(idx2)
-        # print(f"idx2 Shape :")
-        # print(idx2.shape)
-        # print("=======" * 10)
-        # print(f"idx : ")
-        # print(idx)
-        # print(f"idx Shape :")
-        # print(idx.shape)
-        rotlabel = idx * 4 + idx2
-        # print("=======" * 10)
-        # print('rot label:')
-        # print(rotlabel)
-        rotlabel = rotlabel.cuda()
-
+                rotlabel = idx * 4 + idx_rotation
+                rotlabel = rotlabel.cuda()
+            if "sc" in args.method:
+                input_image[i][:, w1:w2, h1:h2] = shuffle_channel(
+                    input_image[i][:, w1:w2, h1:h2], idx_shuffle_channel[i]
+                )
+                sclabel = idx * 4 + idx_shuffle_channel
+                sclabel = sclabel.cuda()
+        rot_output, flip_output, sc_output = 0, 0, 0
+        rotloss, fliploss, scloss = 0, 0, 0
         # compute output
-        output, rotoutput = model(input_image, both=True)
-        # print("=======" * 10)
-        # print('output:')
-        # print(output.shape)
-        # print('rotoutput:')
-        # print(rotoutput.shape)
-        
+        output, rot_output, flip_output, sc_output, gn_output = model(input_image)
+        gn_softmax = nn.Softmax()(gn_output.mean(dim=0))
         loss = criterion(output, target)
 
-        # rotoutput = model(input_image, rot=True)
-        rotloss = CE(rotoutput, rotlabel)
+        # rot_output = model(input_image, rot=True)
+        if "rot" in args.method:
+            rot_output = torch.argmax(rot_output, axis=1)
+            rotloss = CE(rot_output.type(torch.float32), rotlabel.type(torch.float32))
+        if "fliplr" in args.method:
+            flip_output = torch.argmax(flip_output, axis=1)
+            fliploss = CE(
+                flip_output.type(torch.float32), fliplabel.type(torch.float32)
+            )
+        if "sc" in args.method:
+            sc_output = torch.argmax(sc_output, axis=1)
+            scloss = CE(sc_output.type(torch.float32), sclabel.type(torch.float32))
         # measure accuracy and record loss
         acc1, acc5 = accuracy(output, target, topk=(1, 5))
         losses.update(loss.item(), input_image.size(0))
         top1.update(acc1[0], input_image.size(0))
         top5.update(acc5[0], input_image.size(0))
 
-        loss = loss + args.r_ratio * rotloss
+        if args.gated_network:
+            loss = loss + args.r_ratio * (
+                gn_softmax[0].item() * rotloss
+                + gn_softmax[1].item() * fliploss
+                + gn_softmax[2].item() * scloss
+            )
+        else:
+            loss = (
+                loss
+                + args.r_ratio * rotloss
+                + args.r_ratio * fliploss
+                + args.r_ratio * scloss
+            )
 
         # compute gradient and do SGD step
         optimizer.zero_grad()
@@ -511,7 +532,10 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
             print(output)
             log.write(output + "\n")
             log.flush()
-
+    if args.gated_network:
+        print(
+            f"Gated Network Weight Gate= Rot:{gn_softmax[0].item():.2f}, Flip:{gn_softmax[1].item():.2f}, Sc:{gn_softmax[2].item():.2f}"
+        )
     tf_writer.add_scalar("loss/train", losses.avg, epoch)
     tf_writer.add_scalar("acc/train_top1", top1.avg, epoch)
     tf_writer.add_scalar("acc/train_top5", top5.avg, epoch)
@@ -538,7 +562,7 @@ def validate(
             target = target.cuda(args.gpu, non_blocking=True)
 
             # compute output
-            output = model(input_image)
+            output, *_ = model(input_image)
             loss = criterion(output, target)
 
             # measure accuracy and record loss
