@@ -142,11 +142,11 @@ class ResNet_s(nn.Module):
         else:
             self.linear2 = nn.Linear(64, num_trans)
         if use_norm:
-            self.linear3 = NormedLinear(64, num_trans)
+            self.linear3 = NormedLinear(64, num_flipped)
         else:
             self.linear3 = nn.Linear(64, num_flipped)
         if use_norm:
-            self.linear4 = NormedLinear(64, num_trans)
+            self.linear4 = NormedLinear(64, num_shuffled_channel)
         else:
             self.linear4 = nn.Linear(64, num_shuffled_channel)
         self.gating_network = nn.Linear(64, 3)  # sesuai jumlah transformasi

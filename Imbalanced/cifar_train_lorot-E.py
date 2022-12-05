@@ -57,7 +57,7 @@ parser.add_argument(
 parser.add_argument(
     "-j",
     "--workers",
-    default=44,
+    default=4,
     type=int,
     metavar="N",
     help="number of data loading workers (default: 4)",
