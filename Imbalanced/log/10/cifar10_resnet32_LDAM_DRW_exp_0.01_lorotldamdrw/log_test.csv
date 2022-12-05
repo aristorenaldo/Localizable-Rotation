@@ -1,0 +1,1200 @@
+val Results: Prec@1 20.650 Prec@5 73.480 Loss 13.95987
+val Class Accuracy: [0.756,0.934,0.231,0.097,0.020,0.002,0.025,0.000,0.000,0.000]
+Best Prec@1: 20.650
+
+val Results: Prec@1 25.410 Prec@5 78.740 Loss 12.51805
+val Class Accuracy: [0.807,0.941,0.638,0.152,0.000,0.000,0.003,0.000,0.000,0.000]
+Best Prec@1: 25.410
+
+val Results: Prec@1 28.280 Prec@5 78.400 Loss 12.16416
+val Class Accuracy: [0.847,0.930,0.474,0.577,0.000,0.000,0.000,0.000,0.000,0.000]
+Best Prec@1: 28.280
+
+val Results: Prec@1 22.160 Prec@5 80.000 Loss 13.57077
+val Class Accuracy: [0.942,0.551,0.707,0.011,0.001,0.004,0.000,0.000,0.000,0.000]
+Best Prec@1: 28.280
+
+val Results: Prec@1 25.090 Prec@5 82.090 Loss 12.54055
+val Class Accuracy: [0.804,0.967,0.636,0.037,0.013,0.050,0.002,0.000,0.000,0.000]
+Best Prec@1: 28.280
+
+val Results: Prec@1 29.120 Prec@5 83.340 Loss 12.05078
+val Class Accuracy: [0.826,0.960,0.718,0.408,0.000,0.000,0.000,0.000,0.000,0.000]
+Best Prec@1: 29.120
+
+val Results: Prec@1 31.980 Prec@5 80.820 Loss 12.05027
+val Class Accuracy: [0.901,0.748,0.550,0.522,0.477,0.000,0.000,0.000,0.000,0.000]
+Best Prec@1: 31.980
+
+val Results: Prec@1 23.350 Prec@5 77.820 Loss 14.57232
+val Class Accuracy: [0.774,0.994,0.445,0.063,0.021,0.000,0.038,0.000,0.000,0.000]
+Best Prec@1: 31.980
+
+val Results: Prec@1 27.680 Prec@5 84.500 Loss 12.61971
+val Class Accuracy: [0.922,0.892,0.773,0.162,0.019,0.000,0.000,0.000,0.000,0.000]
+Best Prec@1: 31.980
+
+val Results: Prec@1 31.900 Prec@5 89.340 Loss 12.28819
+val Class Accuracy: [0.854,0.988,0.512,0.606,0.125,0.000,0.105,0.000,0.000,0.000]
+Best Prec@1: 31.980
+
+val Results: Prec@1 30.620 Prec@5 85.810 Loss 12.28655
+val Class Accuracy: [0.934,0.873,0.795,0.300,0.092,0.001,0.067,0.000,0.000,0.000]
+Best Prec@1: 31.980
+
+val Results: Prec@1 30.070 Prec@5 85.840 Loss 12.37755
+val Class Accuracy: [0.974,0.950,0.385,0.364,0.314,0.008,0.012,0.000,0.000,0.000]
+Best Prec@1: 31.980
+
+val Results: Prec@1 36.000 Prec@5 93.600 Loss 11.38250
+val Class Accuracy: [0.812,0.994,0.403,0.836,0.347,0.004,0.084,0.120,0.000,0.000]
+Best Prec@1: 36.000
+
+val Results: Prec@1 31.940 Prec@5 89.110 Loss 12.51927
+val Class Accuracy: [0.866,0.936,0.883,0.399,0.038,0.005,0.047,0.019,0.001,0.000]
+Best Prec@1: 36.000
+
+val Results: Prec@1 34.620 Prec@5 90.640 Loss 11.72362
+val Class Accuracy: [0.945,0.987,0.367,0.618,0.400,0.045,0.084,0.016,0.000,0.000]
+Best Prec@1: 36.000
+
+val Results: Prec@1 41.220 Prec@5 92.630 Loss 10.76834
+val Class Accuracy: [0.897,0.953,0.727,0.369,0.613,0.005,0.309,0.249,0.000,0.000]
+Best Prec@1: 41.220
+
+val Results: Prec@1 39.300 Prec@5 92.280 Loss 11.10059
+val Class Accuracy: [0.923,0.993,0.541,0.568,0.526,0.042,0.181,0.156,0.000,0.000]
+Best Prec@1: 41.220
+
+val Results: Prec@1 28.780 Prec@5 87.120 Loss 12.97490
+val Class Accuracy: [0.958,0.984,0.590,0.056,0.075,0.088,0.075,0.052,0.000,0.000]
+Best Prec@1: 41.220
+
+val Results: Prec@1 42.390 Prec@5 93.780 Loss 10.57519
+val Class Accuracy: [0.938,0.982,0.540,0.373,0.783,0.212,0.353,0.054,0.000,0.004]
+Best Prec@1: 42.390
+
+val Results: Prec@1 35.800 Prec@5 91.790 Loss 12.04083
+val Class Accuracy: [0.965,0.838,0.820,0.436,0.149,0.002,0.325,0.045,0.000,0.000]
+Best Prec@1: 42.390
+
+val Results: Prec@1 43.000 Prec@5 93.020 Loss 10.63439
+val Class Accuracy: [0.952,0.945,0.669,0.790,0.464,0.141,0.240,0.099,0.000,0.000]
+Best Prec@1: 43.000
+
+val Results: Prec@1 36.110 Prec@5 91.090 Loss 11.89593
+val Class Accuracy: [0.953,0.991,0.703,0.392,0.226,0.042,0.247,0.057,0.000,0.000]
+Best Prec@1: 43.000
+
+val Results: Prec@1 43.520 Prec@5 94.130 Loss 10.52002
+val Class Accuracy: [0.958,0.925,0.772,0.551,0.334,0.191,0.513,0.108,0.000,0.000]
+Best Prec@1: 43.520
+
+val Results: Prec@1 47.320 Prec@5 94.570 Loss 10.24245
+val Class Accuracy: [0.965,0.979,0.575,0.446,0.693,0.322,0.551,0.199,0.000,0.002]
+Best Prec@1: 47.320
+
+val Results: Prec@1 46.790 Prec@5 93.660 Loss 10.05028
+val Class Accuracy: [0.965,0.936,0.748,0.504,0.321,0.268,0.582,0.352,0.003,0.000]
+Best Prec@1: 47.320
+
+val Results: Prec@1 40.310 Prec@5 91.040 Loss 11.27501
+val Class Accuracy: [0.881,0.912,0.449,0.940,0.481,0.077,0.059,0.230,0.000,0.002]
+Best Prec@1: 47.320
+
+val Results: Prec@1 43.260 Prec@5 93.360 Loss 10.88511
+val Class Accuracy: [0.869,0.996,0.645,0.753,0.659,0.301,0.074,0.028,0.001,0.000]
+Best Prec@1: 47.320
+
+val Results: Prec@1 48.090 Prec@5 92.650 Loss 9.94335
+val Class Accuracy: [0.769,0.959,0.787,0.726,0.526,0.430,0.559,0.048,0.005,0.000]
+Best Prec@1: 48.090
+
+val Results: Prec@1 46.540 Prec@5 93.400 Loss 10.19410
+val Class Accuracy: [0.907,0.994,0.695,0.688,0.425,0.118,0.766,0.058,0.003,0.000]
+Best Prec@1: 48.090
+
+val Results: Prec@1 48.210 Prec@5 92.880 Loss 10.07979
+val Class Accuracy: [0.925,0.968,0.760,0.752,0.730,0.117,0.477,0.086,0.006,0.000]
+Best Prec@1: 48.210
+
+val Results: Prec@1 46.000 Prec@5 95.500 Loss 10.12725
+val Class Accuracy: [0.909,0.984,0.374,0.509,0.906,0.563,0.229,0.098,0.014,0.014]
+Best Prec@1: 48.210
+
+val Results: Prec@1 41.810 Prec@5 89.690 Loss 11.44999
+val Class Accuracy: [0.866,0.996,0.549,0.575,0.168,0.693,0.094,0.240,0.000,0.000]
+Best Prec@1: 48.210
+
+val Results: Prec@1 49.060 Prec@5 94.830 Loss 9.74593
+val Class Accuracy: [0.872,0.978,0.821,0.632,0.770,0.473,0.160,0.161,0.034,0.005]
+Best Prec@1: 49.060
+
+val Results: Prec@1 52.580 Prec@5 95.660 Loss 9.04987
+val Class Accuracy: [0.892,0.990,0.725,0.671,0.711,0.470,0.502,0.224,0.050,0.023]
+Best Prec@1: 52.580
+
+val Results: Prec@1 52.270 Prec@5 94.570 Loss 9.38185
+val Class Accuracy: [0.941,0.968,0.708,0.433,0.729,0.604,0.684,0.142,0.015,0.003]
+Best Prec@1: 52.580
+
+val Results: Prec@1 43.910 Prec@5 93.740 Loss 11.40486
+val Class Accuracy: [0.911,0.991,0.872,0.328,0.454,0.228,0.374,0.233,0.000,0.000]
+Best Prec@1: 52.580
+
+val Results: Prec@1 48.600 Prec@5 92.160 Loss 10.32334
+val Class Accuracy: [0.911,0.957,0.854,0.625,0.431,0.624,0.304,0.149,0.005,0.000]
+Best Prec@1: 52.580
+
+val Results: Prec@1 55.300 Prec@5 94.290 Loss 8.98543
+val Class Accuracy: [0.934,0.964,0.779,0.678,0.718,0.629,0.547,0.269,0.008,0.004]
+Best Prec@1: 55.300
+
+val Results: Prec@1 52.090 Prec@5 94.630 Loss 9.55292
+val Class Accuracy: [0.968,0.900,0.637,0.599,0.743,0.643,0.387,0.305,0.024,0.003]
+Best Prec@1: 55.300
+
+val Results: Prec@1 52.860 Prec@5 94.220 Loss 9.25907
+val Class Accuracy: [0.943,0.956,0.840,0.658,0.646,0.429,0.257,0.314,0.236,0.007]
+Best Prec@1: 55.300
+
+val Results: Prec@1 50.320 Prec@5 93.800 Loss 9.83789
+val Class Accuracy: [0.920,0.971,0.791,0.829,0.462,0.408,0.297,0.282,0.070,0.002]
+Best Prec@1: 55.300
+
+val Results: Prec@1 52.070 Prec@5 95.370 Loss 9.52063
+val Class Accuracy: [0.839,0.970,0.737,0.898,0.639,0.215,0.342,0.305,0.258,0.004]
+Best Prec@1: 55.300
+
+val Results: Prec@1 52.820 Prec@5 95.810 Loss 9.14220
+val Class Accuracy: [0.943,0.964,0.794,0.376,0.707,0.442,0.714,0.306,0.009,0.027]
+Best Prec@1: 55.300
+
+val Results: Prec@1 48.920 Prec@5 93.150 Loss 9.99578
+val Class Accuracy: [0.985,0.971,0.314,0.322,0.716,0.853,0.229,0.397,0.039,0.066]
+Best Prec@1: 55.300
+
+val Results: Prec@1 46.250 Prec@5 92.700 Loss 10.67770
+val Class Accuracy: [0.848,0.965,0.937,0.451,0.381,0.491,0.283,0.247,0.022,0.000]
+Best Prec@1: 55.300
+
+val Results: Prec@1 49.780 Prec@5 93.840 Loss 10.11561
+val Class Accuracy: [0.879,0.961,0.694,0.697,0.921,0.088,0.314,0.118,0.281,0.025]
+Best Prec@1: 55.300
+
+val Results: Prec@1 59.660 Prec@5 95.710 Loss 8.25821
+val Class Accuracy: [0.847,0.982,0.755,0.801,0.810,0.509,0.375,0.436,0.413,0.038]
+Best Prec@1: 59.660
+
+val Results: Prec@1 54.020 Prec@5 94.990 Loss 9.03060
+val Class Accuracy: [0.849,0.960,0.497,0.466,0.822,0.842,0.384,0.453,0.120,0.009]
+Best Prec@1: 59.660
+
+val Results: Prec@1 51.080 Prec@5 93.460 Loss 10.06928
+val Class Accuracy: [0.923,0.986,0.830,0.743,0.641,0.238,0.396,0.291,0.060,0.000]
+Best Prec@1: 59.660
+
+val Results: Prec@1 46.570 Prec@5 92.090 Loss 10.96690
+val Class Accuracy: [0.887,0.987,0.866,0.742,0.312,0.534,0.025,0.259,0.045,0.000]
+Best Prec@1: 59.660
+
+val Results: Prec@1 54.570 Prec@5 95.620 Loss 9.10109
+val Class Accuracy: [0.964,0.975,0.739,0.705,0.630,0.392,0.468,0.543,0.034,0.007]
+Best Prec@1: 59.660
+
+val Results: Prec@1 52.740 Prec@5 94.520 Loss 9.56327
+val Class Accuracy: [0.937,0.977,0.693,0.687,0.546,0.172,0.868,0.278,0.116,0.000]
+Best Prec@1: 59.660
+
+val Results: Prec@1 56.210 Prec@5 95.060 Loss 9.14308
+val Class Accuracy: [0.903,0.983,0.805,0.481,0.659,0.672,0.570,0.447,0.101,0.000]
+Best Prec@1: 59.660
+
+val Results: Prec@1 48.510 Prec@5 89.610 Loss 10.27843
+val Class Accuracy: [0.971,0.983,0.669,0.361,0.723,0.062,0.808,0.188,0.085,0.001]
+Best Prec@1: 59.660
+
+val Results: Prec@1 52.580 Prec@5 93.440 Loss 9.46668
+val Class Accuracy: [0.824,0.977,0.584,0.866,0.730,0.537,0.292,0.294,0.143,0.011]
+Best Prec@1: 59.660
+
+val Results: Prec@1 44.790 Prec@5 88.960 Loss 11.67339
+val Class Accuracy: [0.933,0.956,0.620,0.338,0.489,0.929,0.009,0.150,0.052,0.003]
+Best Prec@1: 59.660
+
+val Results: Prec@1 50.350 Prec@5 93.590 Loss 10.08069
+val Class Accuracy: [0.854,0.986,0.897,0.588,0.559,0.044,0.612,0.204,0.290,0.001]
+Best Prec@1: 59.660
+
+val Results: Prec@1 55.350 Prec@5 94.260 Loss 9.21317
+val Class Accuracy: [0.914,0.992,0.749,0.788,0.615,0.564,0.470,0.246,0.193,0.004]
+Best Prec@1: 59.660
+
+val Results: Prec@1 58.170 Prec@5 95.600 Loss 8.56491
+val Class Accuracy: [0.855,0.988,0.750,0.862,0.568,0.494,0.438,0.349,0.466,0.047]
+Best Prec@1: 59.660
+
+val Results: Prec@1 52.440 Prec@5 94.590 Loss 9.90210
+val Class Accuracy: [0.924,0.974,0.822,0.835,0.665,0.162,0.279,0.367,0.216,0.000]
+Best Prec@1: 59.660
+
+val Results: Prec@1 60.110 Prec@5 96.140 Loss 8.10802
+val Class Accuracy: [0.913,0.993,0.744,0.696,0.805,0.340,0.599,0.535,0.366,0.020]
+Best Prec@1: 60.110
+
+val Results: Prec@1 55.260 Prec@5 92.670 Loss 9.06106
+val Class Accuracy: [0.947,0.987,0.728,0.449,0.837,0.412,0.526,0.266,0.318,0.056]
+Best Prec@1: 60.110
+
+val Results: Prec@1 58.570 Prec@5 95.910 Loss 8.30958
+val Class Accuracy: [0.969,0.968,0.786,0.491,0.716,0.727,0.392,0.594,0.161,0.053]
+Best Prec@1: 60.110
+
+val Results: Prec@1 59.780 Prec@5 96.380 Loss 8.06146
+val Class Accuracy: [0.968,0.950,0.789,0.766,0.627,0.474,0.346,0.596,0.456,0.006]
+Best Prec@1: 60.110
+
+val Results: Prec@1 55.510 Prec@5 95.170 Loss 9.22704
+val Class Accuracy: [0.914,0.983,0.784,0.618,0.827,0.458,0.498,0.279,0.190,0.000]
+Best Prec@1: 60.110
+
+val Results: Prec@1 56.710 Prec@5 92.450 Loss 8.98769
+val Class Accuracy: [0.968,0.963,0.562,0.822,0.591,0.648,0.551,0.525,0.018,0.023]
+Best Prec@1: 60.110
+
+val Results: Prec@1 61.220 Prec@5 97.050 Loss 7.70651
+val Class Accuracy: [0.951,0.990,0.704,0.664,0.631,0.635,0.592,0.629,0.313,0.013]
+Best Prec@1: 61.220
+
+val Results: Prec@1 45.360 Prec@5 87.140 Loss 11.81712
+val Class Accuracy: [0.987,0.909,0.690,0.799,0.423,0.236,0.231,0.257,0.004,0.000]
+Best Prec@1: 61.220
+
+val Results: Prec@1 52.520 Prec@5 95.010 Loss 9.59761
+val Class Accuracy: [0.877,0.993,0.797,0.711,0.835,0.324,0.201,0.271,0.236,0.007]
+Best Prec@1: 61.220
+
+val Results: Prec@1 56.200 Prec@5 95.580 Loss 8.75452
+val Class Accuracy: [0.972,0.978,0.810,0.549,0.615,0.206,0.798,0.562,0.130,0.000]
+Best Prec@1: 61.220
+
+val Results: Prec@1 60.040 Prec@5 92.190 Loss 8.31362
+val Class Accuracy: [0.903,0.917,0.683,0.741,0.751,0.561,0.831,0.390,0.225,0.002]
+Best Prec@1: 61.220
+
+val Results: Prec@1 49.010 Prec@5 94.120 Loss 10.49814
+val Class Accuracy: [0.937,0.987,0.914,0.520,0.236,0.172,0.617,0.429,0.085,0.004]
+Best Prec@1: 61.220
+
+val Results: Prec@1 50.650 Prec@5 92.120 Loss 10.08999
+val Class Accuracy: [0.959,0.983,0.745,0.172,0.670,0.344,0.815,0.298,0.079,0.000]
+Best Prec@1: 61.220
+
+val Results: Prec@1 57.270 Prec@5 95.160 Loss 8.60196
+val Class Accuracy: [0.973,0.973,0.748,0.403,0.679,0.403,0.837,0.396,0.285,0.030]
+Best Prec@1: 61.220
+
+val Results: Prec@1 60.460 Prec@5 92.470 Loss 8.24614
+val Class Accuracy: [0.827,0.957,0.861,0.669,0.730,0.592,0.736,0.392,0.280,0.002]
+Best Prec@1: 61.220
+
+val Results: Prec@1 56.240 Prec@5 92.830 Loss 8.99178
+val Class Accuracy: [0.956,0.990,0.550,0.827,0.695,0.676,0.439,0.130,0.315,0.046]
+Best Prec@1: 61.220
+
+val Results: Prec@1 55.960 Prec@5 94.760 Loss 8.96086
+val Class Accuracy: [0.926,0.986,0.858,0.435,0.849,0.316,0.415,0.523,0.188,0.100]
+Best Prec@1: 61.220
+
+val Results: Prec@1 53.180 Prec@5 90.870 Loss 9.65082
+val Class Accuracy: [0.925,0.951,0.643,0.651,0.704,0.848,0.116,0.365,0.065,0.050]
+Best Prec@1: 61.220
+
+val Results: Prec@1 59.390 Prec@5 94.390 Loss 8.50621
+val Class Accuracy: [0.853,0.984,0.894,0.740,0.618,0.554,0.637,0.309,0.345,0.005]
+Best Prec@1: 61.220
+
+val Results: Prec@1 52.070 Prec@5 92.570 Loss 9.54706
+val Class Accuracy: [0.965,0.991,0.465,0.557,0.575,0.643,0.359,0.504,0.070,0.078]
+Best Prec@1: 61.220
+
+val Results: Prec@1 56.070 Prec@5 92.290 Loss 9.11075
+val Class Accuracy: [0.918,0.964,0.730,0.375,0.901,0.417,0.760,0.096,0.398,0.048]
+Best Prec@1: 61.220
+
+val Results: Prec@1 61.160 Prec@5 94.730 Loss 7.94345
+val Class Accuracy: [0.970,0.972,0.492,0.290,0.697,0.793,0.660,0.692,0.243,0.307]
+Best Prec@1: 61.220
+
+val Results: Prec@1 60.230 Prec@5 95.550 Loss 8.29137
+val Class Accuracy: [0.940,0.991,0.715,0.675,0.821,0.446,0.781,0.334,0.320,0.000]
+Best Prec@1: 61.220
+
+val Results: Prec@1 60.710 Prec@5 94.320 Loss 7.97257
+val Class Accuracy: [0.856,0.974,0.672,0.851,0.811,0.482,0.619,0.407,0.366,0.033]
+Best Prec@1: 61.220
+
+val Results: Prec@1 53.440 Prec@5 89.030 Loss 9.36557
+val Class Accuracy: [0.961,0.974,0.749,0.745,0.263,0.458,0.661,0.326,0.193,0.014]
+Best Prec@1: 61.220
+
+val Results: Prec@1 58.240 Prec@5 94.680 Loss 8.47446
+val Class Accuracy: [0.976,0.970,0.673,0.718,0.560,0.717,0.480,0.407,0.248,0.075]
+Best Prec@1: 61.220
+
+val Results: Prec@1 58.800 Prec@5 96.730 Loss 8.45274
+val Class Accuracy: [0.979,0.976,0.766,0.798,0.466,0.450,0.645,0.520,0.280,0.000]
+Best Prec@1: 61.220
+
+val Results: Prec@1 60.070 Prec@5 94.470 Loss 8.28003
+val Class Accuracy: [0.894,0.962,0.921,0.515,0.532,0.480,0.805,0.294,0.602,0.002]
+Best Prec@1: 61.220
+
+val Results: Prec@1 60.590 Prec@5 95.230 Loss 8.04557
+val Class Accuracy: [0.964,0.969,0.852,0.700,0.739,0.384,0.443,0.587,0.333,0.088]
+Best Prec@1: 61.220
+
+val Results: Prec@1 54.750 Prec@5 94.880 Loss 9.07352
+val Class Accuracy: [0.917,0.997,0.698,0.822,0.390,0.436,0.416,0.452,0.345,0.002]
+Best Prec@1: 61.220
+
+val Results: Prec@1 55.350 Prec@5 94.830 Loss 9.19257
+val Class Accuracy: [0.954,0.982,0.807,0.866,0.414,0.433,0.389,0.431,0.254,0.005]
+Best Prec@1: 61.220
+
+val Results: Prec@1 52.950 Prec@5 94.970 Loss 9.46060
+val Class Accuracy: [0.879,0.992,0.467,0.928,0.689,0.377,0.245,0.312,0.296,0.110]
+Best Prec@1: 61.220
+
+val Results: Prec@1 48.280 Prec@5 92.550 Loss 10.58364
+val Class Accuracy: [0.883,0.974,0.946,0.450,0.558,0.220,0.378,0.259,0.141,0.019]
+Best Prec@1: 61.220
+
+val Results: Prec@1 64.250 Prec@5 94.430 Loss 7.48351
+val Class Accuracy: [0.894,0.960,0.797,0.850,0.683,0.483,0.667,0.638,0.424,0.029]
+Best Prec@1: 64.250
+
+val Results: Prec@1 54.790 Prec@5 93.440 Loss 9.40611
+val Class Accuracy: [0.992,0.946,0.664,0.643,0.583,0.433,0.781,0.232,0.204,0.001]
+Best Prec@1: 64.250
+
+val Results: Prec@1 60.970 Prec@5 96.110 Loss 7.91215
+val Class Accuracy: [0.880,0.990,0.777,0.689,0.458,0.529,0.578,0.797,0.264,0.135]
+Best Prec@1: 64.250
+
+val Results: Prec@1 62.430 Prec@5 95.390 Loss 7.61680
+val Class Accuracy: [0.921,0.984,0.706,0.653,0.465,0.651,0.871,0.268,0.572,0.152]
+Best Prec@1: 64.250
+
+val Results: Prec@1 59.520 Prec@5 89.120 Loss 8.56609
+val Class Accuracy: [0.932,0.949,0.817,0.711,0.758,0.541,0.753,0.445,0.019,0.027]
+Best Prec@1: 64.250
+
+val Results: Prec@1 56.390 Prec@5 93.640 Loss 8.92358
+val Class Accuracy: [0.983,0.978,0.764,0.767,0.526,0.420,0.577,0.428,0.165,0.031]
+Best Prec@1: 64.250
+
+val Results: Prec@1 63.140 Prec@5 94.030 Loss 7.65784
+val Class Accuracy: [0.968,0.966,0.670,0.732,0.725,0.618,0.821,0.597,0.200,0.017]
+Best Prec@1: 64.250
+
+val Results: Prec@1 60.860 Prec@5 95.300 Loss 8.26899
+val Class Accuracy: [0.922,0.964,0.591,0.687,0.793,0.821,0.431,0.330,0.349,0.198]
+Best Prec@1: 64.250
+
+val Results: Prec@1 54.710 Prec@5 95.250 Loss 8.99436
+val Class Accuracy: [0.990,0.981,0.591,0.661,0.756,0.507,0.266,0.394,0.246,0.079]
+Best Prec@1: 64.250
+
+val Results: Prec@1 60.460 Prec@5 96.050 Loss 8.06176
+val Class Accuracy: [0.924,0.997,0.646,0.778,0.750,0.639,0.431,0.528,0.287,0.066]
+Best Prec@1: 64.250
+
+val Results: Prec@1 63.980 Prec@5 95.750 Loss 7.40161
+val Class Accuracy: [0.953,0.931,0.669,0.655,0.806,0.783,0.671,0.162,0.561,0.207]
+Best Prec@1: 64.250
+
+val Results: Prec@1 54.640 Prec@5 95.220 Loss 9.18712
+val Class Accuracy: [0.979,0.975,0.757,0.735,0.783,0.328,0.245,0.424,0.183,0.055]
+Best Prec@1: 64.250
+
+val Results: Prec@1 59.070 Prec@5 94.760 Loss 8.52033
+val Class Accuracy: [0.959,0.946,0.488,0.875,0.538,0.584,0.706,0.691,0.100,0.020]
+Best Prec@1: 64.250
+
+val Results: Prec@1 58.660 Prec@5 95.580 Loss 8.54937
+val Class Accuracy: [0.910,0.953,0.603,0.741,0.609,0.836,0.416,0.495,0.246,0.057]
+Best Prec@1: 64.250
+
+val Results: Prec@1 61.720 Prec@5 91.640 Loss 8.11349
+val Class Accuracy: [0.838,0.932,0.866,0.736,0.651,0.430,0.828,0.397,0.366,0.128]
+Best Prec@1: 64.250
+
+val Results: Prec@1 66.670 Prec@5 97.410 Loss 6.99891
+val Class Accuracy: [0.953,0.979,0.654,0.849,0.657,0.559,0.625,0.545,0.475,0.371]
+Best Prec@1: 66.670
+
+val Results: Prec@1 63.160 Prec@5 96.350 Loss 7.56948
+val Class Accuracy: [0.964,0.991,0.772,0.638,0.837,0.542,0.565,0.453,0.492,0.062]
+Best Prec@1: 66.670
+
+val Results: Prec@1 63.390 Prec@5 95.550 Loss 7.74657
+val Class Accuracy: [0.795,0.987,0.921,0.719,0.761,0.523,0.579,0.560,0.420,0.074]
+Best Prec@1: 66.670
+
+val Results: Prec@1 63.420 Prec@5 95.800 Loss 7.55007
+val Class Accuracy: [0.877,0.985,0.780,0.783,0.877,0.275,0.668,0.678,0.323,0.096]
+Best Prec@1: 66.670
+
+val Results: Prec@1 59.960 Prec@5 95.400 Loss 8.11563
+val Class Accuracy: [0.977,0.973,0.829,0.640,0.735,0.212,0.653,0.323,0.503,0.151]
+Best Prec@1: 66.670
+
+val Results: Prec@1 59.790 Prec@5 95.560 Loss 8.44064
+val Class Accuracy: [0.981,0.961,0.869,0.713,0.769,0.434,0.415,0.314,0.322,0.201]
+Best Prec@1: 66.670
+
+val Results: Prec@1 64.580 Prec@5 96.860 Loss 7.43842
+val Class Accuracy: [0.825,0.997,0.688,0.794,0.647,0.581,0.694,0.700,0.392,0.140]
+Best Prec@1: 66.670
+
+val Results: Prec@1 66.240 Prec@5 96.690 Loss 7.07809
+val Class Accuracy: [0.949,0.988,0.769,0.624,0.555,0.528,0.614,0.760,0.490,0.347]
+Best Prec@1: 66.670
+
+val Results: Prec@1 60.820 Prec@5 94.060 Loss 8.02156
+val Class Accuracy: [0.840,0.979,0.904,0.684,0.637,0.405,0.724,0.476,0.341,0.092]
+Best Prec@1: 66.670
+
+val Results: Prec@1 59.950 Prec@5 90.480 Loss 8.77445
+val Class Accuracy: [0.903,0.957,0.814,0.754,0.765,0.650,0.665,0.230,0.251,0.006]
+Best Prec@1: 66.670
+
+val Results: Prec@1 60.790 Prec@5 94.980 Loss 8.18447
+val Class Accuracy: [0.925,0.992,0.729,0.677,0.595,0.419,0.853,0.415,0.455,0.019]
+Best Prec@1: 66.670
+
+val Results: Prec@1 59.360 Prec@5 95.280 Loss 8.43077
+val Class Accuracy: [0.888,0.982,0.873,0.717,0.759,0.387,0.236,0.358,0.437,0.299]
+Best Prec@1: 66.670
+
+val Results: Prec@1 65.620 Prec@5 96.030 Loss 7.03936
+val Class Accuracy: [0.946,0.968,0.874,0.664,0.537,0.642,0.649,0.541,0.630,0.111]
+Best Prec@1: 66.670
+
+val Results: Prec@1 59.150 Prec@5 90.410 Loss 8.67382
+val Class Accuracy: [0.889,0.977,0.815,0.851,0.752,0.388,0.707,0.163,0.330,0.043]
+Best Prec@1: 66.670
+
+val Results: Prec@1 67.060 Prec@5 97.290 Loss 6.94590
+val Class Accuracy: [0.979,0.941,0.735,0.677,0.620,0.696,0.650,0.546,0.457,0.405]
+Best Prec@1: 67.060
+
+val Results: Prec@1 59.740 Prec@5 96.090 Loss 8.43387
+val Class Accuracy: [0.939,0.986,0.853,0.524,0.832,0.416,0.622,0.610,0.148,0.044]
+Best Prec@1: 67.060
+
+val Results: Prec@1 53.290 Prec@5 93.520 Loss 9.69291
+val Class Accuracy: [0.973,0.988,0.749,0.699,0.559,0.133,0.588,0.312,0.090,0.238]
+Best Prec@1: 67.060
+
+val Results: Prec@1 57.770 Prec@5 94.540 Loss 8.64473
+val Class Accuracy: [0.955,0.929,0.892,0.401,0.558,0.543,0.765,0.352,0.337,0.045]
+Best Prec@1: 67.060
+
+val Results: Prec@1 65.940 Prec@5 97.200 Loss 7.05716
+val Class Accuracy: [0.963,0.970,0.768,0.806,0.677,0.515,0.781,0.536,0.429,0.149]
+Best Prec@1: 67.060
+
+val Results: Prec@1 62.830 Prec@5 95.840 Loss 7.81212
+val Class Accuracy: [0.885,0.969,0.883,0.809,0.648,0.538,0.599,0.538,0.368,0.046]
+Best Prec@1: 67.060
+
+val Results: Prec@1 59.140 Prec@5 94.890 Loss 8.57034
+val Class Accuracy: [0.934,0.992,0.811,0.607,0.733,0.510,0.861,0.363,0.070,0.033]
+Best Prec@1: 67.060
+
+val Results: Prec@1 67.880 Prec@5 97.230 Loss 6.87872
+val Class Accuracy: [0.960,0.968,0.788,0.738,0.845,0.679,0.576,0.420,0.402,0.412]
+Best Prec@1: 67.880
+
+val Results: Prec@1 63.010 Prec@5 96.390 Loss 7.77063
+val Class Accuracy: [0.860,0.982,0.897,0.636,0.552,0.642,0.549,0.438,0.406,0.339]
+Best Prec@1: 67.880
+
+val Results: Prec@1 67.130 Prec@5 96.640 Loss 6.97033
+val Class Accuracy: [0.911,0.989,0.730,0.519,0.745,0.813,0.524,0.668,0.420,0.394]
+Best Prec@1: 67.880
+
+val Results: Prec@1 56.800 Prec@5 95.850 Loss 8.87563
+val Class Accuracy: [0.954,0.975,0.619,0.862,0.385,0.660,0.194,0.517,0.379,0.135]
+Best Prec@1: 67.880
+
+val Results: Prec@1 61.040 Prec@5 93.900 Loss 8.38460
+val Class Accuracy: [0.927,0.959,0.630,0.654,0.642,0.412,0.932,0.180,0.465,0.303]
+Best Prec@1: 67.880
+
+val Results: Prec@1 62.080 Prec@5 94.590 Loss 8.14919
+val Class Accuracy: [0.908,0.981,0.700,0.855,0.823,0.329,0.369,0.699,0.099,0.445]
+Best Prec@1: 67.880
+
+val Results: Prec@1 66.450 Prec@5 96.680 Loss 7.04607
+val Class Accuracy: [0.935,0.984,0.844,0.596,0.754,0.501,0.601,0.632,0.561,0.237]
+Best Prec@1: 67.880
+
+val Results: Prec@1 57.250 Prec@5 93.960 Loss 9.35880
+val Class Accuracy: [0.973,0.985,0.739,0.838,0.691,0.255,0.601,0.304,0.332,0.007]
+Best Prec@1: 67.880
+
+val Results: Prec@1 60.060 Prec@5 92.570 Loss 8.53823
+val Class Accuracy: [0.855,0.959,0.901,0.673,0.781,0.482,0.538,0.296,0.426,0.095]
+Best Prec@1: 67.880
+
+val Results: Prec@1 66.060 Prec@5 95.350 Loss 7.32141
+val Class Accuracy: [0.889,0.977,0.901,0.688,0.822,0.705,0.469,0.552,0.461,0.142]
+Best Prec@1: 67.880
+
+val Results: Prec@1 62.890 Prec@5 95.690 Loss 7.74519
+val Class Accuracy: [0.970,0.985,0.831,0.662,0.872,0.507,0.362,0.528,0.429,0.143]
+Best Prec@1: 67.880
+
+val Results: Prec@1 61.810 Prec@5 95.120 Loss 8.08588
+val Class Accuracy: [0.991,0.966,0.660,0.731,0.776,0.635,0.294,0.571,0.362,0.195]
+Best Prec@1: 67.880
+
+val Results: Prec@1 58.160 Prec@5 95.650 Loss 8.63022
+val Class Accuracy: [0.982,0.984,0.740,0.652,0.570,0.491,0.592,0.252,0.471,0.082]
+Best Prec@1: 67.880
+
+val Results: Prec@1 67.220 Prec@5 96.770 Loss 6.93706
+val Class Accuracy: [0.937,0.979,0.606,0.612,0.669,0.809,0.577,0.434,0.544,0.555]
+Best Prec@1: 67.880
+
+val Results: Prec@1 63.220 Prec@5 95.540 Loss 7.79811
+val Class Accuracy: [0.953,0.991,0.860,0.721,0.588,0.501,0.709,0.404,0.429,0.166]
+Best Prec@1: 67.880
+
+val Results: Prec@1 66.960 Prec@5 97.310 Loss 7.11454
+val Class Accuracy: [0.937,0.990,0.693,0.841,0.674,0.615,0.749,0.551,0.511,0.135]
+Best Prec@1: 67.880
+
+val Results: Prec@1 66.000 Prec@5 96.230 Loss 7.14054
+val Class Accuracy: [0.950,0.972,0.706,0.843,0.792,0.465,0.653,0.603,0.435,0.181]
+Best Prec@1: 67.880
+
+val Results: Prec@1 59.180 Prec@5 94.340 Loss 8.72842
+val Class Accuracy: [0.965,0.989,0.676,0.851,0.684,0.608,0.175,0.605,0.301,0.064]
+Best Prec@1: 67.880
+
+val Results: Prec@1 55.670 Prec@5 93.180 Loss 9.23183
+val Class Accuracy: [0.983,0.942,0.776,0.565,0.860,0.482,0.294,0.428,0.213,0.024]
+Best Prec@1: 67.880
+
+val Results: Prec@1 66.810 Prec@5 95.920 Loss 7.03338
+val Class Accuracy: [0.969,0.975,0.574,0.525,0.857,0.785,0.826,0.630,0.330,0.210]
+Best Prec@1: 67.880
+
+val Results: Prec@1 62.600 Prec@5 95.560 Loss 8.01401
+val Class Accuracy: [0.978,0.973,0.863,0.629,0.542,0.666,0.267,0.579,0.166,0.597]
+Best Prec@1: 67.880
+
+val Results: Prec@1 68.060 Prec@5 97.380 Loss 6.60052
+val Class Accuracy: [0.946,0.983,0.851,0.689,0.574,0.499,0.671,0.649,0.680,0.264]
+Best Prec@1: 68.060
+
+val Results: Prec@1 58.560 Prec@5 96.600 Loss 8.64662
+val Class Accuracy: [0.923,0.989,0.810,0.816,0.438,0.294,0.647,0.476,0.240,0.223]
+Best Prec@1: 68.060
+
+val Results: Prec@1 64.050 Prec@5 95.350 Loss 7.63689
+val Class Accuracy: [0.949,0.983,0.800,0.663,0.637,0.653,0.824,0.163,0.312,0.421]
+Best Prec@1: 68.060
+
+val Results: Prec@1 66.780 Prec@5 97.190 Loss 6.95525
+val Class Accuracy: [0.960,0.976,0.865,0.518,0.619,0.690,0.534,0.544,0.395,0.577]
+Best Prec@1: 68.060
+
+val Results: Prec@1 61.450 Prec@5 93.570 Loss 8.15382
+val Class Accuracy: [0.976,0.923,0.819,0.723,0.705,0.423,0.611,0.209,0.524,0.232]
+Best Prec@1: 68.060
+
+val Results: Prec@1 63.430 Prec@5 96.290 Loss 8.01841
+val Class Accuracy: [0.886,0.995,0.859,0.751,0.667,0.616,0.590,0.561,0.372,0.046]
+Best Prec@1: 68.060
+
+val Results: Prec@1 62.180 Prec@5 95.650 Loss 8.01351
+val Class Accuracy: [0.949,0.982,0.654,0.887,0.799,0.501,0.479,0.242,0.681,0.044]
+Best Prec@1: 68.060
+
+val Results: Prec@1 61.720 Prec@5 94.760 Loss 7.98788
+val Class Accuracy: [0.987,0.968,0.796,0.434,0.752,0.349,0.645,0.564,0.510,0.167]
+Best Prec@1: 68.060
+
+val Results: Prec@1 64.380 Prec@5 96.960 Loss 7.49746
+val Class Accuracy: [0.970,0.975,0.883,0.554,0.534,0.431,0.629,0.661,0.379,0.422]
+Best Prec@1: 68.060
+
+val Results: Prec@1 65.390 Prec@5 96.830 Loss 7.40222
+val Class Accuracy: [0.963,0.988,0.649,0.770,0.715,0.578,0.709,0.600,0.419,0.148]
+Best Prec@1: 68.060
+
+val Results: Prec@1 77.890 Prec@5 98.540 Loss 7.00089
+val Class Accuracy: [0.941,0.947,0.764,0.707,0.781,0.696,0.807,0.698,0.709,0.739]
+Best Prec@1: 77.890
+
+val Results: Prec@1 78.960 Prec@5 98.630 Loss 6.16587
+val Class Accuracy: [0.938,0.950,0.779,0.716,0.763,0.693,0.841,0.694,0.732,0.790]
+Best Prec@1: 78.960
+
+val Results: Prec@1 79.860 Prec@5 98.640 Loss 5.84864
+val Class Accuracy: [0.928,0.953,0.768,0.703,0.765,0.724,0.865,0.730,0.755,0.795]
+Best Prec@1: 79.860
+
+val Results: Prec@1 80.540 Prec@5 98.810 Loss 5.52527
+val Class Accuracy: [0.919,0.951,0.767,0.708,0.817,0.718,0.852,0.709,0.803,0.810]
+Best Prec@1: 80.540
+
+val Results: Prec@1 80.380 Prec@5 98.760 Loss 5.90577
+val Class Accuracy: [0.918,0.959,0.789,0.717,0.805,0.737,0.847,0.710,0.768,0.788]
+Best Prec@1: 80.540
+
+val Results: Prec@1 80.420 Prec@5 98.790 Loss 5.96980
+val Class Accuracy: [0.925,0.961,0.781,0.717,0.807,0.731,0.863,0.721,0.760,0.776]
+Best Prec@1: 80.540
+
+val Results: Prec@1 80.460 Prec@5 98.750 Loss 5.94713
+val Class Accuracy: [0.930,0.960,0.784,0.717,0.804,0.718,0.865,0.713,0.777,0.778]
+Best Prec@1: 80.540
+
+val Results: Prec@1 80.660 Prec@5 98.750 Loss 6.03747
+val Class Accuracy: [0.916,0.969,0.797,0.714,0.816,0.733,0.844,0.755,0.773,0.749]
+Best Prec@1: 80.660
+
+val Results: Prec@1 80.710 Prec@5 98.680 Loss 6.11852
+val Class Accuracy: [0.927,0.968,0.794,0.730,0.809,0.731,0.841,0.746,0.765,0.760]
+Best Prec@1: 80.710
+
+val Results: Prec@1 80.850 Prec@5 98.780 Loss 5.98601
+val Class Accuracy: [0.933,0.967,0.807,0.738,0.818,0.719,0.850,0.715,0.762,0.776]
+Best Prec@1: 80.850
+
+val Results: Prec@1 80.660 Prec@5 98.660 Loss 5.93612
+val Class Accuracy: [0.933,0.964,0.794,0.703,0.826,0.760,0.840,0.734,0.713,0.799]
+Best Prec@1: 80.850
+
+val Results: Prec@1 81.030 Prec@5 98.710 Loss 5.63154
+val Class Accuracy: [0.928,0.960,0.801,0.700,0.832,0.741,0.854,0.732,0.752,0.803]
+Best Prec@1: 81.030
+
+val Results: Prec@1 80.420 Prec@5 98.560 Loss 6.05275
+val Class Accuracy: [0.928,0.966,0.807,0.718,0.824,0.729,0.850,0.719,0.741,0.760]
+Best Prec@1: 81.030
+
+val Results: Prec@1 81.110 Prec@5 98.620 Loss 5.61240
+val Class Accuracy: [0.917,0.961,0.810,0.715,0.817,0.728,0.856,0.744,0.765,0.798]
+Best Prec@1: 81.110
+
+val Results: Prec@1 80.510 Prec@5 98.530 Loss 6.39004
+val Class Accuracy: [0.928,0.973,0.803,0.704,0.825,0.754,0.852,0.724,0.764,0.724]
+Best Prec@1: 81.110
+
+val Results: Prec@1 81.180 Prec@5 98.600 Loss 5.54787
+val Class Accuracy: [0.926,0.960,0.788,0.704,0.803,0.735,0.874,0.771,0.753,0.804]
+Best Prec@1: 81.180
+
+val Results: Prec@1 81.190 Prec@5 98.460 Loss 5.77324
+val Class Accuracy: [0.921,0.966,0.802,0.716,0.810,0.726,0.882,0.741,0.782,0.773]
+Best Prec@1: 81.190
+
+val Results: Prec@1 80.950 Prec@5 98.380 Loss 6.13508
+val Class Accuracy: [0.924,0.969,0.805,0.738,0.809,0.744,0.856,0.743,0.760,0.747]
+Best Prec@1: 81.190
+
+val Results: Prec@1 81.450 Prec@5 98.540 Loss 5.76190
+val Class Accuracy: [0.931,0.969,0.798,0.742,0.809,0.721,0.865,0.767,0.774,0.769]
+Best Prec@1: 81.450
+
+val Results: Prec@1 81.550 Prec@5 98.620 Loss 5.54110
+val Class Accuracy: [0.926,0.964,0.807,0.734,0.810,0.724,0.868,0.751,0.764,0.807]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.470 Prec@5 98.530 Loss 5.67317
+val Class Accuracy: [0.935,0.965,0.823,0.730,0.808,0.718,0.862,0.750,0.766,0.790]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.370 Prec@5 98.560 Loss 5.87206
+val Class Accuracy: [0.933,0.971,0.809,0.728,0.821,0.725,0.866,0.756,0.750,0.778]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.430 Prec@5 98.560 Loss 5.68358
+val Class Accuracy: [0.926,0.971,0.815,0.738,0.803,0.724,0.862,0.754,0.753,0.797]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.500 Prec@5 98.600 Loss 5.77466
+val Class Accuracy: [0.931,0.969,0.818,0.740,0.814,0.723,0.862,0.745,0.756,0.792]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.510 Prec@5 98.610 Loss 5.61012
+val Class Accuracy: [0.931,0.966,0.801,0.729,0.804,0.741,0.870,0.755,0.752,0.802]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.330 Prec@5 98.640 Loss 5.72183
+val Class Accuracy: [0.930,0.968,0.809,0.716,0.813,0.732,0.866,0.751,0.754,0.794]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.410 Prec@5 98.530 Loss 5.82745
+val Class Accuracy: [0.934,0.967,0.814,0.728,0.808,0.738,0.861,0.748,0.761,0.782]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.440 Prec@5 98.500 Loss 5.89431
+val Class Accuracy: [0.944,0.966,0.810,0.730,0.814,0.737,0.863,0.750,0.744,0.786]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.360 Prec@5 98.490 Loss 5.81297
+val Class Accuracy: [0.932,0.970,0.810,0.726,0.821,0.728,0.866,0.752,0.745,0.786]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.480 Prec@5 98.540 Loss 5.85983
+val Class Accuracy: [0.941,0.968,0.802,0.729,0.825,0.742,0.856,0.748,0.753,0.784]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.540 Prec@5 98.590 Loss 5.78603
+val Class Accuracy: [0.932,0.967,0.806,0.748,0.823,0.730,0.866,0.727,0.763,0.792]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.460 Prec@5 98.510 Loss 5.81990
+val Class Accuracy: [0.925,0.971,0.816,0.743,0.810,0.731,0.861,0.747,0.756,0.786]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.310 Prec@5 98.560 Loss 5.90746
+val Class Accuracy: [0.926,0.972,0.814,0.721,0.818,0.722,0.873,0.748,0.761,0.776]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.410 Prec@5 98.500 Loss 5.79775
+val Class Accuracy: [0.932,0.966,0.811,0.726,0.817,0.742,0.865,0.741,0.753,0.788]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.500 Prec@5 98.630 Loss 5.73007
+val Class Accuracy: [0.934,0.970,0.797,0.731,0.806,0.743,0.864,0.755,0.765,0.785]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.430 Prec@5 98.530 Loss 5.74093
+val Class Accuracy: [0.931,0.969,0.812,0.723,0.802,0.742,0.865,0.747,0.765,0.787]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.530 Prec@5 98.500 Loss 5.74326
+val Class Accuracy: [0.936,0.965,0.807,0.740,0.807,0.736,0.864,0.744,0.767,0.787]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.420 Prec@5 98.510 Loss 5.94495
+val Class Accuracy: [0.934,0.969,0.813,0.734,0.814,0.738,0.868,0.743,0.754,0.775]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.440 Prec@5 98.600 Loss 5.78460
+val Class Accuracy: [0.925,0.970,0.812,0.732,0.796,0.741,0.863,0.753,0.773,0.779]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.290 Prec@5 98.590 Loss 5.98910
+val Class Accuracy: [0.938,0.969,0.803,0.721,0.810,0.746,0.864,0.750,0.765,0.763]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.540 Prec@5 98.570 Loss 5.72898
+val Class Accuracy: [0.929,0.968,0.808,0.723,0.806,0.746,0.865,0.753,0.771,0.785]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.360 Prec@5 98.590 Loss 5.83989
+val Class Accuracy: [0.933,0.969,0.793,0.715,0.826,0.746,0.866,0.747,0.766,0.775]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.380 Prec@5 98.530 Loss 6.09506
+val Class Accuracy: [0.933,0.971,0.818,0.732,0.828,0.731,0.859,0.740,0.767,0.759]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.270 Prec@5 98.540 Loss 6.03488
+val Class Accuracy: [0.937,0.969,0.808,0.730,0.808,0.746,0.860,0.739,0.763,0.767]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.180 Prec@5 98.540 Loss 6.06783
+val Class Accuracy: [0.930,0.973,0.804,0.738,0.819,0.725,0.867,0.748,0.757,0.757]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.430 Prec@5 98.520 Loss 5.96866
+val Class Accuracy: [0.934,0.969,0.821,0.731,0.812,0.725,0.862,0.751,0.772,0.766]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.260 Prec@5 98.630 Loss 5.88809
+val Class Accuracy: [0.929,0.970,0.807,0.718,0.809,0.736,0.869,0.754,0.764,0.770]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.410 Prec@5 98.510 Loss 5.97694
+val Class Accuracy: [0.929,0.971,0.803,0.731,0.821,0.745,0.862,0.756,0.762,0.761]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.230 Prec@5 98.540 Loss 6.10833
+val Class Accuracy: [0.935,0.974,0.808,0.730,0.815,0.744,0.859,0.744,0.757,0.757]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.310 Prec@5 98.520 Loss 6.01770
+val Class Accuracy: [0.940,0.968,0.821,0.725,0.820,0.730,0.860,0.738,0.758,0.771]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.510 Prec@5 98.540 Loss 5.96182
+val Class Accuracy: [0.928,0.970,0.814,0.734,0.820,0.732,0.862,0.749,0.776,0.766]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.480 Prec@5 98.540 Loss 5.99864
+val Class Accuracy: [0.931,0.971,0.818,0.736,0.828,0.735,0.858,0.744,0.758,0.769]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.540 Prec@5 98.590 Loss 5.90094
+val Class Accuracy: [0.928,0.971,0.806,0.734,0.815,0.744,0.863,0.748,0.778,0.767]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.410 Prec@5 98.600 Loss 5.88755
+val Class Accuracy: [0.927,0.972,0.805,0.724,0.826,0.742,0.865,0.748,0.762,0.770]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.290 Prec@5 98.530 Loss 5.92461
+val Class Accuracy: [0.938,0.969,0.805,0.708,0.811,0.744,0.865,0.760,0.759,0.770]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.380 Prec@5 98.520 Loss 6.11423
+val Class Accuracy: [0.936,0.972,0.819,0.741,0.821,0.721,0.859,0.749,0.765,0.755]
+Best Prec@1: 81.550
+
+val Results: Prec@1 80.970 Prec@5 98.520 Loss 6.14616
+val Class Accuracy: [0.937,0.972,0.826,0.727,0.806,0.718,0.865,0.741,0.744,0.761]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.040 Prec@5 98.510 Loss 6.16850
+val Class Accuracy: [0.936,0.974,0.814,0.720,0.803,0.743,0.863,0.750,0.750,0.751]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.180 Prec@5 98.520 Loss 6.00339
+val Class Accuracy: [0.933,0.971,0.806,0.712,0.817,0.736,0.869,0.755,0.761,0.758]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.310 Prec@5 98.570 Loss 6.01975
+val Class Accuracy: [0.933,0.971,0.815,0.715,0.816,0.741,0.866,0.742,0.772,0.760]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.160 Prec@5 98.590 Loss 6.05780
+val Class Accuracy: [0.934,0.971,0.810,0.706,0.826,0.743,0.865,0.745,0.750,0.766]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.270 Prec@5 98.510 Loss 5.99619
+val Class Accuracy: [0.930,0.972,0.807,0.712,0.822,0.754,0.853,0.754,0.763,0.760]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.210 Prec@5 98.510 Loss 6.01144
+val Class Accuracy: [0.932,0.971,0.807,0.714,0.825,0.741,0.861,0.759,0.745,0.766]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.470 Prec@5 98.570 Loss 5.84729
+val Class Accuracy: [0.928,0.970,0.813,0.725,0.811,0.745,0.861,0.746,0.776,0.772]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.460 Prec@5 98.530 Loss 6.03073
+val Class Accuracy: [0.938,0.969,0.800,0.731,0.828,0.742,0.866,0.742,0.762,0.768]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.310 Prec@5 98.560 Loss 6.03904
+val Class Accuracy: [0.930,0.972,0.801,0.735,0.817,0.728,0.867,0.754,0.773,0.754]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.340 Prec@5 98.490 Loss 6.02430
+val Class Accuracy: [0.932,0.971,0.806,0.738,0.815,0.737,0.864,0.748,0.762,0.761]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.510 Prec@5 98.530 Loss 5.99712
+val Class Accuracy: [0.934,0.971,0.817,0.722,0.815,0.746,0.863,0.752,0.769,0.762]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.270 Prec@5 98.530 Loss 6.16188
+val Class Accuracy: [0.939,0.971,0.812,0.737,0.818,0.731,0.860,0.755,0.756,0.748]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.490 Prec@5 98.570 Loss 5.97576
+val Class Accuracy: [0.928,0.972,0.801,0.733,0.823,0.745,0.863,0.749,0.782,0.753]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.410 Prec@5 98.480 Loss 6.09651
+val Class Accuracy: [0.936,0.971,0.814,0.745,0.822,0.726,0.864,0.744,0.757,0.762]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.110 Prec@5 98.500 Loss 6.25421
+val Class Accuracy: [0.936,0.971,0.802,0.733,0.823,0.739,0.867,0.738,0.767,0.735]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.330 Prec@5 98.550 Loss 6.08915
+val Class Accuracy: [0.938,0.970,0.806,0.731,0.824,0.731,0.865,0.751,0.762,0.755]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.510 Prec@5 98.490 Loss 5.96396
+val Class Accuracy: [0.933,0.970,0.803,0.729,0.817,0.744,0.863,0.759,0.769,0.764]
+Best Prec@1: 81.550
+
+val Results: Prec@1 80.820 Prec@5 98.550 Loss 6.34318
+val Class Accuracy: [0.935,0.975,0.815,0.711,0.819,0.737,0.862,0.733,0.751,0.744]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.200 Prec@5 98.450 Loss 6.25815
+val Class Accuracy: [0.930,0.973,0.820,0.746,0.810,0.730,0.862,0.751,0.757,0.741]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.230 Prec@5 98.520 Loss 6.15134
+val Class Accuracy: [0.935,0.971,0.810,0.718,0.822,0.742,0.862,0.750,0.768,0.745]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.260 Prec@5 98.510 Loss 6.19613
+val Class Accuracy: [0.935,0.974,0.800,0.732,0.821,0.748,0.861,0.741,0.769,0.745]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.160 Prec@5 98.570 Loss 6.15349
+val Class Accuracy: [0.934,0.971,0.818,0.717,0.817,0.739,0.862,0.745,0.763,0.750]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.210 Prec@5 98.540 Loss 6.13726
+val Class Accuracy: [0.938,0.974,0.802,0.731,0.820,0.729,0.867,0.756,0.757,0.747]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.200 Prec@5 98.560 Loss 6.02826
+val Class Accuracy: [0.931,0.972,0.795,0.715,0.824,0.751,0.866,0.749,0.761,0.756]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.220 Prec@5 98.500 Loss 6.07898
+val Class Accuracy: [0.934,0.969,0.820,0.719,0.813,0.740,0.864,0.743,0.763,0.757]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.200 Prec@5 98.500 Loss 6.19181
+val Class Accuracy: [0.936,0.974,0.803,0.737,0.825,0.738,0.858,0.749,0.750,0.750]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.480 Prec@5 98.530 Loss 5.93996
+val Class Accuracy: [0.932,0.969,0.814,0.717,0.826,0.743,0.858,0.759,0.763,0.767]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.240 Prec@5 98.560 Loss 6.10905
+val Class Accuracy: [0.936,0.971,0.805,0.739,0.820,0.733,0.855,0.754,0.760,0.751]
+Best Prec@1: 81.550
+
+val Results: Prec@1 80.950 Prec@5 98.540 Loss 6.24415
+val Class Accuracy: [0.939,0.971,0.799,0.724,0.804,0.744,0.868,0.743,0.767,0.736]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.220 Prec@5 98.570 Loss 5.96354
+val Class Accuracy: [0.934,0.969,0.808,0.725,0.806,0.742,0.866,0.749,0.756,0.767]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.200 Prec@5 98.540 Loss 6.24722
+val Class Accuracy: [0.935,0.973,0.809,0.728,0.825,0.745,0.857,0.753,0.750,0.745]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.010 Prec@5 98.560 Loss 6.23128
+val Class Accuracy: [0.936,0.974,0.814,0.716,0.809,0.748,0.861,0.749,0.749,0.745]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.250 Prec@5 98.540 Loss 6.10648
+val Class Accuracy: [0.936,0.972,0.804,0.727,0.816,0.743,0.864,0.755,0.758,0.750]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.240 Prec@5 98.580 Loss 6.02721
+val Class Accuracy: [0.934,0.971,0.799,0.717,0.824,0.741,0.867,0.748,0.764,0.759]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.110 Prec@5 98.570 Loss 6.20395
+val Class Accuracy: [0.930,0.973,0.818,0.715,0.815,0.736,0.865,0.759,0.760,0.740]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.280 Prec@5 98.510 Loss 6.19471
+val Class Accuracy: [0.936,0.971,0.811,0.740,0.822,0.724,0.863,0.760,0.763,0.738]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.330 Prec@5 98.560 Loss 6.06550
+val Class Accuracy: [0.937,0.969,0.815,0.729,0.818,0.727,0.865,0.751,0.774,0.748]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.450 Prec@5 98.560 Loss 6.00212
+val Class Accuracy: [0.933,0.971,0.804,0.717,0.826,0.744,0.861,0.767,0.767,0.755]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.450 Prec@5 98.540 Loss 6.06730
+val Class Accuracy: [0.932,0.971,0.814,0.731,0.821,0.731,0.865,0.761,0.771,0.748]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.390 Prec@5 98.510 Loss 6.00143
+val Class Accuracy: [0.927,0.971,0.798,0.720,0.828,0.750,0.862,0.758,0.770,0.755]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.010 Prec@5 98.540 Loss 6.19168
+val Class Accuracy: [0.936,0.973,0.806,0.718,0.809,0.751,0.863,0.752,0.748,0.745]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.130 Prec@5 98.490 Loss 6.21189
+val Class Accuracy: [0.934,0.972,0.813,0.722,0.829,0.740,0.866,0.734,0.756,0.747]
+Best Prec@1: 81.550
+
+val Results: Prec@1 81.560 Prec@5 98.540 Loss 5.89005
+val Class Accuracy: [0.928,0.972,0.800,0.739,0.816,0.731,0.866,0.765,0.776,0.763]
+Best Prec@1: 81.560
+
+val Results: Prec@1 81.330 Prec@5 98.550 Loss 6.14729
+val Class Accuracy: [0.934,0.972,0.810,0.735,0.820,0.735,0.863,0.758,0.762,0.744]
+Best Prec@1: 81.560
+
+val Results: Prec@1 81.560 Prec@5 98.560 Loss 5.90995
+val Class Accuracy: [0.933,0.970,0.818,0.718,0.820,0.735,0.867,0.767,0.763,0.765]
+Best Prec@1: 81.560
+
+val Results: Prec@1 81.450 Prec@5 98.550 Loss 5.95632
+val Class Accuracy: [0.932,0.971,0.807,0.727,0.818,0.735,0.865,0.754,0.776,0.760]
+Best Prec@1: 81.560
+
+val Results: Prec@1 81.230 Prec@5 98.540 Loss 6.10895
+val Class Accuracy: [0.937,0.972,0.812,0.724,0.812,0.740,0.864,0.748,0.757,0.757]
+Best Prec@1: 81.560
+
+val Results: Prec@1 81.300 Prec@5 98.550 Loss 6.09589
+val Class Accuracy: [0.936,0.970,0.813,0.730,0.816,0.736,0.864,0.743,0.771,0.751]
+Best Prec@1: 81.560
+
+val Results: Prec@1 81.370 Prec@5 98.600 Loss 6.07135
+val Class Accuracy: [0.927,0.972,0.802,0.735,0.817,0.745,0.862,0.758,0.772,0.747]
+Best Prec@1: 81.560
+
+val Results: Prec@1 81.260 Prec@5 98.510 Loss 5.99132
+val Class Accuracy: [0.935,0.970,0.808,0.731,0.809,0.741,0.856,0.756,0.754,0.766]
+Best Prec@1: 81.560
+
+val Results: Prec@1 81.030 Prec@5 98.520 Loss 6.18772
+val Class Accuracy: [0.936,0.973,0.805,0.719,0.812,0.743,0.867,0.750,0.750,0.748]
+Best Prec@1: 81.560
+
+val Results: Prec@1 80.930 Prec@5 98.540 Loss 6.18533
+val Class Accuracy: [0.934,0.974,0.807,0.709,0.810,0.741,0.868,0.754,0.756,0.740]
+Best Prec@1: 81.560
+
+val Results: Prec@1 81.220 Prec@5 98.530 Loss 6.14365
+val Class Accuracy: [0.935,0.972,0.805,0.739,0.811,0.746,0.855,0.754,0.754,0.751]
+Best Prec@1: 81.560
+
+val Results: Prec@1 81.600 Prec@5 98.610 Loss 5.98889
+val Class Accuracy: [0.935,0.972,0.807,0.727,0.822,0.740,0.863,0.753,0.782,0.759]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.140 Prec@5 98.480 Loss 6.17084
+val Class Accuracy: [0.935,0.973,0.809,0.724,0.818,0.738,0.866,0.752,0.751,0.748]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.250 Prec@5 98.480 Loss 6.14495
+val Class Accuracy: [0.935,0.973,0.813,0.721,0.820,0.742,0.866,0.752,0.751,0.752]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.330 Prec@5 98.470 Loss 5.98159
+val Class Accuracy: [0.931,0.968,0.823,0.722,0.809,0.749,0.858,0.748,0.763,0.762]
+Best Prec@1: 81.600
+
+val Results: Prec@1 80.980 Prec@5 98.560 Loss 6.30767
+val Class Accuracy: [0.937,0.976,0.807,0.712,0.814,0.748,0.860,0.747,0.763,0.734]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.080 Prec@5 98.600 Loss 6.24884
+val Class Accuracy: [0.933,0.974,0.809,0.727,0.816,0.744,0.865,0.749,0.753,0.738]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.100 Prec@5 98.520 Loss 6.37744
+val Class Accuracy: [0.934,0.975,0.818,0.729,0.813,0.734,0.863,0.754,0.767,0.723]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.120 Prec@5 98.450 Loss 6.16227
+val Class Accuracy: [0.935,0.973,0.805,0.725,0.808,0.745,0.869,0.760,0.744,0.748]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.020 Prec@5 98.560 Loss 6.18847
+val Class Accuracy: [0.927,0.974,0.818,0.726,0.816,0.724,0.866,0.752,0.757,0.742]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.040 Prec@5 98.570 Loss 6.10704
+val Class Accuracy: [0.938,0.971,0.811,0.726,0.811,0.718,0.865,0.757,0.752,0.755]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.470 Prec@5 98.540 Loss 5.87275
+val Class Accuracy: [0.930,0.969,0.814,0.726,0.809,0.736,0.866,0.754,0.777,0.766]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.340 Prec@5 98.500 Loss 6.16986
+val Class Accuracy: [0.934,0.973,0.815,0.745,0.821,0.733,0.855,0.752,0.760,0.746]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.350 Prec@5 98.500 Loss 6.14999
+val Class Accuracy: [0.934,0.972,0.806,0.753,0.822,0.739,0.850,0.754,0.745,0.760]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.380 Prec@5 98.550 Loss 6.00675
+val Class Accuracy: [0.931,0.972,0.808,0.714,0.816,0.750,0.861,0.763,0.768,0.755]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.350 Prec@5 98.530 Loss 6.05391
+val Class Accuracy: [0.928,0.973,0.804,0.728,0.820,0.746,0.863,0.754,0.765,0.754]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.070 Prec@5 98.570 Loss 6.33131
+val Class Accuracy: [0.927,0.976,0.816,0.715,0.823,0.746,0.857,0.749,0.766,0.732]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.010 Prec@5 98.550 Loss 6.24483
+val Class Accuracy: [0.936,0.973,0.820,0.718,0.822,0.731,0.856,0.753,0.754,0.738]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.300 Prec@5 98.510 Loss 6.02649
+val Class Accuracy: [0.932,0.972,0.816,0.731,0.820,0.730,0.859,0.757,0.753,0.760]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.210 Prec@5 98.540 Loss 6.27196
+val Class Accuracy: [0.936,0.974,0.804,0.732,0.822,0.743,0.861,0.757,0.749,0.743]
+Best Prec@1: 81.600
+
+val Results: Prec@1 80.950 Prec@5 98.590 Loss 6.13413
+val Class Accuracy: [0.932,0.974,0.818,0.709,0.804,0.733,0.864,0.760,0.752,0.749]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.220 Prec@5 98.490 Loss 6.00365
+val Class Accuracy: [0.928,0.972,0.819,0.716,0.810,0.739,0.868,0.756,0.755,0.759]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.220 Prec@5 98.560 Loss 6.03714
+val Class Accuracy: [0.927,0.974,0.810,0.723,0.828,0.722,0.871,0.752,0.764,0.751]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.230 Prec@5 98.650 Loss 6.10495
+val Class Accuracy: [0.932,0.974,0.803,0.727,0.815,0.745,0.861,0.748,0.767,0.751]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.190 Prec@5 98.510 Loss 6.14341
+val Class Accuracy: [0.932,0.973,0.815,0.701,0.822,0.759,0.860,0.753,0.756,0.748]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.070 Prec@5 98.560 Loss 6.14057
+val Class Accuracy: [0.930,0.974,0.812,0.720,0.819,0.735,0.858,0.756,0.754,0.749]
+Best Prec@1: 81.600
+
+val Results: Prec@1 80.930 Prec@5 98.530 Loss 6.21221
+val Class Accuracy: [0.931,0.973,0.817,0.703,0.808,0.758,0.863,0.746,0.755,0.739]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.160 Prec@5 98.550 Loss 6.08069
+val Class Accuracy: [0.931,0.973,0.808,0.704,0.821,0.748,0.865,0.763,0.753,0.750]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.160 Prec@5 98.510 Loss 6.17435
+val Class Accuracy: [0.935,0.973,0.807,0.721,0.808,0.755,0.862,0.758,0.754,0.743]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.210 Prec@5 98.500 Loss 6.18307
+val Class Accuracy: [0.935,0.972,0.808,0.724,0.819,0.744,0.863,0.752,0.760,0.744]
+Best Prec@1: 81.600
+
+val Results: Prec@1 81.230 Prec@5 98.530 Loss 6.06745
+val Class Accuracy: [0.935,0.973,0.795,0.731,0.817,0.745,0.864,0.759,0.748,0.756]
+Best Prec@1: 81.600
+
