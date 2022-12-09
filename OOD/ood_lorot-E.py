@@ -201,9 +201,10 @@ def test(net1, d):
 criterion = nn.CrossEntropyLoss()
 options = vars(args)
 options["dataroot"] = os.path.join(options["dataroot"], options["dataset"])
+tmppath = os.path.join(options['outf'], "ood")
 if not os.path.exists(options['outf']):
     os.makedirs(options['outf'])
-    tmppath = os.path.join(options['outf'], "ood")
+    
     if not os.path.exists(tmppath):
         os.makedirs(tmppath)
 if not os.path.exists(os.path.join(tmppath, args.dataset)):
