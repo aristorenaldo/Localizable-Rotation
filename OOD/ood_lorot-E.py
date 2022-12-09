@@ -239,7 +239,7 @@ if options["ood_dataset"] is None:
         options["image_size"] = (32, 32, 3)
 ood_eval = True
 ood_test_loader = dict()
-kwargs = {"pin_memory": False, "num_workers": 40}
+kwargs = {"pin_memory": False, "num_workers": options['workers']}
 for ood in options["ood_dataset"]:
     ood_test_set = get_dataset(
         options,
