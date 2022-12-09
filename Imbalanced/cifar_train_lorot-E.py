@@ -466,7 +466,11 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         rotloss, fliploss, scloss = 0, 0, 0
         # compute output
         output, rot_output, flip_output, sc_output, gn_output = model(input_image)
-        gn_softmax = nn.Softmax()(gn_output.mean(dim=0))
+        # output,  flip_output, sc_output, gn_output = model(input_image)
+        # output, rot_output, gn_output = model(input_image)
+
+        
+        # gn_sigmoid = nn.Sigmoid()(gn_output.mean(dim=0))
         loss = criterion(output, target)
 
         # rot_output = model(input_image, rot=True)
@@ -488,15 +492,31 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         top5.update(acc5[0], input_image.size(0))
 
         if args.gated_network:
+            gn_softmax = nn.Softmax()(gn_output.mean(dim=0))
             loss = loss + args.r_ratio * (
-                gn_softmax[0].item() * rotloss
+                gn_softmax[0].item() * rotloss +
+                #  gn_softmax[1].item() * fliploss
                 + gn_softmax[1].item() * fliploss
                 + gn_softmax[2].item() * scloss
+                # + gn_softmax[3].item() * scloss
             )
+            # loss = (
+            #     gn_softmax[0].item() * loss
+            #     + gn_softmax[1].item() * rotloss
+            #     # + gn_softmax[2].item() * fliploss
+            #     # + gn_softmax[3].item() * scloss
+            # )
+            # sigmoid
+            # loss = (
+            #     loss
+            #     + gn_sigmoid[0] * rotloss 
+            #     + gn_sigmoid[1] * fliploss
+            #     + gn_sigmoid[2] * scloss
+            # )
         else:
             loss = (
                 loss
-                + args.r_ratio * rotloss
+                # + args.r_ratio * rotloss 
                 + args.r_ratio * fliploss
                 + args.r_ratio * scloss
             )
@@ -529,13 +549,17 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                     lr=optimizer.param_groups[-1]["lr"] * 0.1,
                 )
             )  # TODO
-            print(output)
+            print('\r'+output, end='')
             log.write(output + "\n")
             log.flush()
+    print()
     if args.gated_network:
-        print(
-            f"Gated Network Weight Gate= Rot:{gn_softmax[0].item():.2f}, Flip:{gn_softmax[1].item():.2f}, Sc:{gn_softmax[2].item():.2f}"
-        )
+        output = f"Gated Network Weight Gate= Rot:{gn_softmax[0].item():.2f}, Flip:{gn_softmax[1].item():.2f}, Sc:{gn_softmax[2].item():.2f}"
+        # output = f"Gated Network Weight Gate= FC:{gn_softmax[0].item():.2f}, Rot:{gn_softmax[1].item():.2f}"
+        print(output)
+        log.write(output + "\n")
+        log.flush()
+
     tf_writer.add_scalar("loss/train", losses.avg, epoch)
     tf_writer.add_scalar("acc/train_top1", top1.avg, epoch)
     tf_writer.add_scalar("acc/train_top5", top5.avg, epoch)
@@ -594,7 +618,8 @@ def validate(
                         top5=top5,
                     )
                 )
-                print(output)
+                print('\r'+output, end='')
+        print()
         cf = confusion_matrix(all_targets, all_preds).astype(float)
         cls_cnt = cf.sum(axis=1)
         cls_hit = np.diag(cf)
