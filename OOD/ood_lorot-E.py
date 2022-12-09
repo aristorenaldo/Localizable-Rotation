@@ -201,16 +201,17 @@ def test(net1, d):
 criterion = nn.CrossEntropyLoss()
 options = vars(args)
 options["dataroot"] = os.path.join(options["dataroot"], options["dataset"])
-if not os.path.exists("./logs"):
-    os.makedirs("./logs")
-    if not os.path.exists("./logs/ood"):
-        os.makedirs("./logs/ood")
-if not os.path.exists("./logs/ood/" + args.dataset):
-    os.makedirs("./logs/ood/" + args.dataset)
+if not os.path.exists(options['outf']):
+    os.makedirs(options['outf'])
+    tmppath = os.path.join(options['outf'], "ood")
+    if not os.path.exists(tmppath):
+        os.makedirs(tmppath)
+if not os.path.exists(os.path.join(tmppath, args.dataset)):
+    os.makedirs(os.path.join(tmppath, args.dataset))
 
+logdir = os.path.join(options['outf'], 'ood', args.dataset)
 stats_log = open(
-    "./logs/ood/"
-    + args.dataset
+    logdir
     + "/%d_lorote_%.2f_%d" % (args.trial, args.r_ratio, args.num_epochs)
     + ".txt",
     "w",
