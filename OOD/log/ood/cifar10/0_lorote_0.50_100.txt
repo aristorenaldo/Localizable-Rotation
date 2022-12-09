@@ -1,0 +1,6 @@
+--Epoch 0--
+E[0] [svhn] AUC1 Err : [0.491] ACC1 : [2.38]
+--Epoch 0--
+E[0] [lsun_resize] AUC1 Err : [0.614] ACC1 : [2.38]
+--Epoch 0--
+E[0] [imagenet_resize] AUC1 Err : [0.655] ACC1 : [2.38]
