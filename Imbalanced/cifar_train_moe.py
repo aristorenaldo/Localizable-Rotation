@@ -475,7 +475,10 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         # rot_output, flip_output, sc_output = 0, 0, 0
         # rotloss, fliploss, scloss = 0, 0, 0
         # compute output
-        output, region_output, flip_output, sc_output, gn_output = model(input_image)
+        if args.arch.startswith('Moe'):
+            output, region_output, flip_output, sc_output, gn_output = model(input_image)
+        else:
+            output, region_output, flip_output, sc_output = model(input_image)
         # output,  flip_output, sc_output, gn_output = model(input_image)
         # output, rot_output, gn_output = model(input_image)
 
@@ -504,21 +507,29 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         top1.update(acc1[0], input_image.size(0))
         top5.update(acc5[0], input_image.size(0))
 
-        gn_softmax = nn.Softmax()(gn_output.mean(dim=0))
+        
 
         if args.arch == 'Moe1':
+            gn_softmax = nn.Softmax()(gn_output.mean(dim=0))
             loss = loss + args.r_ratio * (
                 gn_softmax[0].item() * region_loss +
                 #  gn_softmax[1].item() * fliploss
                 + gn_softmax[1].item() * flip_loss
                 + gn_softmax[2].item() * sc_loss
             )
-        else:
+        elif args.arch == 'Moe2':
+            gn_softmax = nn.Softmax()(gn_output.mean(dim=0))
             loss = (
                 gn_softmax[0].item() * loss
                 + gn_softmax[1].item() * region_loss 
                 + gn_softmax[2].item() * flip_loss
                 + gn_softmax[3].item() * sc_loss
+            )
+        else:
+            loss = loss + args.r_ratio * (
+                region_loss
+                + flip_loss
+                + sc_loss
             )
             # loss = (
             #     gn_softmax[0].item() * loss
@@ -576,8 +587,9 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
     if args.arch == 'Moe1':
         output = f"Gated Network Weight Gate= Region:{gn_softmax[0].item():.2f}, Flip:{gn_softmax[1].item():.2f}, Sc:{gn_softmax[2].item():.2f}"
     else:
-        output = f"Gated Network Weight Gate= FC:{gn_softmax[0].item():.2f}, Region:{gn_softmax[1].item():.2f}, Flip:{gn_softmax[2].item():.2f}, Sc:{gn_softmax[3].item():.2f}"
-    print(output)
+        if args.arch == 'Moe2':
+            output = f"Gated Network Weight Gate= FC:{gn_softmax[0].item():.2f}, Region:{gn_softmax[1].item():.2f}, Flip:{gn_softmax[2].item():.2f}, Sc:{gn_softmax[3].item():.2f}"
+        print(output)
     log.write(output + "\n")
     log.flush()
 
