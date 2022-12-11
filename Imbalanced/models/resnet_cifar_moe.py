@@ -162,13 +162,13 @@ class Nomoe(nn.Module):
             self.regflip = NormedLinear(64, num_trans)
             # self.region_layer = NormedLinear(64, num_regions)
             # self.flip_layer = NormedLinear(64, num_flips)
-            # self.sc_layer = NormedLinear(64, num_sc)
+            self.sc_layer = NormedLinear(64, num_sc)
         else:
             self.classifier = nn.Linear(64, num_classes)
             self.regflip = nn.Linear(64, num_trans)
             # self.region_layer = nn.Linear(64, num_regions)
             # self.flip_layer = nn.Linear(64, num_flips)
-            # self.sc_layer = nn.Linear(64, num_sc)
+            self.sc_layer = nn.Linear(64, num_sc)
 
         self.apply(_weights_init)
     def forward(self, x):
@@ -176,27 +176,63 @@ class Nomoe(nn.Module):
         if self.training:
             return (
                 self.classifier(out),
-                self.regflip(out)
+                self.regflip(out),
                 # self.region_layer(out),
                 # self.flip_layer(out),
-                # self.sc_layer(out),
+                self.sc_layer(out),
             )
         return self.classifier(out)
 
 class Moe1(nn.Module):
-    def __init__(self, num_classes=10, backbone='resnet32', use_norm=False, num_regions=4, num_flips=4, num_sc=6):
+    def __init__(self, num_classes=10, backbone='resnet32', use_norm=False, num_regions=4, num_flips=4, num_sc=6, num_trans=16):
         super().__init__()
         self.backbone = globals()[backbone]()
         self.backbone.fc = nn.Identity()
         if use_norm:
             self.classifier = NormedLinear(64, num_classes)
-            self.region_layer = NormedLinear(64, num_regions)
-            self.flip_layer = NormedLinear(64, num_flips)
+            self.regflip = NormedLinear(64, num_trans)
+            # self.region_layer = NormedLinear(64, num_regions)
+            # self.flip_layer = NormedLinear(64, num_flips)
             self.sc_layer = NormedLinear(64, num_sc)
         else:
             self.classifier = nn.Linear(64, num_classes)
-            self.region_layer = nn.Linear(64, num_regions)
-            self.flip_layer = nn.Linear(64, num_flips)
+            self.regflip = nn.Linear(64, num_trans)
+            # self.region_layer = nn.Linear(64, num_regions)
+            # self.flip_layer = nn.Linear(64, num_flips)
+            self.sc_layer = nn.Linear(64, num_sc)
+        self.gating_layer = nn.Linear(64, 2)
+
+        self.apply(_weights_init)
+
+    def forward(self, x):
+        out = self.backbone(x)
+        if self.training:
+            return (
+                self.classifier(out),
+                self.regflip(out),
+                # self.region_layer(out),
+                # self.flip_layer(out),
+                self.sc_layer(out),
+                self.gating_layer(out)
+            )
+        return self.classifier(out)
+
+class Moe2(nn.Module):
+    def __init__(self, num_classes=10, backbone='resnet32', use_norm=False, num_regions=4, num_flips=4, num_sc=24, num_trans=16):
+        super().__init__()
+        self.backbone = globals()[backbone]()
+        self.backbone.fc = nn.Identity()
+        if use_norm:
+            self.classifier = NormedLinear(64, num_classes)
+            self.regflip = NormedLinear(64, num_trans)
+            # self.region_layer = NormedLinear(64, num_regions)
+            # self.flip_layer = NormedLinear(64, num_flips)
+            self.sc_layer = NormedLinear(64, num_sc)
+        else:
+            self.classifier = nn.Linear(64, num_classes)
+            self.regflip = nn.Linear(64, num_trans)
+            # self.region_layer = nn.Linear(64, num_regions)
+            # self.flip_layer = nn.Linear(64, num_flips)
             self.sc_layer = nn.Linear(64, num_sc)
         self.gating_layer = nn.Linear(64, 3)
 
@@ -207,39 +243,9 @@ class Moe1(nn.Module):
         if self.training:
             return (
                 self.classifier(out),
-                self.region_layer(out),
-                self.flip_layer(out),
-                self.sc_layer(out),
-                self.gating_layer(out)
-            )
-        return self.classifier(out)
-
-class Moe2(nn.Module):
-    def __init__(self, num_classes=10, backbone='resnet32', use_norm=False, num_regions=4, num_flips=4, num_sc=24):
-        super().__init__()
-        self.backbone = globals()[backbone]()
-        self.backbone.fc = nn.Identity()
-        if use_norm:
-            self.classifier = NormedLinear(64, num_classes)
-            self.region_layer = NormedLinear(64, num_regions)
-            self.flip_layer = NormedLinear(64, num_flips)
-            self.sc_layer = NormedLinear(64, num_sc)
-        else:
-            self.classifier = nn.Linear(64, num_classes)
-            self.region_layer = nn.Linear(64, num_regions)
-            self.flip_layer = nn.Linear(64, num_flips)
-            self.sc_layer = nn.Linear(64, num_sc)
-        self.gating_layer = nn.Linear(64, 4)
-
-        self.apply(_weights_init)
-
-    def forward(self, x):
-        out = self.backbone(x)
-        if self.training:
-            return (
-                self.classifier(out),
-                self.region_layer(out),
-                self.flip_layer(out),
+                self.regflip(out),
+                # self.region_layer(out),
+                # self.flip_layer(out),
                 self.sc_layer(out),
                 self.gating_layer(out)
             )

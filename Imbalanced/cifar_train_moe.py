@@ -416,7 +416,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         # idx_rotation = torch.randint(4, size=(input_image.size(0),))
         flip_label = torch.randint(4, size=(input_image.size(0),))
         
-        # sc_label= torch.randint(6, size=(input_image.size(0),))
+        sc_label= torch.randint(6, size=(input_image.size(0),))
         
         r = input_image.size(2) // 2
         r2 = input_image.size(2) 
@@ -476,15 +476,15 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
 
         del flip_label
         del region_label
-        # sc_label = sc_label.cuda()
+        sc_label = sc_label.cuda()
         # rot_output, flip_output, sc_output = 0, 0, 0
         # rotloss, fliploss, scloss = 0, 0, 0
         # compute output
         if args.arch.startswith('Moe'):
-            output, region_output, flip_output, sc_output, gn_output = model(input_image)
+            output, regflip_output, sc_output, gn_output = model(input_image)
         else:
             # output, region_output, flip_output, sc_output = model(input_image)
-            output, regflip_output = model(input_image)
+            output, regflip_output, sc_output = model(input_image)
         # output,  flip_output, sc_output, gn_output = model(input_image)
         # output, rot_output, gn_output = model(input_image)
 
@@ -495,7 +495,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         # flip_loss = CE(flip_output, flip_label)
         regflip_loss = CE(regflip_output, regflip_label) 
 
-        # sc_loss = CE(sc_output, sc_label)
+        sc_loss = CE(sc_output, sc_label)
         # rot_output = model(input_image, rot=True)
         # if "rot" in args.method:
         #     rot_output = torch.argmax(rot_output, axis=1)
@@ -520,24 +520,26 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         if args.arch == 'Moe1':
             gn_softmax = nn.Softmax()(gn_output.mean(dim=0))
             loss = loss + args.r_ratio * (
-                gn_softmax[0].item() * region_loss +
+                # gn_softmax[0].item() * region_loss +
                 #  gn_softmax[1].item() * fliploss
-                + gn_softmax[1].item() * flip_loss
-                # + gn_softmax[2].item() * sc_loss
+                # + gn_softmax[1].item() * flip_loss
+                 gn_softmax[0].item() * regflip_loss
+                + gn_softmax[1].item() * sc_loss
             )
         elif args.arch == 'Moe2':
             gn_softmax = nn.Softmax()(gn_output.mean(dim=0))
             loss = (
                 gn_softmax[0].item() * loss
-                + gn_softmax[1].item() * region_loss 
-                + gn_softmax[2].item() * flip_loss
-                # + gn_softmax[3].item() * sc_loss
+                + gn_softmax[1].item() * regflip_loss
+                # + gn_softmax[1].item() * region_loss 
+                # + gn_softmax[2].item() * flip_loss
+                + gn_softmax[2].item() * sc_loss
             )
         else:
             loss = loss + args.r_ratio * (
                 regflip_loss
                 # + flip_loss
-                # + sc_loss
+                + sc_loss
             )
             # loss = (
             #     gn_softmax[0].item() * loss
@@ -593,9 +595,13 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
             log.flush()
     print()
     if args.arch == 'Moe1':
-        output = f"Gated Network Weight Gate= Region:{gn_softmax[0].item():.2f}, Flip:{gn_softmax[1].item():.2f}, Sc:{gn_softmax[2].item():.2f}"
+        output = f"Gated Network Weight Gate= "
+        for i in range(0, 2):
+            output += f"[{i}]:{gn_softmax[i].item():.2f} "
     elif args.arch == 'Moe2':
-        output = f"Gated Network Weight Gate= FC:{gn_softmax[0].item():.2f}, Region:{gn_softmax[1].item():.2f}, Flip:{gn_softmax[2].item():.2f}, Sc:{gn_softmax[3].item():.2f}"
+        output = f"Gated Network Weight Gate= FC:{gn_softmax[0].item():.2f} "
+        for i in range(1, 3):
+            output += f"[{i}]:{gn_softmax[i].item():.2f} "
     if args.arch.startswith('Moe'):
         print(output)
     log.write(output + "\n")
