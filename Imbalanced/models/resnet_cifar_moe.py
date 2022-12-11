@@ -153,19 +153,21 @@ def resnet1202():
     return ResNet(BasicBlock, [200, 200, 200])
 
 class Nomoe(nn.Module):
-    def __init__(self, num_classes=10, backbone='resnet32', use_norm=False, num_regions=4, num_flips=4, num_sc=6):
+    def __init__(self, num_classes=10, backbone='resnet32', use_norm=False, num_regions=4, num_flips=4, num_sc=6, num_trans=16):
         super().__init__()
         self.backbone = globals()[backbone]()
         self.backbone.fc = nn.Identity()
         if use_norm:
             self.classifier = NormedLinear(64, num_classes)
-            self.region_layer = NormedLinear(64, num_regions)
-            self.flip_layer = NormedLinear(64, num_flips)
+            self.regflip = NormedLinear(64, num_trans)
+            # self.region_layer = NormedLinear(64, num_regions)
+            # self.flip_layer = NormedLinear(64, num_flips)
             # self.sc_layer = NormedLinear(64, num_sc)
         else:
             self.classifier = nn.Linear(64, num_classes)
-            self.region_layer = nn.Linear(64, num_regions)
-            self.flip_layer = nn.Linear(64, num_flips)
+            self.regflip = nn.Linear(64, num_trans)
+            # self.region_layer = nn.Linear(64, num_regions)
+            # self.flip_layer = nn.Linear(64, num_flips)
             # self.sc_layer = nn.Linear(64, num_sc)
 
         self.apply(_weights_init)
@@ -174,8 +176,9 @@ class Nomoe(nn.Module):
         if self.training:
             return (
                 self.classifier(out),
-                self.region_layer(out),
-                self.flip_layer(out),
+                self.regflip(out)
+                # self.region_layer(out),
+                # self.flip_layer(out),
                 # self.sc_layer(out),
             )
         return self.classifier(out)

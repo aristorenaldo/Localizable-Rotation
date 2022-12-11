@@ -471,6 +471,11 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
 
         region_label = region_label.cuda()
         flip_label = flip_label.cuda()
+        regflip_label = region_label * 4 + flip_label
+        regflip_label = regflip_label.cuda()
+
+        del flip_label
+        del region_label
         # sc_label = sc_label.cuda()
         # rot_output, flip_output, sc_output = 0, 0, 0
         # rotloss, fliploss, scloss = 0, 0, 0
@@ -479,15 +484,17 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
             output, region_output, flip_output, sc_output, gn_output = model(input_image)
         else:
             # output, region_output, flip_output, sc_output = model(input_image)
-            output, region_output, flip_output = model(input_image)
+            output, regflip_output = model(input_image)
         # output,  flip_output, sc_output, gn_output = model(input_image)
         # output, rot_output, gn_output = model(input_image)
 
         
         # gn_sigmoid = nn.Sigmoid()(gn_output.mean(dim=0))
         loss = criterion(output, target)
-        region_loss = CE(region_output, region_label)
-        flip_loss = CE(flip_output, flip_label)
+        # aregion_loss = CE(region_output, region_label)
+        # flip_loss = CE(flip_output, flip_label)
+        regflip_loss = CE(regflip_output, regflip_label) 
+
         # sc_loss = CE(sc_output, sc_label)
         # rot_output = model(input_image, rot=True)
         # if "rot" in args.method:
@@ -528,8 +535,8 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
             )
         else:
             loss = loss + args.r_ratio * (
-                region_loss
-                + flip_loss
+                regflip_loss
+                # + flip_loss
                 # + sc_loss
             )
             # loss = (
