@@ -209,6 +209,18 @@ def shuffle_channel(img: torch.Tensor, index_shuffle: int) -> torch.Tensor:
     list_to_permutations = list(itertools.permutations(range(3), 3))
     return img[list_to_permutations[index_shuffle], ...]
 
+def flip_image(img: torch.Tensor, index_flip:int):
+    if index_flip > 3 and index_flip < 0:
+        raise ValueError('index_flip must be in range 0 to 3')
+
+    if index_flip % 2 != 0: # check last digit in binary
+        img = torch.fliplr(img)
+    
+    index_flip = index_flip >> 1 # shift to right one bit
+    if index_flip % 2 != 0: # check last digit in binary
+        img = torch.flipud(img)
+    return img
+
 
 def accuracy(output, target, topk=(1,)):
 

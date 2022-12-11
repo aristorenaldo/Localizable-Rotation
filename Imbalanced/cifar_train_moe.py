@@ -21,14 +21,12 @@ from losses import FocalLoss, LDAMLoss
 from sklearn.metrics import confusion_matrix
 from tensorboardX import SummaryWriter
 from utils import *
-from transformation import BTTransform
 
 ##2022_CVPR_LoRot-E
 model_names = sorted(
     name
     for name in models.__dict__
     if not name.startswith("__") and callable(models.__dict__[name])
-    
 )
 
 parser = argparse.ArgumentParser(description="PyTorch Cifar Training")
@@ -59,7 +57,7 @@ parser.add_argument(
 parser.add_argument(
     "-j",
     "--workers",
-    default=44,
+    default=4,
     type=int,
     metavar="N",
     help="number of data loading workers (default: 4)",
@@ -75,7 +73,7 @@ parser.add_argument(
     help="manual epoch number (useful on restarts)",
 )
 parser.add_argument(
-    "-b", "--batch-size", default=64, type=int, metavar="N", help="mini-batch size"
+    "-b", "--batch-size", default=128, type=int, metavar="N", help="mini-batch size"
 )
 parser.add_argument(
     "--lr",
@@ -127,18 +125,18 @@ parser.add_argument(
 parser.add_argument("--gpu", default=None, type=int, help="GPU id to use.")
 parser.add_argument("--root_log", type=str, default="log")
 parser.add_argument("--root_model", type=str, default="checkpoint")
-parser.add_argument("--r_ratio", default=0.1, type=float, help="rotation loss ratio")
-parser.add_argument("--bt_ratio", default=0.1, type=float, help="BT loss ratio")
-parser.add_argument(
-    "-x",
-    "--experiment",
-    type=str,
-    default="",
-    help="Experiment it will be doing, Full explanation in experiment.txt",
-)
+parser.add_argument("--r_ratio", default=0.1, type=float, help="ratio")
+# parser.add_argument(
+#     "-m",
+#     "--method",
+#     type=str,
+#     required=True,
+#     help="Experiment it will be doing, Full explanation in experiments md, the available value is rot, fliplr, and sc",
+# )
 best_acc1 = 0
 
 
+# ya
 def main():
     args = parser.parse_args()
     args.store_name = "_".join(
@@ -152,6 +150,7 @@ def main():
             args.exp_str,
         ]
     )
+    # args.method = args.method.split(" ")
     args.root_log = args.root_log + "/" + str(int(args.r_ratio * 100))
     prepare_folders(args)
     if args.seed is not None:
@@ -187,10 +186,7 @@ def main_worker(gpu, ngpus_per_node, args):
     print("=> creating model '{}'".format(args.arch))
     num_classes = 100 if args.dataset == "cifar100" else 10
     use_norm = True if args.loss_type == "LDAM" else False
-    if args.arch == 'BarlowTwins':
-        model = models.__dict__[args.arch](num_classes=num_classes, batch_size=args.batch_size, lorot=True)
-    else:
-        model = models.__dict__[args.arch](num_classes=num_classes, use_norm=use_norm)
+    model = models.__dict__[args.arch](num_classes=num_classes, use_norm=use_norm)
 
     if args.gpu is not None:
         torch.cuda.set_device(args.gpu)
@@ -230,14 +226,14 @@ def main_worker(gpu, ngpus_per_node, args):
 
     # Data loading code
 
-    transform_train = BTTransform(transform_pred=transforms.Compose(
+    transform_train = transforms.Compose(
         [
             transforms.RandomCrop(32, padding=4),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
         ]
-    ))
+    )
 
     transform_val = transforms.Compose(
         [
@@ -407,81 +403,100 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
     model.train()
 
     end = time.time()
-    for b_i, ((input_image, y1), target) in enumerate(train_loader):
+    for b_i, (input_image, target) in enumerate(train_loader):
         # measure data loading time
         data_time.update(time.time() - end)
 
         if args.gpu is not None:
             input_image = input_image.cuda(args.gpu, non_blocking=True)
-            # y = y.cuda(args.gpu, non_blocking=True)
-            y1 = y1.cuda(args.gpu, non_blocking=True)
-            # y2 = y2.cuda(args.gpu, non_blocking=True)
-
-
         target = target.cuda(args.gpu, non_blocking=True)
 
-        idx = torch.randint(4, size=(input_image.size(0),))
-        idx2 = torch.randint(4, size=(input_image.size(0),))
-        r = input_image.size(2) // 2
-        r2 = input_image.size(2)
-        for i in range(input_image.size(0)):
-            if idx[i] == 0:
-                w1 = 0
-                w2 = r
-                h1 = 0
-                h2 = r
-            elif idx[i] == 1:
-                w1 = 0
-                w2 = r
-                h1 = r
-                h2 = r2
-            elif idx[i] == 2:
-                w1 = r
-                w2 = r2
-                h1 = 0
-                h2 = r
-            elif idx[i] == 3:
-                w1 = r
-                w2 = r2
-                h1 = r
-                h2 = r2
-            if args.experiment == "fliplr":
-                input_image[i][:, w1:w2, h1:h2] = torch.fliplr(
-                    input_image[i][:, w1:w2, h1:h2]
-                )
-
-                # Jika fliplr maka idx2 = 5
-                idx2 = torch.full_like(idx2, 4)
-            else:
-                input_image[i][:, w1:w2, h1:h2] = torch.rot90(
-                    input_image[i][:, w1:w2, h1:h2], idx2[i], [1, 2]
-                )
-        # print(f"idx2 : ")
-        # print(idx2)
-        # print(f"idx2 Shape :")
-        # print(idx2.shape)
-        # print("=======" * 10)
-        # print(f"idx : ")
-        # print(idx)
-        # print(f"idx Shape :")
-        # print(idx.shape)
-        rotlabel = idx * 4 + idx2
-        # print("=======" * 10)
-        # print('rot label:')
-        # print(rotlabel)
-        rotlabel = rotlabel.cuda()
-
-        # compute output
-        output, rotoutput, btloss = model(input_image, y1, bt_lorot=True)
-        # print("=======" * 10)
-        # print('output:')
-        # print(output.shape)
-        # print('rotoutput:')
-        # print(rotoutput.shape)
+        region_label = torch.randint(4, size=(input_image.size(0),))
         
-        loss = criterion(output, target)
+        # idx_rotation = torch.randint(4, size=(input_image.size(0),))
+        flip_label = torch.randint(4, size=(input_image.size(0),))
+        
+        sc_label= torch.randint(6, size=(input_image.size(0),))
+        
+        r = input_image.size(2) // 2
+        r2 = input_image.size(2) 
+        # regi, fliplabel, sclabel = 0, 0, 0
+        for i in range(input_image.size(0)):
+            if region_label[i] == 0:
+                w1 = 0
+                w2 = r
+                h1 = 0
+                h2 = r
+            elif region_label[i] == 1:
+                w1 = 0
+                w2 = r
+                h1 = r
+                h2 = r2
+            elif region_label[i] == 2:
+                w1 = r
+                w2 = r2
+                h1 = 0
+                h2 = r
+            elif region_label[i] == 3:
+                w1 = r
+                w2 = r2
+                h1 = r
+                h2 = r2
+            input_image[i][:, w1:w2, h1:h2] = flip_image(
+                    input_image[i][:, w1:w2, h1:h2],
+                    flip_label[i]
+                )
+            input_image[i][:, w1:w2, h1:h2] = shuffle_channel(
+                    input_image[i][:, w1:w2, h1:h2],
+                    sc_label[i]
+                )
+            # if "fliplr" in args.method:
+            #     input_image[i][:, w1:w2, h1:h2] = torch.fliplr(
+            #         input_image[i][:, w1:w2, h1:h2]
+            #     )
+            #     fliplabel = idx * 4
+            #     fliplabel = fliplabel.cuda()
+            # if "rot" in args.method:
+            #     input_image[i][:, w1:w2, h1:h2] = torch.rot90(
+            #         input_image[i][:, w1:w2, h1:h2], idx_rotation[i], [1, 2]
+            #     )
+            #     rotlabel = idx * 4 + idx_rotation
+            #     rotlabel = rotlabel.cuda()
+            # if "sc" in args.method:
+            #     input_image[i][:, w1:w2, h1:h2] = shuffle_channel(
+            #         input_image[i][:, w1:w2, h1:h2], idx_shuffle_channel[i]
+            #     )
+            #     sclabel = idx * 4 + idx_shuffle_channel
+            #     sclabel = sclabel.cuda()
 
-        rotloss = CE(rotoutput, rotlabel)
+        region_label = region_label.cuda()
+        flip_label = flip_label.cuda()
+        sc_label = sc_label.cuda()
+        # rot_output, flip_output, sc_output = 0, 0, 0
+        # rotloss, fliploss, scloss = 0, 0, 0
+        # compute output
+        output, region_output, flip_output, sc_output, gn_output = model(input_image)
+        # output,  flip_output, sc_output, gn_output = model(input_image)
+        # output, rot_output, gn_output = model(input_image)
+
+        
+        # gn_sigmoid = nn.Sigmoid()(gn_output.mean(dim=0))
+        loss = criterion(output, target)
+        region_loss = CE(region_output, region_label)
+        flip_loss = CE(flip_output, flip_label)
+        sc_loss = CE(sc_output, sc_label)
+        # rot_output = model(input_image, rot=True)
+        # if "rot" in args.method:
+        #     rot_output = torch.argmax(rot_output, axis=1)
+        #     rotloss = CE(rot_output.type(torch.float32), rotlabel.type(torch.float32))
+        # if "fliplr" in args.method:
+        #     flip_output = torch.argmax(flip_output, axis=1)
+        #     fliploss = CE(
+        #         flip_output.type(torch.float32), fliplabel.type(torch.float32)
+        #     )
+        # if "sc" in args.method:
+        #     sc_output = torch.argmax(sc_output, axis=1)
+        #     scloss = CE(sc_output.type(torch.float32), sclabel.type(torch.float32))
 
         # measure accuracy and record loss
         acc1, acc5 = accuracy(output, target, topk=(1, 5))
@@ -489,7 +504,42 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         top1.update(acc1[0], input_image.size(0))
         top5.update(acc5[0], input_image.size(0))
 
-        loss = loss + args.r_ratio * rotloss + args.bt_ratio * btloss
+        gn_softmax = nn.Softmax()(gn_output.mean(dim=0))
+
+        if args.arch == 'Moe1':
+            loss = loss + args.r_ratio * (
+                gn_softmax[0].item() * region_loss +
+                #  gn_softmax[1].item() * fliploss
+                + gn_softmax[1].item() * flip_loss
+                + gn_softmax[2].item() * sc_loss
+            )
+        else:
+            loss = (
+                gn_softmax[0].item() * loss
+                + gn_softmax[1].item() * region_loss 
+                + gn_softmax[2].item() * flip_loss
+                + gn_softmax[3].item() * sc_loss
+            )
+            # loss = (
+            #     gn_softmax[0].item() * loss
+            #     + gn_softmax[1].item() * rotloss
+            #     # + gn_softmax[2].item() * fliploss
+            #     # + gn_softmax[3].item() * scloss
+            # )
+            # sigmoid
+            # loss = (
+            #     loss
+            #     + gn_sigmoid[0] * rotloss 
+            #     + gn_sigmoid[1] * fliploss
+            #     + gn_sigmoid[2] * scloss
+            # )
+
+            # loss = (
+            #     loss
+            #     # + args.r_ratio * rotloss 
+            #     + args.r_ratio * fliploss
+            #     + args.r_ratio * scloss
+            # )
 
         # compute gradient and do SGD step
         optimizer.zero_grad()
@@ -519,9 +569,17 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                     lr=optimizer.param_groups[-1]["lr"] * 0.1,
                 )
             )  # TODO
-            print(output)
+            print('\r'+output, end='')
             log.write(output + "\n")
             log.flush()
+    print()
+    if args.arch == 'Moe1':
+        output = f"Gated Network Weight Gate= Region:{gn_softmax[0].item():.2f}, Flip:{gn_softmax[1].item():.2f}, Sc:{gn_softmax[2].item():.2f}"
+    else:
+        output = f"Gated Network Weight Gate= FC:{gn_softmax[0].item():.2f}, Region:{gn_softmax[1].item():.2f}, Flip:{gn_softmax[2].item():.2f}, Sc:{gn_softmax[3].item():.2f}"
+    print(output)
+    log.write(output + "\n")
+    log.flush()
 
     tf_writer.add_scalar("loss/train", losses.avg, epoch)
     tf_writer.add_scalar("acc/train_top1", top1.avg, epoch)
@@ -581,7 +639,8 @@ def validate(
                         top5=top5,
                     )
                 )
-                print(output)
+                print('\r'+output, end='')
+        print()
         cf = confusion_matrix(all_targets, all_preds).astype(float)
         cls_cnt = cf.sum(axis=1)
         cls_hit = np.diag(cf)

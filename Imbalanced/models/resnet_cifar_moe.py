@@ -31,16 +31,27 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.nn.init as init
+from torch.nn import Parameter
 
 from torch.autograd import Variable
 
-__all__ = ['BarlowTwins']
+__all__ = ['Moe1', 'Moe2']
 
 def _weights_init(m):
     classname = m.__class__.__name__
     #print(classname)
     if isinstance(m, nn.Linear) or isinstance(m, nn.Conv2d):
         init.kaiming_normal_(m.weight)
+
+class NormedLinear(nn.Module):
+    def __init__(self, in_features, out_features):
+        super(NormedLinear, self).__init__()
+        self.weight = Parameter(torch.Tensor(in_features, out_features))
+        self.weight.data.uniform_(-1, 1).renorm_(2, 1, 1e-5).mul_(1e5)
+
+    def forward(self, x):
+        out = F.normalize(x, dim=1).mm(F.normalize(self.weight, dim=0))
+        return out
 
 class LambdaLayer(nn.Module):
     def __init__(self, lambd):
@@ -141,6 +152,69 @@ def resnet110():
 def resnet1202():
     return ResNet(BasicBlock, [200, 200, 200])
 
+class Moe1(nn.Module):
+    def __init__(self, num_classes=10, backbone='resnet32', use_norm=False, num_regions=4, num_flips=4, num_sc=6):
+        super().__init__()
+        self.backbone = globals()[backbone]()
+        self.backbone.fc = nn.Identity()
+        if use_norm:
+            self.classifier = NormedLinear(64, num_classes)
+            self.region_layer = NormedLinear(64, num_regions)
+            self.flip_layer = NormedLinear(64, num_flips)
+            self.sc_layer = NormedLinear(64, num_sc)
+        else:
+            self.classifier = nn.Linear(64, num_classes)
+            self.region_layer = nn.Linear(64, num_regions)
+            self.flip_layer = nn.Linear(64, num_flips)
+            self.sc_layer = nn.Linear(64, num_sc)
+        self.gating_layer = nn.Linear(64, 3)
+
+        self.apply(_weights_init)
+
+    def forward(self, x):
+        out = self.backbone(x)
+        if self.training:
+            return (
+                self.classifier(out),
+                self.region_layer(out),
+                self.flip_layer(out),
+                self.sc_layer(out),
+                self.gating_layer(out)
+            )
+        return self.classifier(out)
+
+class Moe2(nn.Module):
+    def __init__(self, num_classes=10, backbone='resnet32', use_norm=False, num_regions=4, num_flips=4, num_sc=24):
+        super().__init__()
+        self.backbone = globals()[backbone]()
+        self.backbone.fc = nn.Identity()
+        if use_norm:
+            self.classifier = NormedLinear(64, num_classes)
+            self.region_layer = NormedLinear(64, num_regions)
+            self.flip_layer = NormedLinear(64, num_flips)
+            self.sc_layer = NormedLinear(64, num_sc)
+        else:
+            self.classifier = nn.Linear(64, num_classes)
+            self.region_layer = nn.Linear(64, num_regions)
+            self.flip_layer = nn.Linear(64, num_flips)
+            self.sc_layer = nn.Linear(64, num_sc)
+        self.gating_layer = nn.Linear(64, 4)
+
+        self.apply(_weights_init)
+
+    def forward(self, x):
+        out = self.backbone(x)
+        if self.training:
+            return (
+                self.classifier(out),
+                self.region_layer(out),
+                self.flip_layer(out),
+                self.sc_layer(out),
+                self.gating_layer(out)
+            )
+        return self.classifier(out)
+
+    
 
 class BarlowTwins(nn.Module):
     def __init__(self, projector = '100-100', num_classes=10, batch_size=128, lambd=0.0051, lorot=False, lorot_trans=16):
@@ -201,6 +275,7 @@ class BarlowTwins(nn.Module):
         # validation / test step 
         pred = self.fc(out)
         return pred
+
 
 def off_diagonal(x):
     # return a flattened view of the off-diagonal elements of a square matrix
