@@ -161,12 +161,12 @@ class Nomoe(nn.Module):
             self.classifier = NormedLinear(64, num_classes)
             self.region_layer = NormedLinear(64, num_regions)
             self.flip_layer = NormedLinear(64, num_flips)
-            self.sc_layer = NormedLinear(64, num_sc)
+            # self.sc_layer = NormedLinear(64, num_sc)
         else:
             self.classifier = nn.Linear(64, num_classes)
             self.region_layer = nn.Linear(64, num_regions)
             self.flip_layer = nn.Linear(64, num_flips)
-            self.sc_layer = nn.Linear(64, num_sc)
+            # self.sc_layer = nn.Linear(64, num_sc)
 
         self.apply(_weights_init)
     def forward(self, x):
@@ -176,7 +176,7 @@ class Nomoe(nn.Module):
                 self.classifier(out),
                 self.region_layer(out),
                 self.flip_layer(out),
-                self.sc_layer(out),
+                # self.sc_layer(out),
             )
         return self.classifier(out)
 
