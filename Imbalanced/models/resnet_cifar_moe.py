@@ -190,13 +190,15 @@ class Moe1(nn.Module):
         self.backbone.fc = nn.Identity()
         if use_norm:
             self.classifier = NormedLinear(64, num_classes)
-            self.regflip = NormedLinear(64, num_trans)
+            self.lorot_layer = NormedLinear(64, num_trans)
+            # self.regflip = NormedLinear(64, num_trans)
             # self.region_layer = NormedLinear(64, num_regions)
             # self.flip_layer = NormedLinear(64, num_flips)
             self.sc_layer = NormedLinear(64, num_sc)
         else:
             self.classifier = nn.Linear(64, num_classes)
-            self.regflip = nn.Linear(64, num_trans)
+            self.lorot_layer = nn.Linear(64, num_trans)
+            # self.regflip = nn.Linear(64, num_trans)
             # self.region_layer = nn.Linear(64, num_regions)
             # self.flip_layer = nn.Linear(64, num_flips)
             self.sc_layer = nn.Linear(64, num_sc)
@@ -209,7 +211,8 @@ class Moe1(nn.Module):
         if self.training:
             return (
                 self.classifier(out),
-                self.regflip(out),
+                self.lorot_layer(out),
+                # self.regflip(out),
                 # self.region_layer(out),
                 # self.flip_layer(out),
                 self.sc_layer(out),
@@ -224,13 +227,15 @@ class Moe2(nn.Module):
         self.backbone.fc = nn.Identity()
         if use_norm:
             self.classifier = NormedLinear(64, num_classes)
-            self.regflip = NormedLinear(64, num_trans)
+            self.lorot_layer = NormedLinear(64, num_trans)
+            # self.regflip = NormedLinear(64, num_trans)
             # self.region_layer = NormedLinear(64, num_regions)
             # self.flip_layer = NormedLinear(64, num_flips)
             self.sc_layer = NormedLinear(64, num_sc)
         else:
             self.classifier = nn.Linear(64, num_classes)
-            self.regflip = nn.Linear(64, num_trans)
+            # self.regflip = nn.Linear(64, num_trans)
+            self.lorot_layer = nn.Linear(64, num_trans)
             # self.region_layer = nn.Linear(64, num_regions)
             # self.flip_layer = nn.Linear(64, num_flips)
             self.sc_layer = nn.Linear(64, num_sc)
@@ -243,7 +248,8 @@ class Moe2(nn.Module):
         if self.training:
             return (
                 self.classifier(out),
-                self.regflip(out),
+                self.lorot_layer(out),
+                # self.regflip(out),
                 # self.region_layer(out),
                 # self.flip_layer(out),
                 self.sc_layer(out),
