@@ -442,14 +442,16 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                 w2 = r2
                 h1 = r
                 h2 = r2
+            # flip region
             input_image[i][:, w1:w2, h1:h2] = flip_image(
                     input_image[i][:, w1:w2, h1:h2],
                     flip_label[i]
                 )
-            # input_image[i][:, w1:w2, h1:h2] = shuffle_channel(
-            #         input_image[i][:, w1:w2, h1:h2],
-            #         sc_label[i]
-            #     )
+            # shuffle channel
+            input_image[i][:, w1:w2, h1:h2] = shuffle_channel(
+                    input_image[i][:, w1:w2, h1:h2],
+                    sc_label[i]
+                )
             # if "fliplr" in args.method:
             #     input_image[i][:, w1:w2, h1:h2] = torch.fliplr(
             #         input_image[i][:, w1:w2, h1:h2]
