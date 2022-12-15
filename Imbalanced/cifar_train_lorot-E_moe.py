@@ -268,7 +268,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
 
         idx = torch.randint(4, size=(input.size(0),))
         idx2 = torch.randint(4, size=(input.size(0),))
-        sc_label = torch.randint(6)
+        sc_label = torch.randint(6, size=(input.size(0),))
         r = input.size(2) // 2
         r2 = input.size(2)
         for i in range(input.size(0)):
@@ -365,7 +365,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                       'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
                       'Prec@1 {top1.val:.3f} ({top1.avg:.3f})\t'
                       'Prec@5 {top5.val:.3f} ({top5.avg:.3f})'.format(
-                epoch, i, len(train_loader), batch_time=batch_time,
+                epoch, b_i, len(train_loader), batch_time=batch_time,
                 data_time=data_time, loss=losses, top1=top1, top5=top5, lr=optimizer.param_groups[-1]['lr'] * 0.1))  # TODO
             print('\r'+output, end='')
             log.write(output + '\n')
@@ -429,7 +429,8 @@ def validate(val_loader, model, criterion, epoch, args, log=None, tf_writer=None
                           'Prec@5 {top5.val:.3f} ({top5.avg:.3f})'.format(
                     i, len(val_loader), batch_time=batch_time, loss=losses,
                     top1=top1, top5=top5))
-                print(output)
+                print('\r'+output, end='')
+        print()
         cf = confusion_matrix(all_targets, all_preds).astype(float)
         cls_cnt = cf.sum(axis=1)
         cls_hit = np.diag(cf)
