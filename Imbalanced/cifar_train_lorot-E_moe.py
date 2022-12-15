@@ -347,7 +347,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                 rot_loss
                 + sc_loss
             )
-        loss = loss + args.r_ratio * rot_loss
+        # loss = loss + args.r_ratio * rot_loss
 
         # compute gradient and do SGD step
         optimizer.zero_grad()
