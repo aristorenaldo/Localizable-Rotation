@@ -69,6 +69,7 @@ parser.add_argument('--gpu', default=None, type=int,
 parser.add_argument('--root_log',type=str, default='log')
 parser.add_argument('--root_model', type=str, default='checkpoint')
 parser.add_argument('--r_ratio', default=0.1, type=float, help='ratio')
+parser.add_argument('--')
 best_acc1 = 0
 
 
@@ -268,6 +269,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
 
         idx = torch.randint(4, size=(input.size(0),))
         idx2 = torch.randint(4, size=(input.size(0),))
+        flip_label = torch.randint(2, size=(input.size(0),))
         sc_label = torch.randint(6, size=(input.size(0),))
         r = input.size(2) // 2
         r2 = input.size(2)
@@ -292,6 +294,10 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                 w2 = r2
                 h1 = r
                 h2 = r2
+
+            # Fliplr
+            if flip_label[i]:
+                input[i][:, w1:w2, h1:h2] = torch.fliplr(input[i][:, w1:w2, h1:h2])
             # lorot E
             input[i][:, w1:w2, h1:h2] = torch.rot90(
                     input[i][:, w1:w2, h1:h2], 
@@ -314,13 +320,14 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
 
         # compute output
         if args.arch.startswith('Moe'):
-            output, rot_output, sc_output, gn_output = model(input)
+            output, rot_output, flip_output, sc_output, gn_output = model(input)
         else:
-            output, rot_output, sc_output = model(input)
+            output, rot_output, flip_output, sc_output = model(input)
         loss = criterion(output, target)
 
         # rotoutput = model(input, rot=True)
         rot_loss = CE(rot_output, rot_label)
+        flip_loss = CE(flip_output, flip_label)
         sc_loss = CE(sc_output, sc_label)
 
         # measure accuracy and record loss
@@ -333,18 +340,21 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
             gn_softmax = nn.Softmax()(gn_output.mean(dim=0))
             loss = loss + args.r_ratio * (
                 gn_softmax[0].item() * rot_loss
-                + gn_softmax[1].item() * sc_loss
+                + gn_softmax[1].item() * flip_loss
+                + gn_softmax[2].item() * sc_loss
             )
         elif args.arch == 'Moe2':
             gn_softmax = nn.Softmax()(gn_output.mean(dim=0))
             loss = (
                 gn_softmax[0].item() * loss
                 + gn_softmax[1].item() * rot_loss
-                + gn_softmax[2].item() * sc_loss
+                + gn_softmax[2].item() * flip_loss
+                + gn_softmax[3].item() * sc_loss
             )
         else:
             loss = loss + args.r_ratio * (
                 rot_loss
+                + flip_label
                 + sc_loss
             )
         # loss = loss + args.r_ratio * rot_loss

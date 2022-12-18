@@ -184,7 +184,7 @@ class Nomoe(nn.Module):
         return self.classifier(out)
 
 class Moe1(nn.Module):
-    def __init__(self, num_classes=10, backbone='resnet32', use_norm=False, num_regions=4, num_flips=4, num_sc=6, num_trans=16):
+    def __init__(self, num_classes=10, backbone='resnet32', use_norm=False, num_regions=4, num_flips=2, num_sc=6, num_trans=16):
         super().__init__()
         self.backbone = globals()[backbone]()
         self.backbone.fc = nn.Identity()
@@ -193,14 +193,14 @@ class Moe1(nn.Module):
             self.lorot_layer = NormedLinear(64, num_trans)
             # self.regflip = NormedLinear(64, num_trans)
             # self.region_layer = NormedLinear(64, num_regions)
-            # self.flip_layer = NormedLinear(64, num_flips)
+            self.flip_layer = NormedLinear(64, num_flips)
             self.sc_layer = NormedLinear(64, num_sc)
         else:
             self.classifier = nn.Linear(64, num_classes)
             self.lorot_layer = nn.Linear(64, num_trans)
             # self.regflip = nn.Linear(64, num_trans)
             # self.region_layer = nn.Linear(64, num_regions)
-            # self.flip_layer = nn.Linear(64, num_flips)
+            self.flip_layer = nn.Linear(64, num_flips)
             self.sc_layer = nn.Linear(64, num_sc)
         self.gating_layer = nn.Linear(64, 2)
 
@@ -214,7 +214,7 @@ class Moe1(nn.Module):
                 self.lorot_layer(out),
                 # self.regflip(out),
                 # self.region_layer(out),
-                # self.flip_layer(out),
+                self.flip_layer(out),
                 self.sc_layer(out),
                 self.gating_layer(out)
             )
@@ -257,67 +257,6 @@ class Moe2(nn.Module):
             )
         return self.classifier(out)
 
-    
-
-class BarlowTwins(nn.Module):
-    def __init__(self, projector = '100-100', num_classes=10, batch_size=128, lambd=0.0051, lorot=False, lorot_trans=16):
-        super().__init__()
-        self.batch_size = batch_size
-        self.lambd = lambd
-        self.lorot = lorot
-
-        self.backbone = resnet32()
-        self.backbone.fc = nn.Identity()
-
-        if num_classes:
-            self.fc = nn.Linear(64, num_classes)
-
-        if lorot:
-            self.fc_lorot = nn.Linear(64, lorot_trans)
-
-        # projector
-        sizes = [64] + list(map(int, projector.split('-')))
-        layers = []
-        for i in range(len(sizes) - 1):
-            layers.append(nn.Linear(sizes[i], sizes[i + 1], bias=False))
-            layers.append(nn.BatchNorm1d(sizes[i + 1]))
-            layers.append(nn.ReLU(inplace=True))
-        layers.append(nn.Linear(sizes[-2], sizes[-1], bias=False))
-        self.projector = nn.Sequential(*layers)
-
-        # normalization layer for the representations z1 and z2
-        self.bn = nn.BatchNorm1d(sizes[-1], affine=False)
-
-    def forward(self, y, y1=None, bt_lorot = False):
-        out = self.backbone(y)
-
-        # training step
-        if self.training:
-            z1 = self.projector(out)
-            z2 = self.projector(self.backbone(y1))
-
-            # empirical cross-correlation matrix
-            c = self.bn(z1).T @ self.bn(z2)
-
-            # sum the cross-correlation matrix between all gpus
-            c.div_(self.batch_size)
-            # torch.distributed.all_reduce(c)
-
-            on_diag = torch.diagonal(c).add_(-1).pow_(2).sum()
-            off_diag = off_diagonal(c).pow_(2).sum()
-            loss_bt = on_diag + self.lambd * off_diag
-
-            pred = self.fc(out)
-
-            if bt_lorot:
-                lorot_pred = self.fc_lorot(out)
-                return pred, lorot_pred, loss_bt
-
-            return pred, loss_bt
-
-        # validation / test step 
-        pred = self.fc(out)
-        return pred
 
 
 def off_diagonal(x):
