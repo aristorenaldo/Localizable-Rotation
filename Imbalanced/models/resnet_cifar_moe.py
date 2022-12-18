@@ -202,7 +202,7 @@ class Moe1(nn.Module):
             # self.region_layer = nn.Linear(64, num_regions)
             self.flip_layer = nn.Linear(64, num_flips)
             self.sc_layer = nn.Linear(64, num_sc)
-        self.gating_layer = nn.Linear(64, 2)
+        self.gating_layer = nn.Linear(64, 3)
 
         self.apply(_weights_init)
 
