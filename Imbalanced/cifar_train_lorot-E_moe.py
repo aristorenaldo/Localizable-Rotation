@@ -69,7 +69,6 @@ parser.add_argument('--gpu', default=None, type=int,
 parser.add_argument('--root_log',type=str, default='log')
 parser.add_argument('--root_model', type=str, default='checkpoint')
 parser.add_argument('--r_ratio', default=0.1, type=float, help='ratio')
-parser.add_argument('--')
 best_acc1 = 0
 
 
@@ -313,6 +312,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         idx2 = idx2.cuda()
         rot_label = idx * 4 + idx2
         rot_label = rot_label.cuda()
+        flip_label = flip_label.cuda()
         sc_label = sc_label.cuda()
 
         del idx
