@@ -383,11 +383,11 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
     print()
     if args.arch == 'Moe1':
         output = f"Gated Network Weight Gate= "
-        for i in range(0, 2):
+        for i in range(0, 3):
             output += f"[{i}]:{gn_softmax[i].item():.2f} "
     elif args.arch == 'Moe2':
         output = f"Gated Network Weight Gate= FC:{gn_softmax[0].item():.2f} "
-        for i in range(1, 3):
+        for i in range(1, 4):
             output += f"[{i}]:{gn_softmax[i].item():.2f} "
     if args.arch.startswith('Moe'):
         print(output)
