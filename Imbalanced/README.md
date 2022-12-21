@@ -23,6 +23,18 @@ python cifar_train_lorot-E.py --gpu 0 --imb_type exp --imb_factor 0.01 --loss_ty
 python cifar_train_lorot-I.py --gpu 0 --imb_type exp --imb_factor 0.01 --loss_type LDAM --train_rule DRW
 ```
 
+train moe
+```
+python cifar_train_lorot-E_moe.py --gpu 0 --imb_type exp --imb_factor 0.01 --loss_type LDAM --train_rule DRW --dataset cifar10 --epochs 300 --workers 2
+```
+train moe-flip
+```
+python cifar_train_lorot-E_moe_flip.py --gpu 0 --imb_type exp --imb_factor 0.01 --loss_type LDAM --train_rule DRW --dataset cifar10 --epochs 300 --workers 2
+```
+train moe
+```
+python cifar_train_lorot-E_moe_sc.py --gpu 0 --imb_type exp --imb_factor 0.01 --loss_type LDAM --train_rule DRW --dataset cifar10 --epochs 300 --workers 2
+```
 ### Acknowledgement
 
 Implementations for Imbalanced Classification of LoRot is based on [LDAM-DRW](https://github.com/kaidic/LDAM-DRW)
