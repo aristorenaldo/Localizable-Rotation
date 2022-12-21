@@ -27,7 +27,7 @@ model_names = sorted(name for name in models.__dict__
 
 parser = argparse.ArgumentParser(description='PyTorch Cifar Training')
 parser.add_argument('--dataset', default='cifar10', help='dataset setting')
-parser.add_argument('-a', '--arch', metavar='ARCH', default='Moe1',
+parser.add_argument('-a', '--arch', metavar='ARCH', default='Moe1flip',
                     choices=model_names,
                     help='model architecture: ' +
                         ' | '.join(model_names) +
@@ -38,7 +38,7 @@ parser.add_argument('--imb_factor', default=0.01, type=float, help='imbalance fa
 parser.add_argument('--train_rule', default='None', type=str, help='data sampling strategy for train loader')
 parser.add_argument('--rand_number', default=0, type=int, help='fix random number for data sampling')
 parser.add_argument('--exp_str', default='0', type=str, help='number to indicate which experiment it is')
-parser.add_argument('-j', '--workers', default=8, type=int, metavar='N',
+parser.add_argument('-j', '--workers', default=44, type=int, metavar='N',
                     help='number of data loading workers (default: 4)')
 parser.add_argument('--epochs', default=200, type=int, metavar='N',
                     help='number of total epochs to run')
@@ -269,7 +269,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         idx = torch.randint(4, size=(input.size(0),))
         idx2 = torch.randint(4, size=(input.size(0),))
         flip_label = torch.randint(2, size=(input.size(0),))
-        sc_label = torch.randint(6, size=(input.size(0),))
+        # sc_label = torch.randint(6, size=(input.size(0),))
         r = input.size(2) // 2
         r2 = input.size(2)
         for i in range(input.size(0)):
@@ -304,31 +304,31 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                     [1, 2]
                 )
             # shuffle channel
-            input[i][:, w1:w2, h1:h2] = shuffle_channel(
-                    input[i][:, w1:w2, h1:h2],
-                    sc_label[i]
-                )
+            # input[i][:, w1:w2, h1:h2] = shuffle_channel(
+            #         input[i][:, w1:w2, h1:h2],
+            #         sc_label[i]
+            #     )
         idx = idx.cuda()
         idx2 = idx2.cuda()
         rot_label = idx * 4 + idx2
         rot_label = rot_label.cuda()
         flip_label = flip_label.cuda()
-        sc_label = sc_label.cuda()
+        # sc_label = sc_label.cuda()
 
         del idx
         del idx2
 
         # compute output
         if args.arch.startswith('Moe'):
-            output, rot_output, flip_output, sc_output, gn_output = model(input)
+            output, rot_output, flip_output, gn_output = model(input)
         else:
-            output, rot_output, flip_output, sc_output = model(input)
+            output, rot_output, flip_output = model(input)
         loss = criterion(output, target)
 
         # rotoutput = model(input, rot=True)
         rot_loss = CE(rot_output, rot_label)
         flip_loss = CE(flip_output, flip_label)
-        sc_loss = CE(sc_output, sc_label)
+        # sc_loss = CE(sc_output, sc_label)
 
         # measure accuracy and record loss
         acc1, acc5 = accuracy(output, target, topk=(1, 5))
@@ -336,26 +336,26 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         top1.update(acc1[0], input.size(0))
         top5.update(acc5[0], input.size(0))
 
-        if args.arch == 'Moe1':
+        if args.arch.startswith('Moe1'):
             gn_softmax = nn.Softmax()(gn_output.mean(dim=0))
             loss = loss + args.r_ratio * (
                 gn_softmax[0].item() * rot_loss
                 + gn_softmax[1].item() * flip_loss
-                + gn_softmax[2].item() * sc_loss
+                # + gn_softmax[2].item() * sc_loss
             )
-        elif args.arch == 'Moe2':
+        elif args.arch.startswith('Moe2'):
             gn_softmax = nn.Softmax()(gn_output.mean(dim=0))
             loss = (
                 gn_softmax[0].item() * loss
                 + gn_softmax[1].item() * rot_loss
                 + gn_softmax[2].item() * flip_loss
-                + gn_softmax[3].item() * sc_loss
+                # + gn_softmax[3].item() * sc_loss
             )
         else:
             loss = loss + args.r_ratio * (
                 rot_loss
-                + flip_label
-                + sc_loss
+                + flip_loss
+                # + sc_loss
             )
         # loss = loss + args.r_ratio * rot_loss
 
@@ -381,13 +381,13 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
             log.write(output + '\n')
             log.flush()
     print()
-    if args.arch == 'Moe1':
+    if args.arch.startswith('Moe1'):
         output = f"Gated Network Weight Gate= "
-        for i in range(0, 3):
+        for i in range(0, 2):
             output += f"[{i}]:{gn_softmax[i].item():.2f} "
-    elif args.arch == 'Moe2':
+    elif args.arch.startswith('Moe2'):
         output = f"Gated Network Weight Gate= FC:{gn_softmax[0].item():.2f} "
-        for i in range(1, 4):
+        for i in range(1, 3):
             output += f"[{i}]:{gn_softmax[i].item():.2f} "
     if args.arch.startswith('Moe'):
         print(output)
