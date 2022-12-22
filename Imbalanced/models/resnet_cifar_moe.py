@@ -227,7 +227,7 @@ class Moe1flip(nn.Module):
             self.classifier = nn.Linear(64, num_classes)
             self.lorot_layer = nn.Linear(64, num_trans)
             self.flip_layer = nn.Linear(64, num_flips)
-        self.gating_layer = nn.Linear(64, 3)
+        self.gating_layer = nn.Linear(64, 2)
 
         self.apply(_weights_init)
 
@@ -255,7 +255,7 @@ class Moe1sc(nn.Module):
             self.classifier = nn.Linear(64, num_classes)
             self.lorot_layer = nn.Linear(64, num_trans)
             self.sc_layer = nn.Linear(64, num_sc)
-        self.gating_layer = nn.Linear(64, 3)
+        self.gating_layer = nn.Linear(64, 2)
 
         self.apply(_weights_init)
 

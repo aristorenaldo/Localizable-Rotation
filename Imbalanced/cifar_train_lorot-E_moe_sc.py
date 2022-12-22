@@ -341,7 +341,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
             loss = loss + args.r_ratio * (
                 gn_softmax[0].item() * rot_loss
                 # + gn_softmax[1].item() * flip_loss
-                + gn_softmax[2].item() * sc_loss
+                + gn_softmax[1].item() * sc_loss
             )
         elif args.startswith('Moe1'):
             gn_softmax = nn.Softmax()(gn_output.mean(dim=0))
@@ -349,7 +349,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
                 gn_softmax[0].item() * loss
                 + gn_softmax[1].item() * rot_loss
                 # + gn_softmax[2].item() * flip_loss
-                + gn_softmax[3].item() * sc_loss
+                + gn_softmax[2].item() * sc_loss
             )
         else:
             loss = loss + args.r_ratio * (
