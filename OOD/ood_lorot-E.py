@@ -201,16 +201,18 @@ def test(net1, d):
 criterion = nn.CrossEntropyLoss()
 options = vars(args)
 options["dataroot"] = os.path.join(options["dataroot"], options["dataset"])
-if not os.path.exists("./logs"):
-    os.makedirs("./logs")
-    if not os.path.exists("./logs/ood"):
-        os.makedirs("./logs/ood")
-if not os.path.exists("./logs/ood/" + args.dataset):
-    os.makedirs("./logs/ood/" + args.dataset)
+tmppath = os.path.join(options['outf'], "ood")
+if not os.path.exists(options['outf']):
+    os.makedirs(options['outf'])
+    
+    if not os.path.exists(tmppath):
+        os.makedirs(tmppath)
+if not os.path.exists(os.path.join(tmppath, args.dataset)):
+    os.makedirs(os.path.join(tmppath, args.dataset))
 
+logdir = os.path.join(options['outf'], 'ood', args.dataset)
 stats_log = open(
-    "./logs/ood/"
-    + args.dataset
+    logdir
     + "/%d_lorote_%.2f_%d" % (args.trial, args.r_ratio, args.num_epochs)
     + ".txt",
     "w",
@@ -239,7 +241,7 @@ if options["ood_dataset"] is None:
         options["image_size"] = (32, 32, 3)
 ood_eval = True
 ood_test_loader = dict()
-kwargs = {"pin_memory": False, "num_workers": 40}
+kwargs = {"pin_memory": False, "num_workers": options['workers']}
 for ood in options["ood_dataset"]:
     ood_test_set = get_dataset(
         options,

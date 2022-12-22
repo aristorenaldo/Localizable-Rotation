@@ -34,7 +34,7 @@ __all__ = [
     "resnet44",
     "resnet56",
     "resnet110",
-    "resnet1202",
+    "resnet1202"
 ]
 
 
@@ -113,7 +113,18 @@ class BasicBlock(nn.Module):
 
 
 class ResNet_s(nn.Module):
-    def __init__(self, block, num_blocks, num_classes=10, use_norm=False, num_trans=16):
+    def __init__(
+        self,
+        block,
+        num_blocks,
+        num_classes=10,
+        use_norm=False,
+        num_trans=16,
+        num_flipped=4,
+        # there are 6 ways to shuffled the image (6c3). Times 4 quadrant then
+        # you get 24 num_shuffled_channel
+        num_shuffled_channel=24,
+    ):
         super(ResNet_s, self).__init__()
         self.in_planes = 16
 
@@ -130,7 +141,19 @@ class ResNet_s(nn.Module):
             self.linear2 = NormedLinear(64, num_trans)
         else:
             self.linear2 = nn.Linear(64, num_trans)
+        if use_norm:
+            self.linear3 = NormedLinear(64, num_flipped)
+        else:
+            self.linear3 = nn.Linear(64, num_flipped)
+        if use_norm:
+            self.linear4 = NormedLinear(64, num_shuffled_channel)
+        else:
+            self.linear4 = nn.Linear(64, num_shuffled_channel)
+        self.gating_network = nn.Linear(64, 3)  # sesuai jumlah transformasi
+
         print("num_trans : {}".format(num_trans))
+        print("num_flipped : {}".format(num_flipped))
+        print("num shuffled channel : {}".format(num_shuffled_channel))
         self.apply(_weights_init)
 
     def _make_layer(self, block, planes, num_blocks, stride):
@@ -142,20 +165,23 @@ class ResNet_s(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def forward(self, x, rot=False, both=False):
+    def forward(self, x):
         out = F.relu(self.bn1(self.conv1(x)))
         out = self.layer1(out)
         out = self.layer2(out)
         out = self.layer3(out)
         out = F.avg_pool2d(out, out.size()[3])
         out = out.view(out.size(0), -1)
-        if both:
-            return self.linear(out), self.linear2(out)
-        if rot:
-            return self.linear2(out)
-        else:
-            out = self.linear(out)
-            return out
+        return (
+            self.linear(out),
+            self.linear2(out),
+            self.linear3(out),
+            self.linear4(out),
+            self.gating_network(out),
+        )
+
+
+# yay
 
 
 def resnet20():
@@ -207,6 +233,7 @@ def test(net):
             )
         ),
     )
+
 
 
 if __name__ == "__main__":

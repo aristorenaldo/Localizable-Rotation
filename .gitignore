@@ -9,6 +9,8 @@ __pycache__/
 
 testing/
 
+.colabond/
+
 # Distribution / packaging
 .Python
 build/
@@ -163,5 +165,3 @@ cython_debug/
 #.idea/
 
 data/
-logs/
-log/
