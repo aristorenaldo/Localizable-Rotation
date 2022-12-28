@@ -30,7 +30,10 @@ optional arguments:
   --r_ratio R_RATIO     ratio
   --resume PATH         path to latest checkpoint (default: none)
 ```
-
+download dataset tiny-imagenet [link](http://cs231n.stanford.edu/tiny-imagenet-200.zip)
+```
+wget http://cs231n.stanford.edu/tiny-imagenet-200.zip
+```
 ### Acknowledgement
 
 Implementations for Imbalanced Classification of LoRot is based on [LDAM-DRW](https://github.com/kaidic/LDAM-DRW)
