@@ -1,0 +1,1 @@
+Namespace(arch='Moe1', backbone='resnet18', batch_size=256, epochs=300, exp_str='uji0', gpu=0, lr=0.1, momentum=0.9, print_freq=10, r_ratio=0.1, resume='', root_log='log/10', root_model='checkpoint', seed=None, start_epoch=0, store_name='tiny-imagenet_Moe1_uji0', use_flip=True, use_gating=True, use_rot=True, use_sc=True, weight_decay=0.0002, workers=8)
