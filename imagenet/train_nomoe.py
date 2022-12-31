@@ -21,10 +21,7 @@ from tensorboardX import SummaryWriter
 
 import models
 
-model_names = sorted(name for name in models.__dict__
-    if not name.startswith("__")
-    and callable(models.__dict__[name])
-    and not 'Nomoe') 
+model_names = ['Nomoe']
 backbone_names = [
     "resnet18",
     "resnet34",
@@ -38,13 +35,13 @@ backbone_names = [
     "wide_resnet101_2",
 ]
 
-parser = argparse.ArgumentParser(description='PyTorch Tiny-Imagenet Moe Training')
+parser = argparse.ArgumentParser(description='PyTorch Tiny-Imagenet Nomoe Training')
 
-parser.add_argument('-a', '--arch', metavar='ARCH', default='vanilla',
+parser.add_argument('-a', '--arch', metavar='ARCH', default='Nomoe',
                     choices=model_names,
                     help='model architecture: ' +
                         ' | '.join(model_names) +
-                        ' (default: vanilla)')
+                        ' (default: Nomoe)')
 parser.add_argument('-b', '--backbone', metavar='Backbone', default='resnet18', 
                     choices=backbone_names,
                     help='model backbone: ' +
@@ -69,7 +66,7 @@ parser.add_argument('--lr', '--learning-rate', default=0.1, type=float,
                     metavar='LR', help='initial learning rate', dest='lr')
 parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
                     help='momentum')
-parser.add_argument('--wd', '--weight-decay', default=1e-4, type=float,
+parser.add_argument('--wd', '--weight-decay', default=2e-4, type=float,
                     metavar='W', help='weight decay (default: 1e-4)',
                     dest='weight_decay')
 
@@ -109,22 +106,6 @@ def main():
         return
 
     # check transformation
-    args.use_gating = False
-    args.use_flip = False
-    args.use_rot = False
-    args.use_sc = False
-    if args.arch.startswith('Moe'):
-        args.use_gating = True
-        args.use_rot = True
-        if args.arch.endswith('sc'):
-            args.use_sc = True
-        elif args.arch.endswith('flip'):
-            args.use_flip = True
-        else:
-            args.use_sc = True
-            args.use_flip = True
-    elif args.arch == 'Lorot':
-        args.use_rot = True
 
 
     # ceate model
@@ -237,109 +218,105 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
 
         input = input.cuda(args.gpu, non_blocking=True)
         target = target.cuda(args.gpu, non_blocking=True)
+        flip_label = torch.randint(2, size=(input.size(0),))
+        sc_label = torch.randint(6, size=(input.size(0),))
 
-        if args.use_flip:
-            flip_label = torch.randint(2, size=(input.size(0),))
-        if args.use_sc:
-            sc_label = torch.randint(6, size=(input.size(0),))
+        idx = torch.randint(4, size=(input.size(0),))
+        idx2 = torch.randint(4, size=(input.size(0),))
+        r = input.size(2) // 2
+        r2 = input.size(2)
+        for i in range(input.size(0)):
+            if idx[i] == 0:
+                w1 = 0
+                w2 = r
+                h1 = 0
+                h2 = r
+            elif idx[i] == 1:
+                w1 = 0
+                w2 = r
+                h1 = r
+                h2 = r2
+            elif idx[i] == 2:
+                w1 = r
+                w2 = r2
+                h1 = 0
+                h2 = r
+            elif idx[i] == 3:
+                w1 = r
+                w2 = r2
+                h1 = r
+                h2 = r2
 
-        if args.use_rot:
-            idx = torch.randint(4, size=(input.size(0),))
-            idx2 = torch.randint(4, size=(input.size(0),))
-            r = input.size(2) // 2
-            r2 = input.size(2)
-            for i in range(input.size(0)):
-                if idx[i] == 0:
-                    w1 = 0
-                    w2 = r
-                    h1 = 0
-                    h2 = r
-                elif idx[i] == 1:
-                    w1 = 0
-                    w2 = r
-                    h1 = r
-                    h2 = r2
-                elif idx[i] == 2:
-                    w1 = r
-                    w2 = r2
-                    h1 = 0
-                    h2 = r
-                elif idx[i] == 3:
-                    w1 = r
-                    w2 = r2
-                    h1 = r
-                    h2 = r2
+            # Fliplr
+            if flip_label[i]:
+                input[i][:, w1:w2, h1:h2] = torch.fliplr(input[i][:, w1:w2, h1:h2])
+            # lorot E
+            input[i][:, w1:w2, h1:h2] = torch.rot90(
+                    input[i][:, w1:w2, h1:h2], 
+                    idx2[i], 
+                    [1, 2]
+                )
+            # shuffle channel
+            input[i][:, w1:w2, h1:h2] = shuffle_channel(
+                    input[i][:, w1:w2, h1:h2],
+                    sc_label[i]
+            )
 
-                # Fliplr
-                if args.use_flip:
-                    if flip_label[i]:
-                        input[i][:, w1:w2, h1:h2] = torch.fliplr(input[i][:, w1:w2, h1:h2])
-                # lorot E
-                input[i][:, w1:w2, h1:h2] = torch.rot90(
-                        input[i][:, w1:w2, h1:h2], 
-                        idx2[i], 
-                        [1, 2]
-                    )
-                # shuffle channel
-                if args.use_sc:
-                    input[i][:, w1:w2, h1:h2] = shuffle_channel(
-                            input[i][:, w1:w2, h1:h2],
-                            sc_label[i]
-                    )
-            idx = idx.cuda()
-            idx2 = idx2.cuda()
-            rot_label = idx * 4 + idx2
-            rot_label = rot_label.cuda()
+        idx = idx.cuda()
+        idx2 = idx2.cuda()
+        rot_label = idx * 4 + idx2
+        rot_label = rot_label.cuda()
+        flip_label = flip_label.cuda()
+        sc_label = sc_label.cuda()
 
-            if args.use_flip:
-                flip_label = flip_label.cuda()
-
-            if args.use_sc:    
-                sc_label = sc_label.cuda()
-
-            del idx
-            del idx2
+        del idx
+        del idx2
 
         # compute output
-        if args.use_gating:
-            # use moe
-            if args.use_flip and args.use_sc:
-                # Moe1
-                output, rot_output, flip_output, sc_output, gn_output = model(input)
-            else:
-                # moe1flip/sc
-                output, rot_output, f_s_output, gn_output = model(input)
-        else:
-            # Lorot or vanilla
-            if args.use_rot:
-                # lorot
-                output, rot_output = model(input)
-            else:
-                # vanilla
-                output = model(input)
+        # if args.use_gating:
+        #     # use moe
+        #     if args.use_flip and args.use_sc:
+        #         # Moe1
+        #         output, rot_output, flip_output, sc_output, gn_output = model(input)
+        #     else:
+        #         # moe1flip/sc
+        #         output, rot_output, f_s_output, gn_output = model(input)
+        # else:
+        #     # Lorot or vanilla
+        #     if args.use_rot:
+        #         # lorot
+        #         output, rot_output = model(input)
+        #     else:
+        #         # vanilla
+        #         output = model(input)
+        output, rot_output, flip_output, sc_output = model(input)
 
         # loss classifier
         loss = criterion(output, target)
 
         # compute loss ssl
-        if args.use_gating:
-            # use moe
-            rot_loss = CE(rot_output, rot_label)
-            if args.use_flip and args.use_sc:
-                # Moe1 all
-                flip_loss = CE(flip_output, flip_label)
-                sc_loss = CE(sc_output, sc_label)
-            elif args.use_flip:
-                # moe1flip
-                flip_loss =CE(f_s_output, flip_label)
-            else:
-                # moe1sc
-                sc_loss = CE(f_s_output, sc_label)
-        else:
-            # Lorot or vanilla
-            if args.use_rot:
-                # lorot
-                rot_loss = CE(rot_output, rot_label)
+        # if args.use_gating:
+        #     # use moe
+        #     rot_loss = CE(rot_output, rot_label)
+        #     if args.use_flip and args.use_sc:
+        #         # Moe1 all
+        #         flip_loss = CE(flip_output, flip_label)
+        #         sc_loss = CE(sc_output, sc_label)
+        #     elif args.use_flip:
+        #         # moe1flip
+        #         flip_loss =CE(f_s_output, flip_label)
+        #     else:
+        #         # moe1sc
+        #         sc_loss = CE(f_s_output, sc_label)
+        # else:
+        #     # Lorot or vanilla
+        #     if args.use_rot:
+        #         # lorot
+        #         rot_loss = CE(rot_output, rot_label)
+        rot_loss = CE(rot_output, rot_label)
+        flip_loss = CE(flip_output, flip_label)
+        sc_loss = CE(sc_output, sc_label)
+        
             
         # rot_loss = CE(rot_output, rot_label)
         # flip_loss = CE(flip_output, flip_label)
@@ -350,28 +327,29 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
         losses.update(loss.item(), input.size(0))
         top1.update(acc1[0], input.size(0))
         top5.update(acc5[0], input.size(0))
-        loss_ssl=0
-        if args.use_gating:
-            gn_softmax = nn.Softmax()(gn_output.mean(dim=0))
-            loss_ssl = gn_softmax[0].item() * rot_loss
+        loss_ssl = rot_loss+flip_loss+sc_loss
+        # if args.use_gating:
+        #     gn_softmax = nn.Softmax()(gn_output.mean(dim=0))
+        #     loss_ssl = gn_softmax[0].item() * rot_loss
 
-            if args.use_flip and args.use_sc:
-                # moe all
-                loss_ssl += (gn_softmax[1].item() * flip_loss
-                            + gn_softmax[2].item() * sc_loss)
-            elif args.use_flip:
-                # moe1flip
-                loss_ssl += (gn_softmax[1].item() * flip_loss)
-            else:
-                # moe1sc
-                loss_ssl += (gn_softmax[1].item() * sc_loss)
-        else:
-            # Lorot or vanilla
-            if args.use_rot:
-                # lorot
-                loss_ssl = rot_loss
-            else:
-                loss_ssl=0
+        #     if args.use_flip and args.use_sc:
+        #         # moe all
+        #         loss_ssl += (gn_softmax[1].item() * flip_loss
+        #                     + gn_softmax[2].item() * sc_loss)
+        #     elif args.use_flip:
+        #         # moe1flip
+        #         loss_ssl += (gn_softmax[1].item() * flip_loss)
+        #     else:
+        #         # moe1sc
+        #         loss_ssl += (gn_softmax[1].item() * sc_loss)
+        # else:
+        #     # Lorot or vanilla
+        #     if args.use_rot:
+        #         # lorot
+        #         loss_ssl = rot_loss
+        #     else:
+                # loss_ssl=0
+        
         loss = loss + args.r_ratio * loss_ssl
 
         # compute gradient and do SGD step
@@ -396,14 +374,6 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
             log.write(output + '\n')
             log.flush()
     print()
-    if args.use_gating:
-        output = f"Epoch: {epoch}, Gated Network Weight Gate = "
-        for i in range(0, gn_softmax.shape[0]):
-            output += f"[{i}]:{gn_softmax[i].item():.2f} "
-        print(output)
-        log.write(output + '\n')
-        log.flush()
-
 
     tf_writer.add_scalar('loss/train', losses.avg, epoch)
     tf_writer.add_scalar('acc/train_top1', top1.avg, epoch)

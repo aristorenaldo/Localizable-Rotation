@@ -10,6 +10,7 @@ __all__ = [
     'Moe1',
     'Moe1flip',
     'Moe1sc',
+    'Nomoe',
     'Lorot',
     'vanilla'
 ]
@@ -78,6 +79,27 @@ class Moe1sc(nn.Module):
                 self.gating_layer(out)
             )
         return self.classifier(out)
+
+class Nomoe(nn.Module):
+    def __init__(self, num_classes=200, backbone='resnet18', num_flips=2, num_sc=6, num_lorot=16) -> None:
+        super().__init__()
+        self.backbone = models.__dict__[backbone]()
+        self.backbone.fc = nn.Identity()
+        self.classifier = nn.Linear(512, num_classes)
+        self.lorot_layer = nn.Linear(512, num_lorot)
+        self.flip_layer = nn.Linear(512, num_flips)
+        self.sc_layer = nn.Linear(512, num_sc)
+    def forward(self, x):
+        out = self.backbone(x)
+        if self.training:
+            return (
+                self.classifier(out),
+                self.lorot_layer(out),
+                self.flip_layer(out),
+                self.sc_layer(out),
+            )
+        return self.classifier(out)
+
 
 class Lorot(nn.Module):
     def __init__(self, num_classes=200, backbone='resnet18', num_lorot=16):
