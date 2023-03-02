@@ -17,7 +17,7 @@ import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 
 from utils import load_tinyimagenet_dataset, prepare_folders, shuffle_channel, save_checkpoint, accuracy, AverageMeter
-from tensorboardX import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
 
 import models
 

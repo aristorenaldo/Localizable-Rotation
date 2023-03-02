@@ -15,7 +15,7 @@ import torch.utils.data
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import models
-from tensorboardX import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
 from sklearn.metrics import confusion_matrix
 from utils import *
 from imbalance_cifar import IMBALANCECIFAR10, IMBALANCECIFAR100

@@ -14,10 +14,10 @@ import torch.optim
 import torch.multiprocessing as mp
 import torch.utils.data
 import torchvision.transforms as transforms
-import torchvision.datasets as datasets
+
 
 from utils import load_tinyimagenet_dataset, prepare_folders, shuffle_channel, save_checkpoint, accuracy, AverageMeter
-from tensorboardX import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
 
 import models
 
@@ -418,8 +418,7 @@ def validate(val_loader, model, criterion, epoch, args, log=None, tf_writer=None
     
     # switch to evaluate mode
     model.eval()
-    all_preds = []
-    all_targets = []
+
     with torch.no_grad():
         end = time.time()
         for i, (input, target) in enumerate(val_loader):
@@ -441,9 +440,6 @@ def validate(val_loader, model, criterion, epoch, args, log=None, tf_writer=None
             batch_time.update(time.time() - end)
             end = time.time()
 
-            _, pred = torch.max(output, 1)
-            all_preds.extend(pred.cpu().numpy())
-            all_targets.extend(target.cpu().numpy())
 
             if i % args.print_freq == 0 or i == (len(val_loader)-1):
                 output = ('Test: [{0}][{1}/{2}]\t'
@@ -455,10 +451,7 @@ def validate(val_loader, model, criterion, epoch, args, log=None, tf_writer=None
                     top1=top1, top5=top5))
                 print('\r'+output, end='')
         print()
-        # cf = confusion_matrix(all_targets, all_preds).astype(float)
-        # cls_cnt = cf.sum(axis=1)
-        # cls_hit = np.diag(cf)
-        # cls_acc = cls_hit / cls_cnt
+
         output = ('{flag} Results: Prec@1 {top1.avg:.3f} Prec@5 {top5.avg:.3f} Loss {loss.avg:.5f}'
                 .format(flag=flag, top1=top1, top5=top5, loss=losses))
         # out_cls_acc = '%s Class Accuracy: %s'%(flag,(np.array2string(cls_acc, separator=',', formatter={'float_kind':lambda x: "%.3f" % x})))
