@@ -199,12 +199,12 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tf_writer
 
         flip_label = torch.randint(2, size=(input.size(0),))
         sc_label = torch.randint(6, size=(input.size(0),))
-
+        
+        idx = torch.randint(4, size=(input.size(0),))
+        idx2 = torch.randint(4, size=(input.size(0),))
+        r = input.size(2) // 2
+        r2 = input.size(2)
         for i in range(input.size(0)):
-            idx = torch.randint(4, size=(input.size(0),))
-            idx2 = torch.randint(4, size=(input.size(0),))
-            r = input.size(2) // 2
-            r2 = input.size(2)
             if idx[i] == 0:
                 w1 = 0
                 w2 = r
