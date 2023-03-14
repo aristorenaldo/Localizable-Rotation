@@ -48,7 +48,10 @@ def create_val_folder(data_set_path):
         if os.path.exists(os.path.join(path, img)):
             os.rename(os.path.join(path, img), os.path.join(newpath, img))
 
-def load_tinyimagenet_dataset(train_transform, val_transform, dataset_path='data/tiny-imagenet-200/'):
+def abspath_dataset(path):
+    return os.path.join(os.path.abspath(os.path.dirname(__file__)),path)
+
+def load_tinyimagenet_dataset(train_transform, val_transform, dataset_path=abspath_dataset('data/tiny-imagenet-200/')):
     create_val_folder(dataset_path)
     train_root = os.path.join(dataset_path,
                                 'train')  # this is path to training images folder
