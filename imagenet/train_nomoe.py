@@ -59,14 +59,14 @@ parser.add_argument('--start-epoch', default=0, type=int, metavar='128',
 parser.add_argument('--gpu', default=0, type=int,
                     help='GPU id to use.')
 
-parser.add_argument('-bs', '--batch-size', default=256, type=int,
+parser.add_argument('-bs', '--batch-size', default=128, type=int,
                     metavar='N',
                     help='mini-batch size')
 parser.add_argument('--lr', '--learning-rate', default=0.1, type=float,
                     metavar='LR', help='initial learning rate', dest='lr')
 parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
                     help='momentum')
-parser.add_argument('--wd', '--weight-decay', default=2e-4, type=float,
+parser.add_argument('--wd', '--weight-decay', default=1e-4, type=float,
                     metavar='W', help='weight decay (default: 1e-4)',
                     dest='weight_decay')
 
