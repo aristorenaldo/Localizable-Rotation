@@ -53,8 +53,8 @@ parser.add_argument('-b', '--backbone', metavar='Backbone', default='resnet18',
 parser.add_argument('--exp_str', default='0', type=str, 
                     help='number to indicate which experiment it is')
 
-parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
-                    help='number of data loading workers (default: 4)')
+parser.add_argument('-j', '--workers', default=8, type=int, metavar='N',
+                    help='number of data loading workers (default: 8)')
 parser.add_argument('--epochs', default=300, type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
@@ -62,7 +62,7 @@ parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
 parser.add_argument('--gpu', default=0, type=int,
                     help='GPU id to use.')
 
-parser.add_argument('-bs', '--batch-size', default=256, type=int,
+parser.add_argument('-bs', '--batch-size', default=128, type=int,
                     metavar='N',
                     help='mini-batch size')
 parser.add_argument('--lr', '--learning-rate', default=0.1, type=float,
@@ -137,6 +137,8 @@ def main():
     optimizer = torch.optim.SGD(model.parameters(), args.lr,
                                 args.momentum,
                                 weight_decay=args.weight_decay)
+    
+    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.epochs // 3, gamma=0.1)
 
 
     # resume from checkpoint
@@ -192,13 +194,14 @@ def main():
     tf_writer = SummaryWriter(log_dir=os.path.join(args.root_log, args.store_name))
 
     for epoch in range(args.start_epoch, args.epochs):
-        adjust_learning_rate(optimizer, epoch, args)
+        # adjust_learning_rate(optimizer, epoch, args)
 
         CE = nn.CrossEntropyLoss().cuda(args.gpu)
         criterion = nn.CrossEntropyLoss().cuda(args.gpu)
 
         # train and validate 1 epoch
         train(train_loader, model, criterion, optimizer, epoch, args, log_training, tf_writer, CE)
+        lr_scheduler.step()
         acc1 = validate(val_loader, model, criterion, epoch, args, log_training, tf_writer)
 
         # remember best acc@1 and save checkpoint
@@ -469,18 +472,18 @@ def validate(val_loader, model, criterion, epoch, args, log=None, tf_writer=None
     return top1.avg
 
 
-def adjust_learning_rate(optimizer, epoch, args):
-    """Sets the learning rate to the initial LR decayed 0.1 every 75 epochs"""
-    last_lr = optimizer.param_groups[-1]['lr']
-    epoch = epoch + 1
-    if epoch <= 5:
-        lr = args.lr * epoch / 5
-    elif epoch % 75 == 0 :
-        lr = last_lr * 0.1
-    else:
-        lr = last_lr
-    for param_group in optimizer.param_groups:
-        param_group['lr'] = lr
+# def adjust_learning_rate(optimizer, epoch, args):
+#     """Sets the learning rate to the initial LR decayed 0.1 every 75 epochs"""
+#     last_lr = optimizer.param_groups[-1]['lr']
+#     epoch = epoch + 1
+#     if epoch <= 5:
+#         lr = args.lr * epoch / 5
+#     elif epoch % 75 == 0 :
+#         lr = last_lr * 0.1
+#     else:
+#         lr = last_lr
+#     for param_group in optimizer.param_groups:
+#         param_group['lr'] = lr
 
 if __name__ == '__main__':
     main()
