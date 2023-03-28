@@ -20,10 +20,10 @@ class Moe1(nn.Module):
 
         self.gating_layer = nn.Linear(64, 3)
     
-    def forward(self, x):
+    def forward(self, x, ssl_task=True):
         out = self.backbone(x)
 
-        if self.training:
+        if self.training and ssl_task:
             return (
                 self.classifier(out),
                 self.lorot_layer(out),
@@ -43,9 +43,9 @@ class Nomoe(nn.Module):
         self.lorot_layer = nn.Linear(64, num_lorot)
         self.flip_layer = nn.Linear(64, num_flips)
         self.sc_layer = nn.Linear(64, num_sc)
-    def forward(self, x):
+    def forward(self, x, ssl_task=True):
         out = self.backbone(x)
-        if self.training:
+        if self.training and ssl_task:
             return (
                 self.classifier(out),
                 self.lorot_layer(out),
@@ -62,9 +62,9 @@ class Lorot(nn.Module):
         self.classifier = nn.Linear(64, num_classes)
         self.lorot_layer = nn.Linear(64, num_lorot)
     
-    def forward(self, x):
+    def forward(self, x, ssl_task=True):
         out = self.backbone(x)
-        if self.training:
+        if self.training and ssl_task:
             return (
                 self.classifier(out),
                 self.lorot_layer(out)
