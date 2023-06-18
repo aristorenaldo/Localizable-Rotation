@@ -69,7 +69,7 @@ def main(args):
     torch.cuda.set_device(args.gpu)
     model = model.cuda(args.gpu)
 
-    optimizer = torch.optim.SGD(model.parameters(), args.lr,
+    optimizer = torch.optim.SGD(model.parameters(), args.learning_rate,
                                 args.momentum,
                                 weight_decay=args.weight_decay)
     
