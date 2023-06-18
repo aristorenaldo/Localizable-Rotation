@@ -192,38 +192,38 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tb_log):
         #     CE(flip_output, ssl_lb[1]) * gate[1].item()+
         #     CE(sc_output, ssl_lb[2]) * gate[2].item()
         # )
-        gate_dict = {}
+        # gate_dict = {}
         if args.arch == "Moe1": # use rot flip sc
             sup_output, rot_output, flip_output, sc_output, gate_output = model(input)
             gate = F.softmax(gate_output, dim=1).mean(dim=0)
             ssl_loss = (F.cross_entropy(rot_output, ssl_lb[0], reduction='mean') * gate[0].item()+
                         F.cross_entropy(flip_output, ssl_lb[1], reduction='mean') * gate[1].item()+
                         F.cross_entropy(sc_output, ssl_lb[2], reduction='mean') * gate[2].item())
-            gate_dict['gate'] = {
-                'rot': gate[0].detach(),
-                'flip': gate[1].detach(),
-                'sc': gate[2].detach()
-            }
+            # gate_dict['gate'] = {
+            #     'rot': gate[0].detach(),
+            #     'flip': gate[1].detach(),
+            #     'sc': gate[2].detach()
+            # }
             
         if args.arch == "Moe1flip": # use rot flip sc
             sup_output, rot_output, flip_output, gate_output = model(input)
             gate = F.softmax(gate_output, dim=1).mean(dim=0)
             ssl_loss = (F.cross_entropy(rot_output, ssl_lb[0], reduction='mean') * gate[0].item()+
                         F.cross_entropy(flip_output, ssl_lb[1], reduction='mean') * gate[1].item())
-            gate_dict['gate'] = {
-                'rot': gate[0].detach(),
-                'flip': gate[1].detach(),
-            }
+            # gate_dict['gate'] = {
+            #     'rot': gate[0].detach(),
+            #     'flip': gate[1].detach(),
+            # }
 
         if args.arch == "Moe1sc": # use rot flip sc
             sup_output, rot_output, sc_output, gate_output = model(input)
             gate = F.softmax(gate_output, dim=1).mean(dim=0)
             ssl_loss = (F.cross_entropy(rot_output, ssl_lb[0], reduction='mean') * gate[0].item()+
                         F.cross_entropy(sc_output, ssl_lb[1], reduction='mean') * gate[1].item())
-            gate_dict['gate'] = {
-                'rot': gate[0].detach(),
-                'sc': gate[1].detach()
-            }
+            # gate_dict['gate'] = {
+            #     'rot': gate[0].detach(),
+            #     'sc': gate[1].detach()
+            # }
 
         elif args.arch == "Nomoe": # use 2 task
             sup_output, rot_output, flip_output, sc_output = model(input)
@@ -254,7 +254,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tb_log):
         optimizer.step()
 
         # log gating
-        tb_log.update(gate_dict, epoch*len(train_loader) + b_i)
+        # tb_log.update(gate_dict, epoch*len(train_loader) + b_i)
 
         # measure elapsed time
         batch_time.update(time.time() - end)
