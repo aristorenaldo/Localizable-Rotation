@@ -372,7 +372,7 @@ if __name__ == '__main__':
 
     assert args.arch in ['Moe1', 'Lorot', 'Nomoe', 'Moe1flip', 'Moe1sc', 'vanilla']
     # set save_name
-    args.save_name += f"_{args.arch}_tinyimagenet_ratio({str(args.ssl_ratio*10)})"
+    args.save_name += f"_{args.arch}_tinyimagenet_ratio({int(args.ssl_ratio*100)})"
     args.save = os.path.join(args.save,args.save_name)
     # args.tb_dir = os.path.join(args.tb_dir, args.save_name)
 
