@@ -146,8 +146,7 @@ def main(args):
         # remember best acc@1 and save checkpoint
         is_best = acc1 > best_acc1
         best_acc1 = max(acc1, best_acc1)
-
-        tb_log.add_scalar('acc/test_top1_best', best_acc1, epoch)
+        tb_log.update({'acc/test_top1_best': best_acc1}, epoch)
         output_best = 'Best Prec@1: %.3f\n' % (best_acc1)
         print(output_best)
         log_training.write(output_best + '\n')

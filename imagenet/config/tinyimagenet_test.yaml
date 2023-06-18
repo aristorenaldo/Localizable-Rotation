@@ -4,7 +4,7 @@ arch: Moe1
 save_name: tester
 
 # optimization
-epochs: 9
+epochs: 1
 
 # gpu
 gpu: 0
