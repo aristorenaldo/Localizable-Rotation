@@ -15,7 +15,7 @@ weight_decay: 1.0e-4
 # checkpoints and log
 save_name: test00
 save: ./tinyimagenet_checkpoint
-tb_dir: ./tblog
+tb_dir: ./tinyimagenet_tblog
 print_freq: 10
 resume: null
 seed: null
