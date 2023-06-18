@@ -110,7 +110,7 @@ def main(args):
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         transforms.Normalize(mean, std),
-        SslTransform(),
+        SslTransform(args.arch),
     ])
 
     val_transform = transforms.Compose([
