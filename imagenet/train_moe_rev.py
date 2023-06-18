@@ -243,7 +243,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tb_log):
         loss = criterion(sup_output, target)
 
         # measure accuracy and record loss
-        acc1, acc5 = accuracy(output, target, topk=(1, 5))
+        acc1, acc5 = accuracy(sup_output, target, topk=(1, 5))
         losses.update(loss.item(), input.size(0))
         top1.update(acc1[0], input.size(0))
         top5.update(acc5[0], input.size(0))
@@ -326,21 +326,21 @@ def validate(val_loader, model, criterion, epoch, args, log=None, tb_log=None, f
 
 
             if i % args.print_freq == 0 or i == (len(val_loader)-1):
-                output = ('Test: [{0}][{1}/{2}]\t'
+                output_log = ('Test: [{0}][{1}/{2}]\t'
                           'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                           'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
                           'Prec@1 {top1.val:.3f} ({top1.avg:.3f})\t'
                           'Prec@5 {top5.val:.3f} ({top5.avg:.3f})'.format(
                     epoch, i, len(val_loader), batch_time=batch_time, loss=losses,
                     top1=top1, top5=top5))
-                print('\r'+output, end='')
+                print('\r'+output_log, end='')
         print()
 
-        output = ('{flag} Results: Prec@1 {top1.avg:.3f} Prec@5 {top5.avg:.3f} Loss {loss.avg:.5f}'
+        output_log = ('{flag} Results: Prec@1 {top1.avg:.3f} Prec@5 {top5.avg:.3f} Loss {loss.avg:.5f}'
                 .format(flag=flag, top1=top1, top5=top5, loss=losses))
-        print(output)
+        print(output_log)
         if log is not None:
-            log.write(output + '\n')
+            log.write(output_log + '\n')
             log.flush()
 
         tb_dict = {
