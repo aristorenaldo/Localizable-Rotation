@@ -363,6 +363,7 @@ def path_correction(path):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description='Adversarial Pertubation Training for Gated SSL')
+    parser.add_argument('--exp_str', '-e', type=str, help='exp_str', required=True)
     parser.add_argument('--path', '-p', type=str, help='config path')
     cli_parser = parser.parse_args()
 
@@ -371,7 +372,7 @@ if __name__ == '__main__':
 
     assert args.arch in ['Moe1', 'Lorot', 'Nomoe', 'Moe1flip', 'Moe1sc', 'vanilla']
     # set save_name
-    args.save_name += f"_{args.arch}_tinyimagenet_ratio_{int(args.ssl_ratio*100)}"
+    args.save_name = f"tinyimagenet_{args.arch}_{cli_parser.exp_str}_sslratio_{int(args.ssl_ratio*100)}"
     args.save = os.path.join(args.save,args.save_name)
     # args.tb_dir = os.path.join(args.tb_dir, args.save_name)
 

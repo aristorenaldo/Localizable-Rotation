@@ -13,7 +13,7 @@ momentum: 0.9
 weight_decay: 1.0e-4
 
 # checkpoints and log
-save_name: test00
+# save_name: test00
 save: ./tinyimagenet_checkpoint
 tb_dir: ./tinyimagenet_tblog
 print_freq: 10
