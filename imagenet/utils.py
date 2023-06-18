@@ -3,14 +3,15 @@ from torchvision import datasets
 import itertools
 import shutil
 import os
+import random
 
-import matplotlib
 import numpy as np
 import torch
-
-matplotlib.use("Agg")
+import torchvision.transforms as transforms
+import torchvision.transforms.functional as TF
 from pathlib import Path
-from typing import Union
+
+from torch.utils.tensorboard import SummaryWriter
 
 def create_val_folder(data_set_path):
     """
@@ -130,7 +131,6 @@ def accuracy(output, target, topk=(1,)):
             res.append(correct_k.mul_(100.0 / batch_size))
         return res
 
-
 def shuffle_channel(img: torch.Tensor, index_shuffle: int) -> torch.Tensor:
     """Mengacak urutan dimensi RGB sebagai bentuk transformasi
 
@@ -152,14 +152,122 @@ def shuffle_channel(img: torch.Tensor, index_shuffle: int) -> torch.Tensor:
     list_to_permutations = list(itertools.permutations(range(3), 3))
     return img[list_to_permutations[index_shuffle], ...]
 
-def flip_image(img: torch.Tensor, index_flip:int):
-    if index_flip > 3 and index_flip < 0:
-        raise ValueError('index_flip must be in range 0 to 3')
+class SslTransform(object):
+    '''
+    Wrapper for SSL Transformation
 
-    if index_flip % 2 != 0: # check last digit in binary
-        img = torch.fliplr(img)
+    Parameter
+    ---------
+    arch : architecture of Gated-SSL to determine which transformations is used
+        (Moe1, Lorot, Moe1Sc, Moe1Flip)
     
-    index_flip = index_flip >> 1 # shift to right one bit
-    if index_flip % 2 != 0: # check last digit in binary
-        img = torch.flipud(img)
-    return img
+    Returns
+    -------
+    image : torch.Tensor
+        Transformed image
+    ssl_labels : int | tupple
+        SSL label
+    '''
+    def __init__(self, arch) -> None:
+        assert isinstance(arch,str)
+        assert arch
+        self.arch = arch
+
+    
+    def __transform_picker(self, image):
+        idx = random.randint(0, 3) # select patch
+        idx2 = random.randint(0, 3) # rotation
+        r2 = image.size(1)
+        r = r2 // 2
+        
+        if idx == 0:
+            w1 = 0
+            w2 = r
+            h1 = 0
+            h2 = r
+        elif idx == 1:
+            w1 = 0
+            w2 = r
+            h1 = r
+            h2 = r2
+        elif idx == 2:
+            w1 = r
+            w2 = r2
+            h1 = 0
+            h2 = r
+        elif idx == 3:
+            w1 = r
+            w2 = r2
+            h1 = r
+            h2 = r2
+
+        if self.arch == 'Moe1' or self.arch == 'Nomoe':
+            flip_label = random.randint(0, 1)
+            sc_label = random.randint(0, 5)
+            if flip_label:
+                image[:, w1:w2, h1:h2] = TF.hflip(image[:, w1:w2, h1:h2])
+            # lorot
+            image[:, w1:w2, h1:h2] = torch.rot90(image[:, w1:w2, h1:h2], idx2, [1,2])
+            # shuffle channel
+            image[:, w1:w2, h1:h2] = shuffle_channel(image[:, w1:w2, h1:h2], sc_label)
+
+            rot_label = idx * 4 + idx2
+            ssl_label = (rot_label, flip_label, sc_label)
+
+            return image, ssl_label
+        
+        elif self.arch == 'Lorot':
+            image[:, w1:w2, h1:h2] = torch.rot90(image[:, w1:w2, h1:h2], idx2, [1,2])
+            rot_label = idx * 4 + idx2
+            return image, rot_label
+        
+        elif self.arch == 'Moe1flip':
+            flip_label = random.randint(0, 1)
+            if flip_label:
+                image[:, w1:w2, h1:h2] = TF.hflip(image[:, w1:w2, h1:h2])
+            # lorot
+            image[:, w1:w2, h1:h2] = torch.rot90(image[:, w1:w2, h1:h2], idx2, [1,2])
+            rot_label = idx * 4 + idx2
+            ssl_label = (rot_label, flip_label)
+            return image, ssl_label
+        
+        elif self.arch == 'Moe1sc':
+            sc_label = random.randint(0, 5)
+             # lorot
+            image[:, w1:w2, h1:h2] = torch.rot90(image[:, w1:w2, h1:h2], idx2, [1,2])
+            # shuffle channel
+            image[:, w1:w2, h1:h2] = shuffle_channel(image[:, w1:w2, h1:h2], sc_label)
+            rot_label = idx * 4 + idx2
+            ssl_label = (rot_label, sc_label)
+            return image, ssl_label
+
+        raise Exception('arch not implemented')
+    
+    def __call__(self, image: torch.Tensor):
+        assert isinstance(image, torch.Tensor)
+        return self.__transform_picker(image)
+
+class TBLog:
+    """
+    Construc tensorboard writer (self.writer).
+    The tensorboard is saved at os.path.join(tb_dir, file_name).
+    """
+    def __init__(self, tb_dir, file_name):
+        self.tb_dir = tb_dir
+        self.writer = SummaryWriter(os.path.join(self.tb_dir, file_name))
+    
+    def update(self, tb_dict, epoch, suffix=None):
+        """
+        Args
+            tb_dict: contains scalar values for updating tensorboard
+            epoch: contains information of epoch (int).
+            suffix: If not None, the update key has the suffix.
+        """
+        if suffix is None:
+            suffix = ''
+        
+        for key, value in tb_dict.items():
+            if isinstance(value, dict):
+                self.writer.add_scalars(suffix+key, value, epoch)
+            else: 
+                self.writer.add_scalar(suffix+key, value, epoch) 

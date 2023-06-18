@@ -15,11 +15,18 @@ __all__ = [
     'vanilla'
 ]
 
+def _backbone(backbone):
+    model = models.__dict__[backbone]()
+    model.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
+    model.maxpool = nn.Identity()
+    model.fc = nn.Identity()
+    return model
+
 class Moe1(nn.Module):
     def __init__(self, num_classes=200, backbone='resnet18', num_flips=2, num_sc=6, num_lorot=16):
         super().__init__()
-        self.backbone = models.__dict__[backbone]()
-        self.backbone.fc = nn.Identity()
+        self.backbone = _backbone(backbone)
+        # self.backbone.fc = nn.Identity()
         self.classifier = nn.Linear(512, num_classes)
         self.lorot_layer = nn.Linear(512, num_lorot)
         self.flip_layer = nn.Linear(512, num_flips)
@@ -41,8 +48,8 @@ class Moe1(nn.Module):
 class Moe1flip(nn.Module):
     def __init__(self, num_classes=200, backbone='resnet18', num_flips=2, num_lorot=16):
         super().__init__()
-        self.backbone = models.__dict__[backbone]()
-        self.backbone.fc = nn.Identity()
+        self.backbone = _backbone(backbone)
+        # self.backbone.fc = nn.Identity()
         self.classifier = nn.Linear(512, num_classes)
         self.lorot_layer = nn.Linear(512, num_lorot)
         self.flip_layer = nn.Linear(512, num_flips)
@@ -62,8 +69,8 @@ class Moe1flip(nn.Module):
 class Moe1sc(nn.Module):
     def __init__(self, num_classes=200, backbone='resnet18', num_sc=6, num_lorot=16):
         super().__init__()
-        self.backbone = models.__dict__[backbone]()
-        self.backbone.fc = nn.Identity()
+        self.backbone = _backbone(backbone)
+        # self.backbone.fc = nn.Identity()
         self.classifier = nn.Linear(512, num_classes)
         self.lorot_layer = nn.Linear(512, num_lorot)
         self.sc_layer = nn.Linear(512, num_sc)
@@ -83,8 +90,8 @@ class Moe1sc(nn.Module):
 class Nomoe(nn.Module):
     def __init__(self, num_classes=200, backbone='resnet18', num_flips=2, num_sc=6, num_lorot=16) -> None:
         super().__init__()
-        self.backbone = models.__dict__[backbone]()
-        self.backbone.fc = nn.Identity()
+        self.backbone = _backbone(backbone)
+        # self.backbone.fc = nn.Identity()
         self.classifier = nn.Linear(512, num_classes)
         self.lorot_layer = nn.Linear(512, num_lorot)
         self.flip_layer = nn.Linear(512, num_flips)
@@ -104,8 +111,8 @@ class Nomoe(nn.Module):
 class Lorot(nn.Module):
     def __init__(self, num_classes=200, backbone='resnet18', num_lorot=16):
         super().__init__()
-        self.backbone = models.__dict__[backbone]()
-        self.backbone.fc = nn.Identity()
+        self.backbone = _backbone(backbone)
+        # self.backbone.fc = nn.Identity()
         self.classifier = nn.Linear(512, num_classes)
         self.lorot_layer = nn.Linear(512, num_lorot)
     
@@ -119,6 +126,10 @@ class Lorot(nn.Module):
         return self.classifier(out)
 
 def vanilla(backbone='resnet18', num_classes=200):
-    return models.__dict__[backbone](num_classes=200)
+    model  = models.__dict__[backbone](num_classes=200)
+    model.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
+    model.maxpool = nn.Identity()
+    return model
 
-
+if __name__ == "__main__":
+    print(vanilla())

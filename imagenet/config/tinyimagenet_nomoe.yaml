@@ -1,0 +1,8 @@
+# model
+arch: Nomoe
+
+# checkpoints and log
+save_name: test00
+
+# gpu
+gpu: 0

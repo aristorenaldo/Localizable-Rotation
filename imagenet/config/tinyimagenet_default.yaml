@@ -1,0 +1,28 @@
+experiment: 'Gated Self-Supervised Learning Tiny-Imagenet'
+
+# model
+arch: vanilla # 'Moe1', 'Lorot', 'Nomoe', 'Moe1flip', 'Moe1sc', 'vanilla'
+backbone: resnet18 # only resnet
+
+# optimization
+epochs: 400
+start_epoch: 0
+batch_size: 100
+learning_rate: 0.2
+momentum: 0.9
+weight_decay: 1e-4
+
+# checkpoints and log
+save_name: test00
+save: ./tinyimagenet_checkpoint
+tb_dir: ./tblog
+print_freq: 10
+resume: null
+seed: null
+
+#G-SSL
+ssl_ratio: 0.1
+
+# gpu
+gpu: 0
+workers: 4

@@ -1,0 +1,10 @@
+arch: Moe1
+
+# checkpoints and log
+save_name: tester
+
+# optimization
+epochs: 9
+
+# gpu
+gpu: 0
