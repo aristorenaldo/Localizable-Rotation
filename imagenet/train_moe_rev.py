@@ -283,7 +283,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, log, tb_log):
 
     tb_dict = {}
     tb_dict['loss/train'] = losses.avg
-    tb_dict['loss/train'] = top1.avg
+    tb_dict['acc/train_top1'] = top1.avg
     tb_dict['acc/train_top5'] = top5.avg
     tb_dict['lr'] = optimizer.param_groups[-1]['lr']
     tb_log.update(tb_dict, epoch)
